@@ -4,7 +4,9 @@
 
 #### Examples (API's/Apps)
 [**Open 311**](http://www.open311.org/ "American app example")
+
 [**City SDK**](https://www.citysdk.eu/ "European App/SDK example")
+
 [**Buiten Beter**](http://buitenbeter.nl/ "Nederlandse app voor het melden van problemen (beste voorbeeld)")
 
 # Android Naming
