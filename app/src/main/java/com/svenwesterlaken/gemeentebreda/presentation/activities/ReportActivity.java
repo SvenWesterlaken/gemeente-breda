@@ -20,6 +20,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.svenwesterlaken.gemeentebreda.R;
+import com.svenwesterlaken.gemeentebreda.presentation.fragments.ReportMapFragment;
 
 public class ReportActivity extends AppCompatActivity {
 
@@ -129,9 +130,9 @@ public class ReportActivity extends AppCompatActivity {
      * A {@link FragmentPagerAdapter} that returns a fragment corresponding to
      * one of the sections/tabs/pages.
      */
-    public class SectionsPagerAdapter extends FragmentPagerAdapter {
+    private class SectionsPagerAdapter extends FragmentPagerAdapter {
 
-        public SectionsPagerAdapter(FragmentManager fm) {
+        private SectionsPagerAdapter(FragmentManager fm) {
             super(fm);
         }
 
