@@ -53,12 +53,12 @@ public class ReportMapFragment extends Fragment {
                     e.printStackTrace();
                 }
 
-                // For dropping a marker at a point on the Map
-                LatLng sydney = new LatLng(-34, 151);
-                map.addMarker(new MarkerOptions().position(sydney).title("Marker Title").snippet("Marker Description"));
+                // Add a marker
+                LatLng hogeschool = new LatLng(51.5843682,4.795152);
+                mMap.addMarker(new MarkerOptions().position(hogeschool).title("Hogeschoollaan 1").snippet("Avans Locatie Hogeschoollaan"));
 
-                // For zooming automatically to the location of the marker
-                CameraPosition cameraPosition = new CameraPosition.Builder().target(sydney).zoom(12).build();
+                //mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(hogeschool, 17));
+                CameraPosition cameraPosition = new CameraPosition.Builder().target(hogeschool).zoom(17).build();
                 map.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
             }
         });
