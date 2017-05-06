@@ -138,7 +138,13 @@ public class ReportActivity extends AppCompatActivity {
 
         @Override
         public Fragment getItem(int position) {
-            return PlaceholderFragment.newInstance(position + 1);
+            switch (position) {
+                case 0:
+                    Fragment f1 = new ReportMapFragment();
+                    return f1;
+                default:
+                    return PlaceholderFragment.newInstance(position + 1);
+            }
         }
 
         @Override
