@@ -3,7 +3,6 @@ package com.svenwesterlaken.gemeentebreda.presentation.fragments;
 import android.Manifest;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
@@ -41,7 +40,6 @@ public class ReportMapFragment extends Fragment {
 
         mMapView = (MapView) v.findViewById(R.id.mapView);
         mMapView.onCreate(bundle);
-
         mMapView.onResume();
 
         try {
@@ -55,6 +53,8 @@ public class ReportMapFragment extends Fragment {
             public void onMapReady(GoogleMap mMap) {
                 map = mMap;
 
+                enableMyLocation();
+
                 // Add a marker
                 LatLng hogeschool = new LatLng(51.5843682,4.795152);
                 mMap.addMarker(new MarkerOptions().position(hogeschool).title("Hogeschoollaan 1").snippet("Avans Locatie Hogeschoollaan"));
@@ -66,6 +66,13 @@ public class ReportMapFragment extends Fragment {
         });
 
         return v;
+    }
+
+    public void enableMyLocation(){
+        if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION)
+                == PackageManager.PERMISSION_GRANTED) {
+            map.setMyLocationEnabled(true);
+        }
     }
 
     @Override

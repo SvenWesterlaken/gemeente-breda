@@ -43,7 +43,7 @@ public class ReportActivity extends AppCompatActivity {
      * The {@link ViewPager} that will host the section contents.
      */
     private ViewPager mViewPager;
-
+    Fragment f1 = new ReportMapFragment();
     private static final int MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 1;
 
     @Override
@@ -128,7 +128,10 @@ public class ReportActivity extends AppCompatActivity {
     @Override
     public void onRequestPermissionsResult(int requestCode,
                                            String permissions[], int[] grantResults) {
+        ReportMapFragment mapFragment = (ReportMapFragment) f1;
+
         switch (requestCode) {
+
             case MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION: {
                 // If request is cancelled, the result arrays are empty.
                 if (grantResults.length > 0
@@ -137,12 +140,14 @@ public class ReportActivity extends AppCompatActivity {
                     // permission was granted.
                     // Do the task you need to do.
                     Log.i("LOCATION_PERMISSION", "GRANTED");
+                    mapFragment.enableMyLocation();
 
                 } else {
 
                     // permission denied. Disable the
                     // functionality that depends on this permission.
                     Log.i("LOCATION_PERMISSION", "DENIED");
+
                 }
                 return;
             }
@@ -201,7 +206,6 @@ public class ReportActivity extends AppCompatActivity {
         public Fragment getItem(int position) {
             switch (position) {
                 case 0:
-                    Fragment f1 = new ReportMapFragment();
                     return f1;
                 default:
                     return PlaceholderFragment.newInstance(position + 1);
