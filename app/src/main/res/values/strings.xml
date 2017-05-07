@@ -3,4 +3,6 @@
     <string name="action_settings">Settings</string>
     <string name="title_activity_report">Meldingen</string>
     <string name="section_format">Hello World from section: %1$d</string>
+    <string name="homepage_tab1">Kaart</string>
+    <string name="homepage_tab2">Overzicht</string>
 </resources>
