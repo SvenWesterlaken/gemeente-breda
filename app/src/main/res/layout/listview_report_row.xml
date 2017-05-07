@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ImageView
+        android:id="@+id/reportImage"
+        android:layout_width="51dp"
+        android:layout_height="41dp"
+        app:srcCompat="@color/cast_intro_overlay_button_background_color"
+        tools:layout_editor_absoluteX="18dp"
+        tools:layout_editor_absoluteY="16dp" />
+
+    <TextView
+        android:id="@+id/ReportText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:layout_editor_absoluteX="86dp"
+        tools:layout_editor_absoluteY="16dp"
+        tools:text="Kapotte straatverlichting" />
+
+    <TextView
+        android:id="@+id/AddressTxt"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        tools:layout_editor_absoluteX="86dp"
+        tools:layout_editor_absoluteY="40dp"
+        tools:text="Lovendijkstraat 63" />
+
+    <TextView
+        android:id="@+id/DescriptionTxt"
+        android:layout_width="355dp"
+        android:layout_height="wrap_content"
+        tools:layout_editor_absoluteX="15dp"
+        tools:layout_editor_absoluteY="71dp"
+        tools:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. " />
+
+    <ImageView
+        android:id="@+id/seenNotifier"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        app:srcCompat="@color/clear_btn_color"
+        tools:layout_editor_absoluteX="296dp"
+        tools:layout_editor_absoluteY="20dp" />
+
+    <ImageView
+        android:id="@+id/reportNumberTxt"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        app:srcCompat="@color/clear_btn_color"
+        tools:layout_editor_absoluteX="332dp"
+        tools:layout_editor_absoluteY="20dp" />
+
+
+
+</android.support.constraint.ConstraintLayout>
