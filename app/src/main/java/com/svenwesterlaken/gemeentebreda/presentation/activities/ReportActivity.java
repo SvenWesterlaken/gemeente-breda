@@ -1,9 +1,16 @@
 package com.svenwesterlaken.gemeentebreda.presentation.activities;
 
+import android.Manifest;
+import android.content.pm.PackageManager;
 import android.support.design.widget.TabLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+
 import android.support.v4.view.PagerAdapter;
+
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
+
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 
@@ -12,6 +19,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -42,6 +50,8 @@ public class ReportActivity extends AppCompatActivity {
      */
     private ViewPager mViewPager;
 
+    private static final int MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 1;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -64,7 +74,53 @@ public class ReportActivity extends AppCompatActivity {
 
 
 
+        // Request ACCESS_FINE_LOCATION permission
+        if (ContextCompat.checkSelfPermission(this,
+                Manifest.permission.ACCESS_FINE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED) {
+
+            // Should we show an explanation?
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this,
+                    Manifest.permission.ACCESS_FINE_LOCATION)) {
+
+                // Show an explanation to the user *asynchronously* -- don't block
+                // sees the explanation, try again to request the permission.
+
+            } else {
+
+                // No explanation needed, we can request the permission.
+
+                ActivityCompat.requestPermissions(this,
+                        new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                        MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION);
+
+                // MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION is an
+                // app-defined int constant. The callback method gets the
+                // result of the request.
+            }
+        }
+
     }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
+     switch (requestCode) {
+            case MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION: {
+                // If request is cancelled, the result arrays are empty.
+
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                  // permission was granted.
+                    // Do the task you need to do.
+                 Log.i("LOCATION_PERMISSION", "GRANTED");}
+                Log.i("LOCATION_PERMISSION", "DENIED");
+                        }
+                              return;
+                        }
+
+                              // other 'case' lines to check for other
+                                  // permissions this app might request
+                                     }
+           
 
 
     @Override
@@ -88,7 +144,6 @@ public class ReportActivity extends AppCompatActivity {
 
         return super.onOptionsItemSelected(item);
     }
-
 
 
 }
