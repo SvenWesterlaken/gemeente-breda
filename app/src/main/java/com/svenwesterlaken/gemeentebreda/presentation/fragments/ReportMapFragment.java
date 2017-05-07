@@ -1,7 +1,12 @@
 package com.svenwesterlaken.gemeentebreda.presentation.fragments;
 
+import android.Manifest;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,6 +31,10 @@ public class ReportMapFragment extends Fragment {
     MapView mMapView;
     private GoogleMap map;
 
+    public ReportMapFragment(){
+
+    }
+
     @Override
     public View onCreateView(LayoutInflater layoutInflater, ViewGroup viewGroup, Bundle bundle) {
         View v = layoutInflater.inflate(R.layout.fragment_reportmap, viewGroup, false);
@@ -45,13 +54,6 @@ public class ReportMapFragment extends Fragment {
             @Override
             public void onMapReady(GoogleMap mMap) {
                 map = mMap;
-
-                // For showing a move to my location button
-                try {
-                    map.setMyLocationEnabled(true);
-                } catch(SecurityException e){
-                    e.printStackTrace();
-                }
 
                 // Add a marker
                 LatLng hogeschool = new LatLng(51.5843682,4.795152);
