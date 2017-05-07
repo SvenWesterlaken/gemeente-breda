@@ -73,7 +73,7 @@ public class ReportActivity extends AppCompatActivity {
             }
         });
 
-        // Here, thisActivity is the current activity
+        // Request ACCESS_FINE_LOCATION permission
         if (ContextCompat.checkSelfPermission(this,
                 Manifest.permission.ACCESS_FINE_LOCATION)
                 != PackageManager.PERMISSION_GRANTED) {
@@ -94,7 +94,7 @@ public class ReportActivity extends AppCompatActivity {
                         new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
                         MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION);
 
-                // MY_PERMISSIONS_REQUEST_READ_CONTACTS is an
+                // MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION is an
                 // app-defined int constant. The callback method gets the
                 // result of the request.
             }
