@@ -21,7 +21,7 @@ import android.widget.TextView;
 
 import com.svenwesterlaken.gemeentebreda.R;
 
-public class ReportActivity extends AppCompatActivity {
+public class ReportActivity extends MenuActivity {
 
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
@@ -45,6 +45,8 @@ public class ReportActivity extends AppCompatActivity {
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        super.onCreateDrawer(toolbar, this);
+
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
