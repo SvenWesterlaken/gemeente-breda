@@ -29,8 +29,10 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.svenwesterlaken.gemeentebreda.R;
+import com.svenwesterlaken.gemeentebreda.domain.Report;
 import com.svenwesterlaken.gemeentebreda.logic.adapters.ReportPagerAdapter;
 
+import java.util.ArrayList;
 
 
 public class ReportActivity extends AppCompatActivity {
@@ -49,6 +51,7 @@ public class ReportActivity extends AppCompatActivity {
      * The {@link ViewPager} that will host the section contents.
      */
     private ViewPager mViewPager;
+    ArrayList<Report> spotifyItemsList = new ArrayList<Report>();
 
     private static final int MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 1;
 
@@ -59,6 +62,7 @@ public class ReportActivity extends AppCompatActivity {
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
 
 
         // Create the adapter that will return a fragment for each of the three

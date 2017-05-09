@@ -5,10 +5,10 @@ package com.svenwesterlaken.gemeentebreda.domain;
  */
 
 public class User {
-    int userID, mobileNumber;
-    String name, emailaddress;
+    int userID;
+    String name, emailaddress, mobileNumber;
 
-    public User(int userID, int mobileNumber, String name, String emailaddress ) {
+    public User(int userID, String mobileNumber, String name, String emailaddress ) {
         this.emailaddress = emailaddress;
         this.mobileNumber = mobileNumber;
         this.name = name;
@@ -22,7 +22,7 @@ public class User {
         return userID;
     }
 
-    public int getMobileNumber() {
+    public String getMobileNumber() {
         return mobileNumber;
     }
 
@@ -41,7 +41,7 @@ public class User {
         this.userID = userID;
     }
 
-    public void setMobileNumber(int mobileNumber) {
+    public void setMobileNumber(String mobileNumber) {
         this.mobileNumber = mobileNumber;
     }
 

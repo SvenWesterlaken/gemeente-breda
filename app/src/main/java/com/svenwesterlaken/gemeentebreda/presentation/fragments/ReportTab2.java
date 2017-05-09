@@ -1,5 +1,6 @@
 package com.svenwesterlaken.gemeentebreda.presentation.fragments;
 
+import android.database.Cursor;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -10,6 +11,7 @@ import android.widget.ListView;
 
 
 import com.svenwesterlaken.gemeentebreda.R;
+import com.svenwesterlaken.gemeentebreda.data.database.ReportDatabase;
 import com.svenwesterlaken.gemeentebreda.logic.adapters.ReportAdapter;
 
 import java.util.ArrayList;
@@ -32,7 +34,9 @@ public class ReportTab2 extends Fragment {
         View rootView = inflater.inflate(R.layout.activity_report_tab2, container, false);
 
         ListView reportListView = (ListView) rootView.findViewById(R.id.ReportListView);
-        mReportAdapter = new ReportAdapter(getActivity(), reportList);
+        ReportDatabase database = new ReportDatabase(getContext());
+        Cursor cursor = database.getReports();
+        mReportAdapter = new ReportAdapter(getContext(), cursor, false);
         reportListView.setAdapter(mReportAdapter);
 
 
