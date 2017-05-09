@@ -98,12 +98,11 @@ public class ReportActivity extends AppCompatActivity {
                 AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
                 // 2. Chain together various setter methods to set the dialog characteristics
-                //TODO: Hardcoded strings to string file.
-                builder.setMessage("Explanation as to why the app needs a permission.")
-                        .setTitle("App needs permission.");
+                builder.setMessage(R.string.body_permission_alert)
+                        .setTitle(R.string.title_permission_alert);
 
                 // 3. Add button.
-                builder.setNeutralButton("OK", new DialogInterface.OnClickListener() {
+                builder.setNeutralButton(R.string.button_ok, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         requestLocationPermission();
                     }
