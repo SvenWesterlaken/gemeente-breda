@@ -163,7 +163,38 @@ public class DatabaseHandler extends SQLiteOpenHelper{
         Log.i("TAG", "added report");
         db.close();
     }
-    public ArrayList
+    public ArrayList<Report> getReport(String name){
+        ArrayList<Report> reports = new ArrayList<>();
+
+        String query = "SELECT * FROM " + REPORT_TABLE_NAME + " WHERE " +
+                REPORT_COLUMN_USERID + "=" + "\"" + name + "\"";
+
+        String queryALL = "SELECT * FROM " + REPORT_TABLE_NAME;
+
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        Cursor cursor = db.rawQuery(query, null);
+
+        while(cursor.moveToNext() ) {
+
+            Ticket ticket = new Ticket();
+
+            ticket.setFilmId(cursor.getInt(cursor.getColumnIndex(TICKET_COLUMN_FILMID)));
+            ticket.setAmountOfTickets(cursor.getInt(cursor.getColumnIndex(TICKET_COLUMN_AMOUNTSEATS)));
+            ticket.setPrice(cursor.getInt(cursor.getColumnIndex(TICKET_COLUMN_TICKETPRICE)));
+            ticket.setTicketId(cursor.getInt(cursor.getColumnIndex(TICKET_COLUMN_TICKETID)));
+            ticket.setTitle(cursor.getString(cursor.getColumnIndex(TICKET_COLUMN_FILMTITLE)));
+            ticket.setBuyDate(cursor.getString(cursor.getColumnIndex(TICKET_COLUMN_BUYDATE)));
+
+            tickets.add(ticket);
+        }
+
+        db.close();
+
+
+
+        return tickets;
+    }
     public User getUser(String name){
         User user = new User();
 
