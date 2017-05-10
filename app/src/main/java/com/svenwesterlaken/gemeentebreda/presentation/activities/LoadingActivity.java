@@ -20,7 +20,7 @@ public class LoadingActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_loading);
 
-        new CountDownTimer(10000, 1000) {
+        new CountDownTimer(1500, 1000) {
 
             @Override
             public void onTick(long millisUntilFinished) {
