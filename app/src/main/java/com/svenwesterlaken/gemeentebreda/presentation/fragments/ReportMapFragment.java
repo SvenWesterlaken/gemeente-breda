@@ -31,8 +31,11 @@ import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.svenwesterlaken.gemeentebreda.R;
+
+import java.util.ArrayList;
 
 
 import static android.content.Context.LOCATION_SERVICE;
@@ -46,6 +49,7 @@ public class ReportMapFragment extends Fragment {
 
     MapView mMapView;
     private GoogleMap map;
+    private Marker placedMarker;
 
     public ReportMapFragment(){
 
@@ -102,7 +106,7 @@ public class ReportMapFragment extends Fragment {
                     // Create a LatLng object for the current location
                     LatLng latLng = new LatLng(latitude, longitude);
 
-                    // Add a marker
+                    // Add a marker at users initial position
                     mMap.addMarker(new MarkerOptions().position(latLng).title("Current Location").snippet("You are here!"));
 
                     // Move camera
@@ -120,6 +124,19 @@ public class ReportMapFragment extends Fragment {
 
                 // Add markers
                 mMap.addMarker(new MarkerOptions().position(hogeschool).title("Hogeschoollaan 1").snippet("Avans Locatie Hogeschoollaan"));
+
+                map.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
+
+                    @Override
+                    public void onMapClick(LatLng point) {
+                        //Remove the previously placed marker
+                        if (placedMarker != null) {
+                            placedMarker.remove();
+                        }
+                        //Place a new marker at the location of the tap
+                        placedMarker = map.addMarker(new MarkerOptions().position(point));
+                    }
+                });
 
             }
         });

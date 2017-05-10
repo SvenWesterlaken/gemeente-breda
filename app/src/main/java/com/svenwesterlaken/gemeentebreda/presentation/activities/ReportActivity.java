@@ -1,6 +1,7 @@
 package com.svenwesterlaken.gemeentebreda.presentation.activities;
 
 import android.Manifest;
+import android.content.DialogInterface;
 import android.content.pm.PackageManager;
 import android.support.design.widget.TabLayout;
 import android.support.design.widget.FloatingActionButton;
@@ -10,6 +11,8 @@ import android.support.v4.view.PagerAdapter;
 
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+
+import android.support.v7.app.AlertDialog;
 
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -78,6 +81,12 @@ public class ReportActivity extends AppCompatActivity {
 
 
 
+        requestPermissions();
+
+    }
+
+    public void requestPermissions(){
+
         // Request ACCESS_FINE_LOCATION permission
         if (ContextCompat.checkSelfPermission(this,
                 Manifest.permission.ACCESS_FINE_LOCATION)
@@ -90,13 +99,30 @@ public class ReportActivity extends AppCompatActivity {
                 // Show an explanation to the user *asynchronously* -- don't block
                 // sees the explanation, try again to request the permission.
 
+                // 1. Instantiate an AlertDialog.Builder with its constructor
+                AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
+                // 2. Chain together various setter methods to set the dialog characteristics
+                builder.setMessage(R.string.body_permission_alert)
+                        .setTitle(R.string.title_permission_alert);
+
+                // 3. Add button.
+                builder.setNeutralButton(R.string.button_ok, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        requestLocationPermission();
+                    }
+                });
+
+                // 4. Get the AlertDialog from create()
+                AlertDialog dialog = builder.create();
+
+                dialog.show();
+
             } else {
 
                 // No explanation needed, we can request the permission.
 
-                ActivityCompat.requestPermissions(this,
-                        new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
-                        MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION);
+                requestLocationPermission();
 
                 // MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION is an
                 // app-defined int constant. The callback method gets the
@@ -105,6 +131,7 @@ public class ReportActivity extends AppCompatActivity {
         }
 
     }
+
 
     @Override
     public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
@@ -125,6 +152,12 @@ public class ReportActivity extends AppCompatActivity {
                                   // permissions this app might request
                                      }
 
+
+    public void requestLocationPermission(){
+        ActivityCompat.requestPermissions(this,
+                new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION);
+    }
 
 
     @Override

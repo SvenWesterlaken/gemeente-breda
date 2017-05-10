@@ -3,6 +3,14 @@
     <string name="action_settings">Settings</string>
     <string name="title_activity_report">Meldingen</string>
     <string name="section_format">Hello World from section: %1$d</string>
+
     <string name="homepage_tab1">Kaart</string>
     <string name="homepage_tab2">Overzicht</string>
+
+    <string name="title_permission_alert">App heeft toestemming nodig</string>
+    <string name="body_permission_alert">
+        Deze app heeft uw toestemming nodig om uw huidige locatie te kunnen lezen.
+        Uw locatie wordt gebruikt voor het weergeven van meldingen in uw buurt.</string>
+    <string name="button_ok">OK</string>
+
 </resources>
