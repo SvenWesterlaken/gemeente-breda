@@ -140,147 +140,147 @@ public class DatabaseHandler extends SQLiteOpenHelper{
 
     }
 
-    //ADD USERS
-    public void addUser(User user){
-        ContentValues values = new ContentValues();
-        values.put(USER_COLUMN_NAME, user.getName());
-        values.put(USER_COLUMN_PHONE, user.getPhone());
-        values.put(USER_COLUMN_EMAIL, user.getEmail());
-
-        SQLiteDatabase db = this.getWritableDatabase();
-        db.insert(USER_TABLE_NAME, null, values);
-        Log.i("TAG", "added user");
-        db.close();
-    }
-
-    //ADD REPORTS
-    public void addReport(Report report){
-        ContentValues values = new ContentValues();
-        values.put(REPORT_COLUMN_CATEGORYID, report.getCategoryId());
-        values.put(REPORT_COLUMN_DESCRIPTION, report.getDescription());
-        values.put(REPORT_COLUMN_MEDIAID, report.getMediaId());
-        values.put(REPORT_COLUMN_LOCATIONID, report.getLocationId());
-        values.put(REPORT_COLUMN_USERID, report.getUserId());
-
-        SQLiteDatabase db = this.getWritableDatabase();
-        db.insert(REPORT_TABLE_NAME, null, values);
-        Log.i("TAG", "added report");
-        db.close();
-    }
-
-    //ADD LOCATIONS
-    public void addLocation(Location location){
-        ContentValues values = new ContentValues();
-        values.put(LOCATION_COLUMN_LATITUDE, location.getLatitude());
-        values.put(LOCATION_COLUMN_LONGITUDE, location.getLongitude());
-        values.put(LOCATION_COLUMN_STREET, location.getStreet());
-        values.put(LOCATION_COLUMN_STREETNR , location.getStreetNr());
-        values.put(LOCATION_COLUMN_POSTALCODE, location.getPostalcode());
-        values.put(LOCATION_COLUMN_CITY, location.getCity());
-
-        SQLiteDatabase db = this.getWritableDatabase();
-        db.insert(LOCATION_TABLE_NAME, null, values);
-        Log.i("TAG", "added location");
-        db.close();
-    }
-
-    //ADD CATEGORIES
-    public void addCategory(Category category){
-        ContentValues values = new ContentValues();
-        values.put(CATEGORY_COLUMN_NAAM, category.getCategoryName());
-
-        SQLiteDatabase db = this.getWritableDatabase();
-        db.insert(CATEGORY_TABLE_NAME, null, values);
-        db.close();
-    }
-    //ADD MEDIA
-    public void addMedia(Media media){
-        ContentValues values = new ContentValues();
-        values.put(MEDIA_COLUMN_ID, media.getMediaId());
-
-        SQLiteDatabase db = this.getWritableDatabase();
-        db.insert(MEDIA_TABLE_NAME, null, values);
-        db.close();
-    }
-    //ADD PHOTO
-    public void addPhoto(Photo photo){
-        ContentValues values = new ContentValues();
-        values.put(MEDIA_COLUMN_ID, photo.getMediaId());
-
-        SQLiteDatabase db = this.getWritableDatabase();
-        db.insert(PHOTO_TABLE_NAME, null, values);
-        db.close();
-    }
-
-    //ADD PHOTO
-    public void addVideo(Video video){
-        ContentValues values = new ContentValues();
-        values.put(VIDEO_COLUMN_ID, video.getMediaId());
-
-        SQLiteDatabase db = this.getWritableDatabase();
-        db.insert(VIDEO_TABLE_NAME, null, values);
-        db.close();
-    }
-
-    //GET USERS
-    public User getUser(String name){
-        User user = new User();
-
-        String query = "SELECT " + USER_COLUMN_NAME + " FROM " + USER_TABLE_NAME +
-                USER_COLUMN_NAME + "=" + "\"" + name + "\"";
-
-        SQLiteDatabase db = this.getWritableDatabase();
-
-        Cursor cursor = db.rawQuery(query, null);
-
-        //cursor.moveToFirst();
-        Log.i("TAG", "before while");
-
-        while(cursor.moveToNext() ) {
-            user.setName(cursor.getString(cursor.getColumnIndex(USER_COLUMN_NAME)));
-            Log.i("TAG", "got user");
-        };
-
-        db.close();
-
-        return user;
-    }
-
-
-
-    //ARRAYLIST FOR REPORTS
-    public ArrayList<Report> getReport(String name){
-        ArrayList<Report> reports = new ArrayList<>();
-
-        String query = "SELECT * FROM " + REPORT_TABLE_NAME + " WHERE " +
-                REPORT_COLUMN_USERID + "=" + "\"" + name + "\"";
-
-        String queryALL = "SELECT * FROM " + REPORT_TABLE_NAME;
-
-        SQLiteDatabase db = this.getReadableDatabase();
-
-        Cursor cursor = db.rawQuery(query, null);
-
-        while(cursor.moveToNext() ) {
-
-            Report report = new Report();
-
-            report.setReportId(cursor.getInt(cursor.getColumnIndex(REPORT_COLUMN_ID)));
-            report.setCategoryId(cursor.getInt(cursor.getColumnIndex(REPORT_COLUMN_CATEGORYID)));
-            report.setDescription(cursor.getString(cursor.getColumnIndex(REPORT_COLUMN_DESCRIPTION)));
-            report.setMediaId(cursor.getInt(cursor.getColumnIndex(REPORT_COLUMN_MEDIAID)));
-            report.setLocationId(cursor.getInt(cursor.getColumnIndex(REPORT_COLUMN_LOCATIONID)));
-            report.setUserId(cursor.getInt(cursor.getColumnIndex(REPORT_COLUMN_USERID)));
-
-            reports.add(report);
-        }
-
-        db.close();
-
-
-
-        return reports;
-    }
+//    //ADD USERS
+//    public void addUser(User user){
+//        ContentValues values = new ContentValues();
+//        values.put(USER_COLUMN_NAME, user.getName());
+//        values.put(USER_COLUMN_PHONE, user.getPhone());
+//        values.put(USER_COLUMN_EMAIL, user.getEmail());
+//
+//        SQLiteDatabase db = this.getWritableDatabase();
+//        db.insert(USER_TABLE_NAME, null, values);
+//        Log.i("TAG", "added user");
+//        db.close();
+//    }
+//
+//    //ADD REPORTS
+//    public void addReport(Report report){
+//        ContentValues values = new ContentValues();
+//        values.put(REPORT_COLUMN_CATEGORYID, report.getCategoryId());
+//        values.put(REPORT_COLUMN_DESCRIPTION, report.getDescription());
+//        values.put(REPORT_COLUMN_MEDIAID, report.getMediaId());
+//        values.put(REPORT_COLUMN_LOCATIONID, report.getLocationId());
+//        values.put(REPORT_COLUMN_USERID, report.getUserId());
+//
+//        SQLiteDatabase db = this.getWritableDatabase();
+//        db.insert(REPORT_TABLE_NAME, null, values);
+//        Log.i("TAG", "added report");
+//        db.close();
+//    }
+//
+//    //ADD LOCATIONS
+//    public void addLocation(Location location){
+//        ContentValues values = new ContentValues();
+//        values.put(LOCATION_COLUMN_LATITUDE, location.getLatitude());
+//        values.put(LOCATION_COLUMN_LONGITUDE, location.getLongitude());
+//        values.put(LOCATION_COLUMN_STREET, location.getStreet());
+//        values.put(LOCATION_COLUMN_STREETNR , location.getStreetNr());
+//        values.put(LOCATION_COLUMN_POSTALCODE, location.getPostalcode());
+//        values.put(LOCATION_COLUMN_CITY, location.getCity());
+//
+//        SQLiteDatabase db = this.getWritableDatabase();
+//        db.insert(LOCATION_TABLE_NAME, null, values);
+//        Log.i("TAG", "added location");
+//        db.close();
+//    }
+//
+//    //ADD CATEGORIES
+//    public void addCategory(Category category){
+//        ContentValues values = new ContentValues();
+//        values.put(CATEGORY_COLUMN_NAAM, category.getCategoryName());
+//
+//        SQLiteDatabase db = this.getWritableDatabase();
+//        db.insert(CATEGORY_TABLE_NAME, null, values);
+//        db.close();
+//    }
+//    //ADD MEDIA
+//    public void addMedia(Media media){
+//        ContentValues values = new ContentValues();
+//        values.put(MEDIA_COLUMN_ID, media.getMediaId());
+//
+//        SQLiteDatabase db = this.getWritableDatabase();
+//        db.insert(MEDIA_TABLE_NAME, null, values);
+//        db.close();
+//    }
+//    //ADD PHOTO
+//    public void addPhoto(Photo photo){
+//        ContentValues values = new ContentValues();
+//        values.put(MEDIA_COLUMN_ID, photo.getMediaId());
+//
+//        SQLiteDatabase db = this.getWritableDatabase();
+//        db.insert(PHOTO_TABLE_NAME, null, values);
+//        db.close();
+//    }
+//
+//    //ADD VIDEO
+//    public void addVideo(Video video){
+//        ContentValues values = new ContentValues();
+//        values.put(VIDEO_COLUMN_ID, video.getMediaId());
+//
+//        SQLiteDatabase db = this.getWritableDatabase();
+//        db.insert(VIDEO_TABLE_NAME, null, values);
+//        db.close();
+//    }
+//
+//    //GET USERS
+//    public User getUser(String name){
+//        User user = new User();
+//
+//        String query = "SELECT " + USER_COLUMN_NAME + " FROM " + USER_TABLE_NAME +
+//                USER_COLUMN_NAME + "=" + "\"" + name + "\"";
+//
+//        SQLiteDatabase db = this.getWritableDatabase();
+//
+//        Cursor cursor = db.rawQuery(query, null);
+//
+//        //cursor.moveToFirst();
+//        Log.i("TAG", "before while");
+//
+//        while(cursor.moveToNext() ) {
+//            user.setName(cursor.getString(cursor.getColumnIndex(USER_COLUMN_NAME)));
+//            Log.i("TAG", "got user");
+//        };
+//
+//        db.close();
+//
+//        return user;
+//    }
+//
+//
+//
+//    //ARRAYLIST FOR REPORTS
+//    public ArrayList<Report> getReport(String name){
+//        ArrayList<Report> reports = new ArrayList<>();
+//
+//        String query = "SELECT * FROM " + REPORT_TABLE_NAME + " WHERE " +
+//                REPORT_COLUMN_USERID + "=" + "\"" + name + "\"";
+//
+//        String queryALL = "SELECT * FROM " + REPORT_TABLE_NAME;
+//
+//        SQLiteDatabase db = this.getReadableDatabase();
+//
+//        Cursor cursor = db.rawQuery(query, null);
+//
+//        while(cursor.moveToNext() ) {
+//
+//            Report report = new Report();
+//
+//            report.setReportId(cursor.getInt(cursor.getColumnIndex(REPORT_COLUMN_ID)));
+//            report.setCategoryId(cursor.getInt(cursor.getColumnIndex(REPORT_COLUMN_CATEGORYID)));
+//            report.setDescription(cursor.getString(cursor.getColumnIndex(REPORT_COLUMN_DESCRIPTION)));
+//            report.setMediaId(cursor.getInt(cursor.getColumnIndex(REPORT_COLUMN_MEDIAID)));
+//            report.setLocationId(cursor.getInt(cursor.getColumnIndex(REPORT_COLUMN_LOCATIONID)));
+//            report.setUserId(cursor.getInt(cursor.getColumnIndex(REPORT_COLUMN_USERID)));
+//
+//            reports.add(report);
+//        }
+//
+//        db.close();
+//
+//
+//
+//        return reports;
+//    }
 
 
 }
