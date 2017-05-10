@@ -24,8 +24,6 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.svenwesterlaken.gemeentebreda.R;
 
-import java.util.ArrayList;
-
 import static android.content.Context.LOCATION_SERVICE;
 
 
@@ -39,9 +37,7 @@ public class ReportMapFragment extends Fragment {
     private GoogleMap map;
     private Marker placedMarker;
 
-    public ReportMapFragment(){
-
-    }
+    public ReportMapFragment(){}
 
     @Override
     public View onCreateView(LayoutInflater layoutInflater, ViewGroup viewGroup, Bundle bundle) {

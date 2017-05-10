@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="AppTheme.Light" parent="Theme.AppCompat.Light">
+        <item name="colorPrimary">@color/colorLightPrimary</item>
+        <item name="colorPrimaryDark">@color/colorLightPrimaryDark</item>
+        <item name="colorAccent">@color/colorLightAccent</item>
+        <item name="colorDivider">@color/colorLightPrimaryDivider</item>
+        <item name="colorIcons">@color/colorLightPrimaryText</item>
+        <item name="actionBarTheme">@style/ThemeOverlay.AppCompat.Light</item>
+        <item name="android:windowBackground">@color/colorLightPrimaryBackground</item>
+        <item name="android:listDivider">@null</item>
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+        <item name="android:textColorPrimary">@color/colorLightPrimaryText</item>
+        <item name="android:textColorPrimaryDisableOnly">@color/colorLightPrimaryDisabled</item>
+        <item name="android:textColorPrimaryNoDisable">@color/colorLightPrimaryText</item>
+        <item name="android:textColorSecondary">@color/colorLightPrimaryTextSecondary</item>
+        <item name="android:textColorSecondaryNoDisable">@color/colorLightPrimaryTextSecondary</item>
+        <item name="android:textAppearanceMedium">@style/CustomtextAppearanceMedium</item>
+        <item name="android:textAppearanceSmall">@style/CustomtextAppearanceSmall</item>
+        <item name="android:windowTitleStyle">@style/ToolBarTitle</item>
+        <item name="android:windowLightStatusBar">true</item>
+    </style>
+</resources>

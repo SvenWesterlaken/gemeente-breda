@@ -1,6 +1,7 @@
 package com.svenwesterlaken.gemeentebreda.presentation.activities;
 
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -16,6 +17,11 @@ import com.svenwesterlaken.gemeentebreda.R;
  */
 
 public class MenuActivity extends BaseActivity implements NavigationView.OnNavigationItemSelectedListener {
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+    }
+
     //Create Drawer Menu
     protected void onCreateDrawer(Toolbar toolbar, AppCompatActivity activity) {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

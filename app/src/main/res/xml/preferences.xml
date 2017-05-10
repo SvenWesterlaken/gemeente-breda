@@ -2,9 +2,7 @@
 
     <PreferenceCategory
         android:title="Account"
-        android:icon="@drawable/account"
-        android:layout="@layout/row_preference_category"
-        android:key="pref_key_storage_settings">
+        android:layout="@layout/row_preference_category">
 
         <EditTextPreference
             android:capitalize="words"
@@ -41,6 +39,20 @@
             android:selectAllOnFocus="true"
             android:singleLine="true"
             android:title="@string/pref_title_phone" />
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:title="Uiterlijk"
+        android:layout="@layout/row_preference_category">
+
+        <ListPreference
+            android:defaultValue="@string/pref_default_theme"
+            android:title="@string/pref_title_theme"
+            android:icon="@drawable/invert_colors"
+            android:entries="@array/pref_entries_theme"
+            android:entryValues="@array/pref_values_theme"
+            android:layout="@layout/row_preference"
+            android:key="pref_theme"/>
 
     </PreferenceCategory>
 
