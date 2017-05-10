@@ -1,11 +1,22 @@
 <resources>
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+    <style name="AppTheme" parent="Theme.AppCompat">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+        <item name="colorDivider">@color/colorPrimaryWhiteDivider</item>
+        <item name="android:windowBackground">@color/colorPrimaryBackground</item>
+        <item name="android:textAppearance">@style/CustomtextAppearance</item>
+        <item name="android:textColorPrimary">@color/colorPrimaryWhite</item>
+        <item name="android:textColorPrimaryDisableOnly">@color/colorPrimaryWhiteDisabled</item>
+        <item name="android:textColorPrimaryNoDisable">@color/colorPrimaryWhite</item>
+        <item name="android:textColorSecondary">@color/colorPrimaryWhite</item>
+        <item name="android:textColorSecondaryNoDisable">@color/colorPrimaryWhiteSecondary</item>
+        <item name="android:textAppearanceMedium">@style/CustomtextAppearanceMedium</item>
+        <item name="android:textAppearanceSmall">@style/CustomtextAppearanceSmall</item>
+        <item name="android:listDivider">@null</item>
     </style>
 
     <style name="AppTheme.NoActionBar">
@@ -13,8 +24,31 @@
         <item name="windowNoTitle">true</item>
     </style>
 
-    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+    <style name="CustomtextAppearance" parent="TextAppearance.AppCompat">
+        <item name="fontPath">fonts/Roboto-Regular.ttf</item>
+    </style>
 
+    <style name="SettingsTextAppearanceMedium" parent="TextAppearance.AppCompat">
+        <item name="fontPath">fonts/Roboto-Medium.ttf</item>
+        <item name="android:textSize">16sp</item>
+    </style>
+
+    <style name="CustomtextAppearanceMedium" parent="TextAppearance.AppCompat.Medium">
+        <item name="fontPath">fonts/Roboto-Regular.ttf</item>
+        <item name="android:textSize">16sp</item>
+    </style>
+
+    <style name="CustomtextAppearanceSmall" parent="TextAppearance.AppCompat">
+        <item name="fontPath">fonts/Roboto-Regular.ttf</item>
+        <item name="android:textSize">14sp</item>
+    </style>
+
+    <style name="TextAppearanceSettingsCategory" parent="TextAppearance.AppCompat">
+        <item name="fontPath">fonts/Roboto-Regular.ttf</item>
+        <item name="android:textSize">12sp</item>
+    </style>
+
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
 </resources>
