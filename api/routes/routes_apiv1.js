@@ -4,7 +4,6 @@
 
 var express = require('express');
 var router = express.Router();
-var connector = require('../db/db_connector');
 var pool = require('../db/db_connector');
 
 router.get('/user/:userID', function(request, response) {
@@ -29,3 +28,4 @@ router.get('*', function(req, res){
 });
 
 module.exports = router;
+ 
