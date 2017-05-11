@@ -32,7 +32,11 @@ public class DatabaseHandler extends SQLiteOpenHelper{
         private static final String REPORT_COLUMN_DESCRIPTION = "description";
         private static final String REPORT_COLUMN_MEDIAID = "mediaId";
         private static final String REPORT_COLUMN_LOCATIONID = "locationId";
-        private static final String REPORT_COLUMN_USERID = "userId";
+
+
+    private static final String USER_REPORT_TABLE_NAME = "user_report";
+        private static final String USER_REPORT_COLUMN_USERID = "_userId";
+        private static final String USER_REPORT_COLUMN_REPORTID = "_reportId";
 
     private static final String LOCATION_TABLE_NAME = "location";
         private static final String LOCATION_COLUMN_ID = "_locationId";
@@ -46,12 +50,14 @@ public class DatabaseHandler extends SQLiteOpenHelper{
     private static final String CATEGORY_TABLE_NAME = "category";
         private static final String CATEGORY_COLUMN_ID = "_categoryId";
         private static final String CATEGORY_COLUMN_NAAM = "categoryName";
+        private static final String CATEGORY_COLUMN_SUMMARY = "summary";
 
     private static final String MEDIA_TABLE_NAME = "media";
         private static final String MEDIA_COLUMN_ID = "_mediaId";
 
     private static final String VIDEO_TABLE_NAME = "video";
         private static final String VIDEO_COLUMN_ID = "_mediaId";
+        private static final String VIDEO_COLUMN_LENGTH = "length";
 
     private static final String PHOTO_TABLE_NAME = "photo";
         private static final String PHOTO_COLUMN_ID = "_mediaId";
@@ -76,10 +82,6 @@ public class DatabaseHandler extends SQLiteOpenHelper{
                 REPORT_COLUMN_DESCRIPTION + " TEXT," +
                 REPORT_COLUMN_MEDIAID + " TEXT," +
                 REPORT_COLUMN_LOCATIONID + " TEXT," +
-                REPORT_COLUMN_USERID + " TEXT," +
-
-                "FOREIGN KEY (" + REPORT_COLUMN_ID + ") " +
-                "REFERENCES " + USER_TABLE_NAME + "(" + USER_COLUMN_ID + ")," +
 
                 "FOREIGN KEY (" + REPORT_COLUMN_CATEGORYID + ")" +
                 "REFERENCES " + CATEGORY_TABLE_NAME + "(" + CATEGORY_COLUMN_ID + ")," +
@@ -88,7 +90,18 @@ public class DatabaseHandler extends SQLiteOpenHelper{
                 "REFERENCES " + REPORT_TABLE_NAME +  "(" + REPORT_COLUMN_ID + ")," +
 
                 "FOREIGN KEY (" + REPORT_COLUMN_MEDIAID + ")" +
-                "REFERENCES " + MEDIA_TABLE_NAME +  "(" + MEDIA_COLUMN_ID + ")," +
+                "REFERENCES " + MEDIA_TABLE_NAME +  "(" + MEDIA_COLUMN_ID + ")" +
+
+                ");";
+        String CREATE_USER_REPORT_TABLE = "CREATE TABLE " + USER_REPORT_TABLE_NAME + "(" +
+                USER_REPORT_COLUMN_USERID + " TEXT, " +
+                USER_REPORT_COLUMN_REPORTID + " TEXT, " +
+
+                "FOREIGN KEY (" + USER_REPORT_COLUMN_USERID + ")" +
+                "REFERENCES " + USER_TABLE_NAME + "(" + USER_COLUMN_ID + ")," +
+
+                "FOREIGN KEY (" + USER_REPORT_COLUMN_REPORTID + ")" +
+                "REFERENCES " + REPORT_TABLE_NAME +  "(" + REPORT_COLUMN_ID + ")" +
 
                 ");";
 
@@ -104,7 +117,8 @@ public class DatabaseHandler extends SQLiteOpenHelper{
 
         String CREATE_CATEGORY_TABLE = "CREATE TABLE " + CATEGORY_TABLE_NAME + "(" +
                 CATEGORY_COLUMN_ID + " TEXT PRIMARY KEY AUTOINCREMENT," +
-                CATEGORY_COLUMN_NAAM + " TEXT" +
+                CATEGORY_COLUMN_NAAM + " TEXT, " +
+                CATEGORY_COLUMN_SUMMARY + " TEXT " +
                 ");";
 
         String CREATE_MEDIA_TABLE = "CREATE TABLE " + MEDIA_TABLE_NAME +  "(" +
@@ -112,7 +126,8 @@ public class DatabaseHandler extends SQLiteOpenHelper{
                 ");";
 
         String CREATE_VIDEO_TABLE = "CREATE TABLE " + VIDEO_TABLE_NAME + "(" +
-                VIDEO_COLUMN_ID + " TEXT PRIMARY KEY AUTOINCREMENT" +
+                VIDEO_COLUMN_ID + " TEXT PRIMARY KEY AUTOINCREMENT, " +
+                VIDEO_COLUMN_LENGTH + " TEXT, " +
 
                 "FOREIGN KEY (" + VIDEO_COLUMN_ID + ")" +
                 "REFERENCES " + MEDIA_TABLE_NAME +  "(" + MEDIA_COLUMN_ID + ")," +
@@ -123,12 +138,13 @@ public class DatabaseHandler extends SQLiteOpenHelper{
                 PHOTO_COLUMN_ID + " TEXT PRIMARY KEY AUTOINCREMENT" +
 
                 "FOREIGN KEY (" + PHOTO_COLUMN_ID + ")" +
-                "REFERENCES " + MEDIA_TABLE_NAME +  "(" + MEDIA_COLUMN_ID + ")," +
+                "REFERENCES " + MEDIA_TABLE_NAME +  "(" + MEDIA_COLUMN_ID + ")" +
 
                 ");";
         db.execSQL("PRAGMA foreign_keys = ON");
         db.execSQL(CREATE_USER_TABLE);
         db.execSQL(CREATE_REPORT_TABLE);
+        db.execSQL(CREATE_USER_REPORT_TABLE);
         db.execSQL(CREATE_LOCATION_TABLE);
         db.execSQL(CREATE_CATEGORY_TABLE);
         db.execSQL(CREATE_MEDIA_TABLE);
