@@ -21,4 +21,15 @@
 
     <string name="pref_title_phone">Mobiele Nummer</string>
     <string name="pref_default_phone">Onbekend</string>
+
+    <string name="pref_title_theme">Thema</string>
+    <string name="pref_default_theme">Donker</string>
+    <string-array name="pref_entries_theme">
+        <item>Donker</item>
+        <item>Licht</item>
+    </string-array>
+    <string-array name="pref_values_theme">
+        <item>dark</item>
+        <item>light</item>
+    </string-array>
 </resources>
