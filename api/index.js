@@ -10,13 +10,13 @@ var app = express();
 
 app.set('PORT', config.webPort);
 
+app.use('/apiv1', require('./routes/routes_apiv1'));
+
 app.all('*', function(req, res, next){
     res.status(200);
     res.json({});
     next();
 });
-
-app.use('/apiv1', require('./routes/routes_apiv1'));
 
 var port = process.env.PORT || app.get('PORT');
 
