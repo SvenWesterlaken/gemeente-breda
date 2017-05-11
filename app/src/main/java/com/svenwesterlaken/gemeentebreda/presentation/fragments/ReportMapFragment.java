@@ -18,6 +18,7 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
@@ -113,6 +114,7 @@ public class ReportMapFragment extends Fragment {
                 // Add markers
                 mMap.addMarker(new MarkerOptions().position(hogeschool).title("Hogeschoollaan 1").snippet("Avans Locatie Hogeschoollaan"));
 
+
                 map.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
 
                     @Override
@@ -122,7 +124,7 @@ public class ReportMapFragment extends Fragment {
                             placedMarker.remove();
                         }
                         //Place a new marker at the location of the tap
-                        placedMarker = map.addMarker(new MarkerOptions().position(point));
+                        placedMarker = map.addMarker(new MarkerOptions().position(point).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
                     }
                 });
 
