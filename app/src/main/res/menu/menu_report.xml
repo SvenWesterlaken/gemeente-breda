@@ -11,7 +11,7 @@
         app:showAsAction="always"/>
 
     <item
-        android:id="@+id/action_settings"
+        android:id="@+id/action_filter"
         android:orderInCategory="200"
         android:icon="@drawable/filter_outline"
         android:title="filter"

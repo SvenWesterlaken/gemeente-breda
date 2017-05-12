@@ -46,13 +46,13 @@
         android:layout="@layout/row_preference_category">
 
         <ListPreference
-            android:defaultValue="0"
             android:title="@string/pref_title_theme"
+            android:key="pref_theme"
             android:icon="@drawable/invert_colors"
             android:entries="@array/pref_entries_theme"
             android:entryValues="@array/pref_values_theme"
             android:layout="@layout/row_preference"
-            android:key="pref_theme"/>
+            android:defaultValue="1"/>
 
     </PreferenceCategory>
 
