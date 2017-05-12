@@ -26,9 +26,9 @@
                 android:layout_height="?attr/actionBarSize"
                 android:background="?attr/colorPrimary"
                 app:layout_scrollFlags="scroll|enterAlways"
-                app:itemIconTint="@color/colorPrimaryWhite"
-                app:itemTextColor="@color/colorPrimaryWhite"
-                android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+                app:itemIconTint="?android:attr/textColorPrimary"
+                app:itemTextColor="?android:attr/textColorPrimary"
+                android:theme="?attr/actionBarTheme"
                 app:popupTheme="@style/AppTheme.PopupOverlay">
 
             </android.support.v7.widget.Toolbar>
@@ -49,9 +49,9 @@
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_gravity="start"
-        android:background="@color/colorPrimaryBackground"
-        app:itemTextColor="@color/colorPrimaryWhite"
-        app:itemIconTint="@color/colorPrimaryWhite"
+        android:background="?android:attr/colorBackground"
+        app:itemTextColor="?android:attr/textColorPrimary"
+        app:itemIconTint="?android:attr/textColorPrimary"
         android:fitsSystemWindows="true"
         app:headerLayout="@layout/menu_header"
         app:menu="@menu/menu_drawer"/>
