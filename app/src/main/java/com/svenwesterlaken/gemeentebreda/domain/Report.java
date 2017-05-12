@@ -8,24 +8,41 @@ import android.icu.util.ULocale;
 
 public class Report {
 
-    int reportID;
+    int reportID, locationID, categoryID, userID;
     User user;
     Location location;
     String description;
     Media media;
     Category category;
 
-    public Report(int reportID, User user, Location location, String description, Media media, Category category) {
+    public Report() {
+    }
+
+    public Report(int reportID, User user, Location location, String description, Category category) {
         this.reportID = reportID;
         this.category = category;
         this.user = user;
         this.location = location;
         this.description = description;
-        this.media = media;
         this.category = category;
     }
 
+
+
     //getters
+
+
+    public int getLocationID() {
+        return locationID;
+    }
+
+    public int getCategoryID() {
+        return categoryID;
+    }
+
+    public int getUserID() {
+        return userID;
+    }
 
     public int getReportID() {
         return reportID;
@@ -60,6 +77,18 @@ public class Report {
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    public void setLocationID(int locationID) {
+        this.locationID = locationID;
+    }
+
+    public void setCategoryID(int categoryID) {
+        this.categoryID = categoryID;
+    }
+
+    public void setUserID(int userID) {
+        this.userID = userID;
     }
 
     public void setLocation(Location location) {

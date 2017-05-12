@@ -13,6 +13,10 @@ public class Category {
         this.categoryName = categoryName;
     }
 
+    public Category(){
+
+    }
+
     //getters
 
     public int getCategoryID() {

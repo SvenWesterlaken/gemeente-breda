@@ -11,6 +11,7 @@ import android.widget.CursorAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.google.android.gms.plus.model.people.Person;
 import com.google.android.gms.vision.text.Text;
 import com.svenwesterlaken.gemeentebreda.R;
 import com.svenwesterlaken.gemeentebreda.domain.Category;
@@ -25,93 +26,41 @@ import java.util.ArrayList;
  * Created by lukab on 7-5-2017.
  */
 
-public class ReportAdapter extends CursorAdapter {
+public class ReportAdapter extends ArrayAdapter<Report> {
+
 
     // Constructor
-    public ReportAdapter(Context context, Cursor c, boolean autoRequery) {
-        super(context, c, 0);
-    }
-
-    // Inflate the new view. Geen databinding
-    @Override
-    public View newView(Context context, Cursor cursor, ViewGroup parent) {
-        View view = LayoutInflater.from(context).inflate(R.layout.listview_report_row, parent, false);
-        return view;
+    public ReportAdapter(Context context, ArrayList<Report> objects) {
+        super(context, 0, objects);
     }
 
     // Hier wortd de data gebind aan de view
     @Override
-    public void bindView(View view, Context context, Cursor cursor) {
+    public View getView(int position, View convertView, ViewGroup parent) {
 
-        //ViewHolder holder = new ViewHolder();
-        TextView reportTextView = (TextView) view.findViewById(R.id.ReportText);
-        TextView addressTxtView = (TextView) view.findViewById(R.id.AddressTxt);
+        Report report = getItem(position);
 
-        //heel veel textviews
+        if (convertView == null) {
 
-        String report = cursor.getString(cursor.getColumnIndex("category"));
-        String address = cursor.getString(cursor.getColumnIndex("street"));
+            convertView = LayoutInflater.from(getContext()).inflate(R.layout.listview_report_row, parent, false);
 
-        reportTextView.setText(report);
-        addressTxtView.setText(address);
+        }
+
+        TextView reportTextView = (TextView) convertView.findViewById(R.id.ReportText);
+        TextView addressTxtView = (TextView) convertView.findViewById(R.id.AddressTxt);
+        ImageView  image = (ImageView) convertView.findViewById(R.id.reportImage);
+        ImageView image2 =(ImageView) convertView.findViewById(R.id.seenNotifier);
+        TextView descriptionTxtView = (TextView) convertView.findViewById(R.id.DescriptionTxt);
+        ImageView image4 = (ImageView) convertView.findViewById(R.id.reportNumberTxt);
+
+
+        reportTextView.setText(report.getCategory().getCategoryName());
+        addressTxtView.setText(report.getLocation().getStreet() + " " + report.getLocation().getHouseNumber());
+        descriptionTxtView.setText(report.getDescription());
+
+        return convertView;
+
+
     }
-
-//    private Context mContext;
-//    private Category category;
-//    private Media media;
-//    private User user;
-//    private Location location;
-//    private Report report;
-//
-//
-//    private ArrayList<Report> mReportList;
-//
-//
-//    public ReportAdapter(Context context, ArrayList<Report> reports) {
-//
-//        super(context, 0, reports);
-//
-//        mReportList = reports;
-//
-//    }
-//
-//    public void testData(){
-//
-//        category = new Category(1, "Straatverlichting");
-//        media = new Media(1);
-//        user = new User(1, "0645678900", "arie", "arie@hotmail.com");
-//        location = new Location("Van Voorst tot Voorstraat", "Breda", 51, "4814AA", 1);
-//        report = new Report(1, user, location, "Kappotte straatlantaarn", media, category);
-//
-//        mReportList.add(report);
-//
-//
-//    }
-//
-//
-//    public View getView(int position, View convertView, ViewGroup parent) {
-//
-//        Report report  = getItem(position);
-//
-//        if( convertView == null ) {
-//            convertView = LayoutInflater.from(getContext()).inflate(R.layout.listview_report_row, parent, false);
-//        }
-//
-//        testData();
-//
-//        ImageView reportImage = (ImageView) convertView.findViewById(R.id.reportNumberTxt);
-//        TextView reportTxt = (TextView) convertView.findViewById(R.id.ReportText);
-//        TextView descriptionTxt = (TextView) convertView.findViewById(R.id.DescriptionTxt);
-//        TextView addressTxt = (TextView) convertView.findViewById(R.id.AddressTxt);
-//
-//        reportTxt.setText(report.getCategory().getCategoryName());
-//        descriptionTxt.setText(report.getDescription());
-//        addressTxt.setText(report.getLocation().getStreet() + report.getLocation().getHouseNumber());
-//
-//        //heel veel info uit database per report
-//
-//        return convertView;
-//
-//    }
 
 }

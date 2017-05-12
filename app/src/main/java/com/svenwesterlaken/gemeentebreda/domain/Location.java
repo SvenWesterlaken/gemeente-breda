@@ -7,14 +7,19 @@ package com.svenwesterlaken.gemeentebreda.domain;
 public class Location {
     String street, city, postalCode;
     int houseNumber,  locationID;
+    String lattitude, longitude;
 
-    public Location(String street, String city, int houseNumber, String postalCode, int locationID ) {
+    public Location(String street, String city, int houseNumber, String postalCode, int locationID, String longitude, String lattitude ) {
         this.street = street;
         this.locationID = locationID;
         this.city = city;
         this.houseNumber = houseNumber;
         this.postalCode = postalCode;
+        this.lattitude = lattitude;
+        this.longitude = longitude;
     }
+
+    public Location(){};
 
     //getters
 
@@ -39,6 +44,12 @@ public class Location {
         return locationID;
     }
 
+    public String getLongitude() { return longitude; }
+
+    public String getLattitude() {
+        return lattitude;
+    }
+
     //setters
 
 
@@ -58,7 +69,13 @@ public class Location {
         this.houseNumber = houseNumber;
     }
 
+    public void setLongitude(String longitude) { this.longitude = longitude; }
+
     public void setLocationID(int locationID) {
         this.locationID = locationID;
+    }
+
+    public void setLattitude(String lattitude) {
+        this.lattitude = lattitude;
     }
 }

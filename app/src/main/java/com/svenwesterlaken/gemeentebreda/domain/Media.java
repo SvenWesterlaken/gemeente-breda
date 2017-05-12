@@ -6,6 +6,14 @@ package com.svenwesterlaken.gemeentebreda.domain;
 
 public class Media {
 
+    public int getMediaID() {
+        return mediaID;
+    }
+
+    public void setMediaID(int mediaID) {
+        this.mediaID = mediaID;
+    }
+
     int mediaID;
 
     public Media(int mediaID) {
