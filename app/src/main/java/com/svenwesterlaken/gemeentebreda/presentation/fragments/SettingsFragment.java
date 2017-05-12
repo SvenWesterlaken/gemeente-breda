@@ -8,6 +8,8 @@ import android.preference.Preference;
 import android.preference.PreferenceCategory;
 import android.preference.PreferenceFragment;
 import android.support.v4.content.IntentCompat;
+
+import com.svenwesterlaken.gemeentebreda.BuildConfig;
 import com.svenwesterlaken.gemeentebreda.R;
 import com.svenwesterlaken.gemeentebreda.presentation.activities.SettingsActivity;
 
@@ -64,8 +66,14 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
                 ListPreference listPreference = (ListPreference) preference;
                 listPreference.setSummary(listPreference.getEntry());
             } else {
-                SharedPreferences sharedPrefs = getPreferenceManager().getSharedPreferences();
-                preference.setSummary(sharedPrefs.getString(key, "Default"));
+                if (key.equals("pref_info")) {
+                    preference.setSummary(getString(R.string.pref_value_info) + " " + BuildConfig.VERSION_NAME);
+                } else if (key.equals("pref_reset")) {
+                    preference.setSummary(preference.getSummary());
+                } else {
+                    SharedPreferences sharedPrefs = getPreferenceManager().getSharedPreferences();
+                    preference.setSummary(sharedPrefs.getString(key, "default"));
+                }
             }
         }
     }

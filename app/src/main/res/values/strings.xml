@@ -14,10 +14,10 @@
 
     <!-- Strings related to Settings -->
     <string name="pref_title_display_name">Naam</string>
-    <string name="pref_default_display_name">John Smith</string>
+    <string name="pref_default_display_name">Onbekend</string>
 
     <string name="pref_title_email">Email</string>
-    <string name="pref_default_email">johnsmith@gmail.com</string>
+    <string name="pref_default_email">Onbekend</string>
 
     <string name="pref_title_phone">Mobiele Nummer</string>
     <string name="pref_default_phone">Onbekend</string>
@@ -32,4 +32,11 @@
         <item>dark</item>
         <item>light</item>
     </string-array>
+    <string name="pref_title_reset">Standaardinstellingen</string>
+    <string name="pref_value_reset">Herstel de standaardinstellingen van de app</string>
+    <string name="pref_title_info">Over de app</string>
+    <string name="pref_value_info">Versie</string>
+
+    <string name="title_activity_login">LoginActivity</string>
+    <string name="section_format">Hello World from section: %1$d</string>
 </resources>
