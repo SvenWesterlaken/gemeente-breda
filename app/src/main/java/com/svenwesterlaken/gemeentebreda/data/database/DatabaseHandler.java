@@ -27,13 +27,13 @@ public class DatabaseHandler extends SQLiteOpenHelper{
     private static final String DB_NAME = "gemeente.db";
 
     private static final String USER_TABLE_NAME = "user";
-        private static final String USER_COLUMN_ID = "_userId";
+        private static final String USER_COLUMN_ID = "userId";
         private static final String USER_COLUMN_NAME = "name";
         private static final String USER_COLUMN_PHONE = "phone";
         private static final String USER_COLUMN_EMAIL = "email";
 
     private static final String REPORT_TABLE_NAME = "report";
-        private static final String REPORT_COLUMN_ID = "_reportId";
+        private static final String REPORT_COLUMN_ID = "reportId";
         private static final String REPORT_COLUMN_CATEGORYID = "categoryId";
         private static final String REPORT_COLUMN_DESCRIPTION = "description";
         private static final String REPORT_COLUMN_MEDIAID = "mediaId";
@@ -42,11 +42,11 @@ public class DatabaseHandler extends SQLiteOpenHelper{
 
 
     private static final String USER_REPORT_TABLE_NAME = "user_report";
-        private static final String USER_REPORT_COLUMN_USERID = "_userId";
-        private static final String USER_REPORT_COLUMN_REPORTID = "_reportId";
+        private static final String USER_REPORT_COLUMN_USERID = "userId";
+        private static final String USER_REPORT_COLUMN_REPORTID = "reportId";
 
     private static final String LOCATION_TABLE_NAME = "location";
-        private static final String LOCATION_COLUMN_ID = "_locationId";
+        private static final String LOCATION_COLUMN_ID = "locationId";
         private static final String LOCATION_COLUMN_LATITUDE = "latitude";
         private static final String LOCATION_COLUMN_LONGITUDE = "longitude";
         private static final String LOCATION_COLUMN_STREET = "steet";
@@ -55,19 +55,19 @@ public class DatabaseHandler extends SQLiteOpenHelper{
         private static final String LOCATION_COLUMN_CITY = "city";
 
     private static final String CATEGORY_TABLE_NAME = "category";
-        private static final String CATEGORY_COLUMN_ID = "_categoryId";
+        private static final String CATEGORY_COLUMN_ID = "categoryId";
         private static final String CATEGORY_COLUMN_NAAM = "categoryName";
         private static final String CATEGORY_COLUMN_SUMMARY = "summary";
 
     private static final String MEDIA_TABLE_NAME = "media";
-        private static final String MEDIA_COLUMN_ID = "_mediaId";
+        private static final String MEDIA_COLUMN_ID = "mediaId";
 
     private static final String VIDEO_TABLE_NAME = "video";
-        private static final String VIDEO_COLUMN_ID = "_mediaId";
+        private static final String VIDEO_COLUMN_ID = "mediaId";
         private static final String VIDEO_COLUMN_LENGTH = "length";
 
     private static final String PHOTO_TABLE_NAME = "photo";
-        private static final String PHOTO_COLUMN_ID = "_mediaId";
+        private static final String PHOTO_COLUMN_ID = "mediaId";
 
     public DatabaseHandler (Context context, String name, SQLiteDatabase.CursorFactory factory, int version){
         super(context, DB_NAME, factory, DB_VERSION);
@@ -91,7 +91,6 @@ public class DatabaseHandler extends SQLiteOpenHelper{
                 REPORT_COLUMN_DESCRIPTION + " TEXT," +
                 REPORT_COLUMN_MEDIAID + " TEXT," +
                 REPORT_COLUMN_LOCATIONID + " TEXT," +
-                USER_REPORT_COLUMN_USERID + "INTEGER " +
 
                 "FOREIGN KEY (" + REPORT_COLUMN_CATEGORYID + ")" +
                 "REFERENCES " + CATEGORY_TABLE_NAME + "(" + CATEGORY_COLUMN_ID + ")," +
@@ -128,7 +127,6 @@ public class DatabaseHandler extends SQLiteOpenHelper{
 
                 CATEGORY_COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
                 CATEGORY_COLUMN_NAAM + " TEXT" +
-      CATEGORY_COLUMN_ID + " TEXT PRIMARY KEY AUTOINCREMENT," +
                 CATEGORY_COLUMN_NAAM + " TEXT, " +
                 CATEGORY_COLUMN_SUMMARY + " TEXT " +
                 ");";
@@ -139,7 +137,6 @@ public class DatabaseHandler extends SQLiteOpenHelper{
 
         String CREATE_VIDEO_TABLE = "CREATE TABLE " + VIDEO_TABLE_NAME + "(" +
                 VIDEO_COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                VIDEO_COLUMN_ID + " TEXT PRIMARY KEY AUTOINCREMENT, " +
                 VIDEO_COLUMN_LENGTH + " TEXT, " +
 
                 "FOREIGN KEY (" + VIDEO_COLUMN_ID + ")" +
@@ -212,7 +209,6 @@ public class DatabaseHandler extends SQLiteOpenHelper{
         values.put(REPORT_COLUMN_DESCRIPTION, report.getDescription());
 //        values.put(REPORT_COLUMN_MEDIAID, report.getMedia().getMediaID());
         values.put(REPORT_COLUMN_LOCATIONID, report.getLocation().getLocationID());
-        values.put(REPORT_COLUMN_USERID, report.getUser().getUserID());
 
         SQLiteDatabase db = this.getWritableDatabase();
         db.insert(REPORT_TABLE_NAME, null, values);
@@ -386,32 +382,34 @@ public class DatabaseHandler extends SQLiteOpenHelper{
     public ArrayList<Report> getAllReports(){
         ArrayList<Report> reports = new ArrayList<>();
 
-        String query = "SELECT * FROM " + REPORT_TABLE_NAME ;
+        String query = "SELECT * FROM " + REPORT_TABLE_NAME + ";";
 
 
         SQLiteDatabase db = this.getReadableDatabase();
 
         Cursor cursor = db.rawQuery(query, null);
 
+        cursor.moveToFirst();
+
         while(cursor.moveToNext() ) {
 
             Report report = new Report();
 
-            report.setCategory( getCategory(cursor.getInt(cursor.getColumnIndex(REPORT_COLUMN_ID))));
+            report.setCategory(getCategory(cursor.getInt(cursor.getColumnIndex(REPORT_COLUMN_ID))));
 
             report.setReportID( cursor.getInt(cursor.getColumnIndex(REPORT_COLUMN_ID)));
 
             report.setDescription( cursor.getString(cursor.getColumnIndex(REPORT_COLUMN_DESCRIPTION)));
 //            report.setMediaId(cursor.getInt(cursor.getColumnIndex(REPORT_COLUMN_MEDIAID)));
             report.setLocation( getLocation(cursor.getInt(cursor.getColumnIndex(REPORT_COLUMN_LOCATIONID))));
-            report.setUser( getUser(cursor.getInt(cursor.getColumnIndex(REPORT_COLUMN_USERID))));
+            //report.setUser( getUser(cursor.getInt(cursor.getColumnIndex(REPORT_COLUMN_USERID))));
 
 
 
             reports.add(report);
         }
 
-        db.close();
+        cursor.close();
 
         return reports;
 

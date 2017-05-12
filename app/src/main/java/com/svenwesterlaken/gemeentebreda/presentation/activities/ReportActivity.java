@@ -44,7 +44,8 @@ public class ReportActivity extends MenuActivity {
 
     private PagerAdapter mSectionsPagerAdapter;
     private ViewPager mViewPager;
-    ArrayList<Report> spotifyItemsList = new ArrayList<Report>();
+    private ReportMapFragment mapFragment;
+
 
     private static final int MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 1;
 
@@ -58,10 +59,11 @@ public class ReportActivity extends MenuActivity {
 
         super.onCreateDrawer(toolbar, this);
 
+        mapFragment = new ReportMapFragment();
 
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
-        mSectionsPagerAdapter = new ReportPagerAdapter(getSupportFragmentManager(), 2, getApplicationContext());
+        mSectionsPagerAdapter = new ReportPagerAdapter(getSupportFragmentManager(), 2, getApplicationContext(), mapFragment);
 
         // Set up the ViewPager with the sections adapter.
         mViewPager = (ViewPager) findViewById(R.id.container);
@@ -143,8 +145,6 @@ public class ReportActivity extends MenuActivity {
     @Override
     public void onRequestPermissionsResult(int requestCode,
                                            String permissions[], int[] grantResults) {
-        ReportMapFragment mapFragment = (ReportMapFragment) f1;
-
         switch (requestCode) {
 
             case MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION: {
