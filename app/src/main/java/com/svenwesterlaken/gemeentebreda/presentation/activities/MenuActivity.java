@@ -75,10 +75,8 @@ public class MenuActivity extends BaseActivity implements NavigationView.OnNavig
         } else if (id == R.id.drawer_settings) {
             Intent i = new Intent(getApplicationContext(), SettingsActivity.class);
             startActivity(i);
-        } else if (id == R.id.drawer_info) {
-//            Intent i = new Intent(getApplicationContext(), SettingsActivity.class);
-//            startActivity(i);
         }
+
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
