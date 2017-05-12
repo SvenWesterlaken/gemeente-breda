@@ -23,6 +23,12 @@
         <activity
             android:name=".presentation.activities.LoadingActivity"
             android:label="@string/app_name"
+
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".presentation.activities.ReportActivity"
+            android:label="@string/title_activity_report"
+
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -30,17 +36,14 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".presentation.activities.ReportActivity"
-            android:label="@string/title_activity_report"
-            android:theme="@style/AppTheme.NoActionBar" />
+
+
         <activity
             android:name=".presentation.activities.SettingsActivity"
-            android:label="@string/title_activity_settings"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:label="@string/title_activity_settings" />
         <activity
             android:name=".presentation.activities.LoginActivity"
-            android:label="@string/title_activity_login"></activity>
+            android:label="@string/title_activity_login"/>
     </application>
 
 </manifest>
