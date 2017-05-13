@@ -38,7 +38,6 @@ public class DatabaseHandler extends SQLiteOpenHelper{
         private static final String REPORT_COLUMN_DESCRIPTION = "description";
         private static final String REPORT_COLUMN_MEDIAID = "mediaId";
         private static final String REPORT_COLUMN_LOCATIONID = "locationId";
-        private static final String REPORT_COLUMN_USERID = "userId";
 
 
     private static final String USER_REPORT_TABLE_NAME = "user_report";
@@ -126,7 +125,6 @@ public class DatabaseHandler extends SQLiteOpenHelper{
         String CREATE_CATEGORY_TABLE = "CREATE TABLE " + CATEGORY_TABLE_NAME + "(" +
 
                 CATEGORY_COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
-                CATEGORY_COLUMN_NAAM + " TEXT" +
                 CATEGORY_COLUMN_NAAM + " TEXT, " +
                 CATEGORY_COLUMN_SUMMARY + " TEXT " +
                 ");";
