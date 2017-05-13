@@ -49,6 +49,7 @@ public class LoginTwoFragment extends Fragment {
 
 
                 Intent i = new Intent(getActivity().getApplicationContext(), ReportActivity.class);
+                i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(i);
             }
         });

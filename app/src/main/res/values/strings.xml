@@ -43,4 +43,7 @@
 
     <string name="title_activity_login">LoginActivity</string>
     <string name="section_format">Hello World from section: %1$d</string>
+    <string name="welcome_message">Welkom bij \'Gemeente Breda\'. \n\n De app voor al uw problemen waar de gemeente iets van af moet weten!</string>
+    <string name="login_message">Om uw ervaring te personaliseren raden wij u aan om hier uw naam en e-mailadres in te vullen.</string>
+    <string name="login_submessage">Deze kunnen later nog gewijzigd worden</string>
 </resources>

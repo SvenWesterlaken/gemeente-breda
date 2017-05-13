@@ -18,9 +18,7 @@ public class LoginOneFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_placeholder, container, false);
-        TextView textView = (TextView) rootView.findViewById(R.id.section_label);
-        textView.setText("Ga naar rechts om de inloggevens in te vullen. \n Invulling van dit scherm komt later.");
+        View rootView = inflater.inflate(R.layout.fragment_welcome, container, false);
         return rootView;
     }
 }
