@@ -84,6 +84,43 @@ public class DatabaseHandler extends SQLiteOpenHelper{
                 USER_COLUMN_EMAIL + " TEXT" +
                 ");";
 
+        String CREATE_LOCATION_TABLE = "CREATE TABLE " + LOCATION_TABLE_NAME + "(" +
+                LOCATION_COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
+                LOCATION_COLUMN_LATITUDE + " DECIMAL(5,5)," +
+                LOCATION_COLUMN_LONGITUDE + " DECIMAL(5,5)," +
+                LOCATION_COLUMN_STREET + " TEXT," +
+                LOCATION_COLUMN_STREETNR + " TEXT," +
+                LOCATION_COLUMN_POSTALCODE + " TEXT," +
+                LOCATION_COLUMN_CITY + " TEXT" +
+                ");";
+
+        String CREATE_CATEGORY_TABLE = "CREATE TABLE " + CATEGORY_TABLE_NAME + "(" +
+                CATEGORY_COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
+                CATEGORY_COLUMN_NAME + " TEXT, " +
+                CATEGORY_COLUMN_SUMMARY + " TEXT " +
+                ");";
+
+        String CREATE_MEDIA_TABLE = "CREATE TABLE " + MEDIA_TABLE_NAME +  "(" +
+                MEDIA_COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT" +
+                ");";
+
+        String CREATE_VIDEO_TABLE = "CREATE TABLE " + VIDEO_TABLE_NAME + "(" +
+                VIDEO_COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                VIDEO_COLUMN_LENGTH + " TEXT, " +
+
+                "FOREIGN KEY (" + VIDEO_COLUMN_ID + ")" +
+                "REFERENCES " + MEDIA_TABLE_NAME +  "(" + MEDIA_COLUMN_ID + ")" +
+
+                ");";
+
+        String CREATE_PHOTO_TABLE = "CREATE TABLE " + PHOTO_TABLE_NAME + "(" +
+                PHOTO_COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+
+                "FOREIGN KEY (" + PHOTO_COLUMN_ID + ")" +
+                "REFERENCES " + MEDIA_TABLE_NAME +  "(" + MEDIA_COLUMN_ID + ")" +
+
+                ");";
+
         String CREATE_REPORT_TABLE = "CREATE TABLE " + REPORT_TABLE_NAME + "(" +
                 REPORT_COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
                 REPORT_COLUMN_CATEGORYID + " INTEGER, " +
@@ -112,43 +149,6 @@ public class DatabaseHandler extends SQLiteOpenHelper{
                 "REFERENCES " + REPORT_TABLE_NAME +  "(" + REPORT_COLUMN_ID + ")" +
                 ");";
 
-        String CREATE_LOCATION_TABLE = "CREATE TABLE " + LOCATION_TABLE_NAME + "(" +
-                LOCATION_COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
-                LOCATION_COLUMN_LATITUDE + " DECIMAL(5,10)," +
-                LOCATION_COLUMN_LONGITUDE + " DECIMAL(5,10)," +
-                LOCATION_COLUMN_STREET + " TEXT," +
-                LOCATION_COLUMN_STREETNR + " TEXT," +
-                LOCATION_COLUMN_POSTALCODE + " TEXT," +
-                LOCATION_COLUMN_CITY + " TEXT" +
-                ");";
-
-        String CREATE_CATEGORY_TABLE = "CREATE TABLE " + CATEGORY_TABLE_NAME + "(" +
-
-                CATEGORY_COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
-                CATEGORY_COLUMN_NAME + " TEXT, " +
-                CATEGORY_COLUMN_SUMMARY + " TEXT " +
-                ");";
-
-        String CREATE_MEDIA_TABLE = "CREATE TABLE " + MEDIA_TABLE_NAME +  "(" +
-                MEDIA_COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT" +
-                ");";
-
-        String CREATE_VIDEO_TABLE = "CREATE TABLE " + VIDEO_TABLE_NAME + "(" +
-                VIDEO_COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                VIDEO_COLUMN_LENGTH + " TEXT, " +
-
-                "FOREIGN KEY (" + VIDEO_COLUMN_ID + ")" +
-                "REFERENCES " + MEDIA_TABLE_NAME +  "(" + MEDIA_COLUMN_ID + ")" +
-
-                ");";
-
-        String CREATE_PHOTO_TABLE = "CREATE TABLE " + PHOTO_TABLE_NAME + "(" +
-                PHOTO_COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
-
-                "FOREIGN KEY (" + PHOTO_COLUMN_ID + ")" +
-                "REFERENCES " + MEDIA_TABLE_NAME +  "(" + MEDIA_COLUMN_ID + ")" +
-
-                ");";
         db.execSQL("PRAGMA foreign_keys = ON");
         db.execSQL(CREATE_USER_TABLE);
         db.execSQL(CREATE_REPORT_TABLE);
