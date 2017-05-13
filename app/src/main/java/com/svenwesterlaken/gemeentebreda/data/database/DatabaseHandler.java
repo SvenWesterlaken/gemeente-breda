@@ -86,8 +86,8 @@ public class DatabaseHandler extends SQLiteOpenHelper{
 
         String CREATE_LOCATION_TABLE = "CREATE TABLE " + LOCATION_TABLE_NAME + "(" +
                 LOCATION_COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
-                LOCATION_COLUMN_LATITUDE + " DECIMAL(5,5)," +
-                LOCATION_COLUMN_LONGITUDE + " DECIMAL(5,5)," +
+                LOCATION_COLUMN_LATITUDE + " FLOAT(10)," +
+                LOCATION_COLUMN_LONGITUDE + " FLOAT(10)," +
                 LOCATION_COLUMN_STREET + " TEXT," +
                 LOCATION_COLUMN_STREETNR + " TEXT," +
                 LOCATION_COLUMN_POSTALCODE + " TEXT," +
