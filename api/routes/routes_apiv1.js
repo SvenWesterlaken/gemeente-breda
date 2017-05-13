@@ -16,8 +16,28 @@ router.get('/user/:userID', function(request, response) {
 router.get('/report/:reportID', function(request, response) {
     var reportID = request.params.reportID;
 
-    response.status(200);
-    response.json({"description": "this will return a report", "reportID": reportID});
+    var query_str;
+    if (reportID) {
+        query_str = 'SELECT * FROM country WHERE code = "' + reportID + '";';
+    } else {
+        query_str = 'SELECT * FROM country;';
+    }
+
+    pool.getConnection(function (err, connection) {
+        if (err) {
+            throw error
+        }
+        connection.query(query_str, function (err, rows, fields) {
+            connection.release();
+            if (err) {
+                throw error
+            }
+            res.status(200).json(rows);
+        });
+    });
+
+    // response.status(200);
+    // response.json({"description": "this will return a report", "reportID": reportID});
 });
 
 router.get('*', function(req, res){
