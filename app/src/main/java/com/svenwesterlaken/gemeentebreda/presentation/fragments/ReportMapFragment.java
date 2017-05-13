@@ -1,5 +1,12 @@
 package com.svenwesterlaken.gemeentebreda.presentation.fragments;
 
+
+import android.support.v4.app.Fragment;
+import android.os.Bundle;
+
+import android.os.Bundle;
+import android.support.v4.app.Fragment;
+
 import android.Manifest;
 import android.content.pm.PackageManager;
 import android.location.Criteria;
@@ -9,9 +16,13 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+
+import com.svenwesterlaken.gemeentebreda.R;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -24,6 +35,9 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.svenwesterlaken.gemeentebreda.R;
+
+import java.util.ArrayList;
+
 
 import static android.content.Context.LOCATION_SERVICE;
 
@@ -160,4 +174,5 @@ public class ReportMapFragment extends Fragment {
         super.onLowMemory();
         mMapView.onLowMemory();
     }
+
 }

@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/report_CV_report"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="8dp"
+    tools:ignore="missingPrefix"
+    app:cardCornerRadius="2dp"
+    app:cardElevation="2dp">
+
+    <android.support.constraint.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:id="@+id/report_IV_icon"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_alignBottom="@+id/report_TV_upvotes"
+            android:layout_alignLeft="@+id/report_TV_description"
+            android:layout_alignStart="@+id/report_TV_description"
+            android:layout_marginBottom="8dp"
+            android:layout_marginLeft="24dp"
+            android:layout_marginTop="8dp"
+            app:layout_constraintBottom_toBottomOf="@+id/report_TV_address"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/report_TV_title"
+            app:srcCompat="@color/cast_intro_overlay_button_background_color"
+            android:layout_marginStart="24dp" />
+
+        <TextView
+            android:id="@+id/report_TV_title"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/report_TV_description"
+            android:layout_centerHorizontal="true"
+            android:layout_marginLeft="24dp"
+            android:layout_marginTop="16dp"
+
+            android:text="Kapotte straatverlichting"
+            android:textAppearance="@style/CustomtextAppearanceSmall"
+            app:layout_constraintLeft_toRightOf="@+id/report_IV_icon"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintRight_toLeftOf="@+id/report_IV_status"
+            android:layout_marginRight="16dp"
+            app:layout_constraintHorizontal_bias="0.0"
+            android:layout_marginStart="24dp"
+            android:layout_marginEnd="16dp" />
+
+        <TextView
+            android:id="@+id/report_TV_address"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="Lovendijkstraat 63"
+            android:textAppearance="@style/CustomtextAppearanceSmall"
+            app:layout_constraintLeft_toLeftOf="@+id/report_TV_title"
+            app:layout_constraintTop_toBottomOf="@+id/report_TV_title"
+            app:layout_constraintRight_toRightOf="@+id/report_TV_title"
+            app:layout_constraintHorizontal_bias="0.0" />
+
+        <ImageView
+            android:id="@+id/report_IV_status"
+            android:layout_width="16dp"
+            android:layout_height="16dp"
+            android:layout_marginBottom="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginTop="8dp"
+            app:layout_constraintBottom_toBottomOf="@+id/report_TV_address"
+            app:layout_constraintRight_toLeftOf="@+id/report_TV_upvotes"
+            app:layout_constraintTop_toTopOf="@+id/report_TV_title"
+            app:srcCompat="@color/clear_btn_color" />
+
+        <TextView
+            android:id="@+id/report_TV_upvotes"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_alignParentTop="true"
+            android:layout_marginBottom="8dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginRight="16dp"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/circle"
+            android:text="0"
+            android:gravity="center"
+            android:textColor="?attr/colorPrimary"
+            fontPath="fonts/Roboto-Medium.ttf"
+            app:layout_constraintBottom_toBottomOf="@+id/report_IV_status"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/report_IV_status" />
+
+        <View
+            android:id="@+id/report_D_header"
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:background="?attr/colorDivider"
+            app:layout_constraintTop_toBottomOf="@+id/report_TV_address"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            android:layout_marginTop="16dp" />
+
+        <TextView
+            android:id="@+id/report_TV_description"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/report_IV_icon"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="16dp"
+            android:layout_marginTop="16dp"
+            android:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. "
+            android:textAppearance="@style/CustomtextAppearanceSmall"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/report_D_header"
+            app:layout_constraintVertical_bias="0.0"
+            android:layout_marginRight="16dp"
+            app:layout_constraintRight_toRightOf="parent"
+            android:layout_marginLeft="16dp"
+            app:layout_constraintLeft_toLeftOf="parent" />
+
+
+    </android.support.constraint.ConstraintLayout>
+
+</android.support.v7.widget.CardView>
