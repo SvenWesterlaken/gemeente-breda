@@ -13,14 +13,15 @@ router.get('/user/:userID', function(request, response) {
     response.json({"description": "this will return a user", "userID": userID});
 });
 
-router.get('/report/:reportID', function(request, response) {
-    var reportID = request.params.reportID;
+router.get('/reports', function(request, response) {
+    var longitude = request.query.longitude || '';
+    var latitude = request.query.latitude || '';
 
     var query_str;
     if (reportID) {
-        query_str = 'SELECT * FROM country WHERE code = "' + reportID + '";';
+        query_str += 'SELECT * FROM report WHERE reportID = "' + reportID + '";';
     } else {
-        query_str = 'SELECT * FROM country;';
+        query_str = 'SELECT * FROM report;';
     }
 
     pool.getConnection(function (err, connection) {
@@ -32,7 +33,7 @@ router.get('/report/:reportID', function(request, response) {
             if (err) {
                 throw error
             }
-            res.status(200).json(rows);
+            response.status(200).json(rows);
         });
     });
 
@@ -40,9 +41,9 @@ router.get('/report/:reportID', function(request, response) {
     // response.json({"description": "this will return a report", "reportID": reportID});
 });
 
-router.get('*', function(req, res){
-    res.status(200);
-    res.json({
+router.get('*', function(request, response){
+    response.status(200);
+    response.json({
         "description": "API V1"
     });
 });

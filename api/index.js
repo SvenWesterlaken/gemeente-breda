@@ -10,7 +10,7 @@ var app = express();
 
 app.set('PORT', config.webPort);
 
-app.use('/apiv1', require('./routes/routes_apiv1'));
+app.use('/api/v1', require('./routes/routes_apiv1'));
 
 app.all('*', function(req, res, next){
     res.status(200);

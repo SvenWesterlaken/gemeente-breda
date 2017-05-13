@@ -1,8 +1,8 @@
 {
   "secretkey" : "",
-  "dbUsername" : "",
-  "dbPassword" : "",
-  "dbSchema" : "",
-  "dbServer" : "",
+  "dbUsername" : "gemeenteTest",
+  "dbPassword" : "KGbfTaEXJv7bmLUA",
+  "dbSchema" : "gemeente",
+  "dbServer" : "localhost",
   "webPort" : "8080"
 }
