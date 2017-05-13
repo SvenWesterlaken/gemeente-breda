@@ -55,7 +55,7 @@ public class DatabaseHandler extends SQLiteOpenHelper{
 
     private static final String CATEGORY_TABLE_NAME = "category";
         private static final String CATEGORY_COLUMN_ID = "categoryId";
-        private static final String CATEGORY_COLUMN_NAAM = "categoryName";
+        private static final String CATEGORY_COLUMN_NAME = "categoryName";
         private static final String CATEGORY_COLUMN_SUMMARY = "summary";
 
     private static final String MEDIA_TABLE_NAME = "media";
@@ -86,10 +86,10 @@ public class DatabaseHandler extends SQLiteOpenHelper{
 
         String CREATE_REPORT_TABLE = "CREATE TABLE " + REPORT_TABLE_NAME + "(" +
                 REPORT_COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
-                REPORT_COLUMN_CATEGORYID + " TEXT, " +
+                REPORT_COLUMN_CATEGORYID + " INTEGER, " +
                 REPORT_COLUMN_DESCRIPTION + " TEXT," +
-                REPORT_COLUMN_MEDIAID + " TEXT," +
-                REPORT_COLUMN_LOCATIONID + " TEXT," +
+                REPORT_COLUMN_MEDIAID + " INTEGER," +
+                REPORT_COLUMN_LOCATIONID + " INTEGER," +
 
                 "FOREIGN KEY (" + REPORT_COLUMN_CATEGORYID + ")" +
                 "REFERENCES " + CATEGORY_TABLE_NAME + "(" + CATEGORY_COLUMN_ID + ")," +
@@ -102,8 +102,8 @@ public class DatabaseHandler extends SQLiteOpenHelper{
 
                 ");";
         String CREATE_USER_REPORT_TABLE = "CREATE TABLE " + USER_REPORT_TABLE_NAME + "(" +
-                USER_REPORT_COLUMN_USERID + " TEXT, " +
-                USER_REPORT_COLUMN_REPORTID + " TEXT, " +
+                USER_REPORT_COLUMN_USERID + " INTEGER, " +
+                USER_REPORT_COLUMN_REPORTID + " INTEGER, " +
 
                 "FOREIGN KEY (" + USER_REPORT_COLUMN_USERID + ")" +
                 "REFERENCES " + USER_TABLE_NAME + "(" + USER_COLUMN_ID + ")," +
@@ -117,7 +117,7 @@ public class DatabaseHandler extends SQLiteOpenHelper{
                 LOCATION_COLUMN_LATITUDE + " DECIMAL(5,10)," +
                 LOCATION_COLUMN_LONGITUDE + " DECIMAL(5,10)," +
                 LOCATION_COLUMN_STREET + " TEXT," +
-                LOCATION_COLUMN_STREETNR + " INT," +
+                LOCATION_COLUMN_STREETNR + " TEXT," +
                 LOCATION_COLUMN_POSTALCODE + " TEXT," +
                 LOCATION_COLUMN_CITY + " TEXT" +
                 ");";
@@ -125,7 +125,7 @@ public class DatabaseHandler extends SQLiteOpenHelper{
         String CREATE_CATEGORY_TABLE = "CREATE TABLE " + CATEGORY_TABLE_NAME + "(" +
 
                 CATEGORY_COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
-                CATEGORY_COLUMN_NAAM + " TEXT, " +
+                CATEGORY_COLUMN_NAME + " TEXT, " +
                 CATEGORY_COLUMN_SUMMARY + " TEXT " +
                 ");";
 
@@ -234,7 +234,7 @@ public class DatabaseHandler extends SQLiteOpenHelper{
     //ADD CATEGORIES
     public void addCategory(Category category){
         ContentValues values = new ContentValues();
-        values.put(CATEGORY_COLUMN_NAAM, category.getCategoryName());
+        values.put(CATEGORY_COLUMN_NAME, category.getCategoryName());
 
 
         SQLiteDatabase db = this.getWritableDatabase();
@@ -328,7 +328,7 @@ public class DatabaseHandler extends SQLiteOpenHelper{
         ArrayList<Report> reports = new ArrayList<>();
 
         String query = "SELECT * FROM " + REPORT_TABLE_NAME + " WHERE " +
-                REPORT_COLUMN_USERID + "=" + "\"" + name + "\"";
+                USER_REPORT_COLUMN_REPORTID + "=" + "\"" + name + "\"";
 
         String queryALL = "SELECT * FROM " + REPORT_TABLE_NAME;
 
@@ -345,7 +345,7 @@ public class DatabaseHandler extends SQLiteOpenHelper{
             report.setDescription(cursor.getString(cursor.getColumnIndex(REPORT_COLUMN_DESCRIPTION)));
 //            report.setMediaId(cursor.getInt(cursor.getColumnIndex(REPORT_COLUMN_MEDIAID)));
             report.setLocationID(cursor.getInt(cursor.getColumnIndex(REPORT_COLUMN_LOCATIONID)));
-            report.setUserID(cursor.getInt(cursor.getColumnIndex(REPORT_COLUMN_USERID)));
+//            report.setUserID(cursor.getInt(cursor.getColumnIndex(REPORT_COLUMN_USERID)));
 
             reports.add(report);
         }
@@ -369,7 +369,7 @@ public class DatabaseHandler extends SQLiteOpenHelper{
         while(cursor.moveToNext()){
             category = new Category();
             category.setCategoryID(cursor.getInt(cursor.getColumnIndex(CATEGORY_COLUMN_ID)));
-            category.setCategoryName(cursor.getString(cursor.getColumnIndex(CATEGORY_COLUMN_NAAM)));
+            category.setCategoryName(cursor.getString(cursor.getColumnIndex(CATEGORY_COLUMN_NAME)));
 
         }
 
