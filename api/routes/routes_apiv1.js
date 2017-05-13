@@ -13,25 +13,33 @@ router.get('/user/:userID', function(request, response) {
     response.json({"description": "this will return a user", "userID": userID});
 });
 
-router.get('/reports', function(request, response) {
-    var longitudeQuery = request.query.longitude || '';
-    var latitudeQuery = request.query.latitude || '';
+router.get('/reports/:latitude/:longitude/:area', function(request, response) {
+    var latitude = request.params.latitude;
+    var longitude = request.params.longitude;
+    var area = request.params.area;
+
+    var maxLat = latitude + area;
+    var minLat = latitude - area;
+    var maxLong = longitude + area;
+    var minLong = longitude - area;
 
     var query_str;
-    if (longitudeQuery !== '' && latitudeQuery !== '') {
-        query_str += 'SELECT * FROM report INNER JOIN location ON report.locationID = location.locationID WHERE longitude = ' + longitudeQuery + ' AND latitude = ' + latitudeQuery + ';';
+    if (longitude !== '' && latitude !== '') {
+        query_str = 'SELECT * FROM report INNER JOIN location ON report.locationId = location.locationId ' +
+            'WHERE longitude BETWEEN ' + minLong + ' AND ' + maxLong + ' AND latitude BETWEEN ' + minLat + ' AND ' + maxLat + ';';
+        console.log(query_str);
     } else {
-        query_str = 'SELECT * FROM report;';
+        query_str = 'SELECT * FROM location;';
     }
 
     pool.getConnection(function (err, connection) {
         if (err) {
-            throw error
+            throw err
         }
         connection.query(query_str, function (err, rows, fields) {
             connection.release();
             if (err) {
-                throw error
+                throw err
             }
             response.status(200).json(rows);
         });
