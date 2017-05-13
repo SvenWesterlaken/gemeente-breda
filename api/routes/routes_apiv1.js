@@ -47,9 +47,12 @@ router.get('/reports/:latitude/:longitude/:area', function(request, response) {
         });
     }
 
-    // response.status(200);
-    // response.json({"description": "this will return a report", "reportID": reportID});
 });
+
+// router.post('/reports/:latitude/:longitude/:area', function(request, response) {
+//
+//
+// });
 
 router.get('*', function(request, response){
     response.status(200);
