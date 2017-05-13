@@ -14,12 +14,12 @@ router.get('/user/:userID', function(request, response) {
 });
 
 router.get('/reports', function(request, response) {
-    var longitude = request.query.longitude || '';
-    var latitude = request.query.latitude || '';
+    var longitudeQuery = request.query.longitude || '';
+    var latitudeQuery = request.query.latitude || '';
 
     var query_str;
-    if (reportID) {
-        query_str += 'SELECT * FROM report WHERE reportID = "' + reportID + '";';
+    if (longitudeQuery !== '' && latitudeQuery !== '') {
+        query_str += 'SELECT * FROM report INNER JOIN location ON report.locationID = location.locationID WHERE longitude = ' + longitudeQuery + ' AND latitude = ' + latitudeQuery + ';';
     } else {
         query_str = 'SELECT * FROM report;';
     }
