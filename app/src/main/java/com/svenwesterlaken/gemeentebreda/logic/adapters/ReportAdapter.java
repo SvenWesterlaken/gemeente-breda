@@ -1,66 +1,71 @@
 package com.svenwesterlaken.gemeentebreda.logic.adapters;
 
 import android.content.Context;
-import android.database.Cursor;
-import android.media.Image;
+import android.graphics.drawable.Drawable;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.CursorAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.google.android.gms.plus.model.people.Person;
-import com.google.android.gms.vision.text.Text;
 import com.svenwesterlaken.gemeentebreda.R;
-import com.svenwesterlaken.gemeentebreda.domain.Category;
-import com.svenwesterlaken.gemeentebreda.domain.Location;
-import com.svenwesterlaken.gemeentebreda.domain.Media;
 import com.svenwesterlaken.gemeentebreda.domain.Report;
-import com.svenwesterlaken.gemeentebreda.domain.User;
 
-import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by lukab on 7-5-2017.
  */
 
-public class ReportAdapter extends ArrayAdapter<Report> {
+public class ReportAdapter extends RecyclerView.Adapter<ReportAdapter.ReportViewHolder> {
 
+    private List<Report> reports;
+    private Context context;
 
     // Constructor
-    public ReportAdapter(Context context, ArrayList<Report> objects) {
-        super(context, 0, objects);
+    public ReportAdapter(Context context, List<Report> reports) {
+        this.reports = reports;
+        this.context = context;
     }
 
-    // Hier wortd de data gebind aan de view
+    public int getItemCount() {
+        return reports.size();
+    }
+
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public ReportViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.row_report, parent, false);
 
-        Report report = getItem(position);
+        return new ReportViewHolder(itemView);
+    }
 
-        if (convertView == null) {
+    @Override
+    public void onBindViewHolder(ReportViewHolder contactViewHolder, int i) {
+        Report r = reports.get(i);
+        contactViewHolder.title.setText(r.getCategory().getCategoryName());
+        contactViewHolder.address.setText(r.getLocation().getStreet() + " " + r.getLocation().getHouseNumber());
+        contactViewHolder.description.setText(r.getDescription());
 
-            convertView = LayoutInflater.from(getContext()).inflate(R.layout.listview_report_row, parent, false);
 
+        contactViewHolder.icon.setImageResource( R.drawable.lightbulb);
+        contactViewHolder.status.setImageResource( R.drawable.eye_off);
+    }
+
+    public static class ReportViewHolder extends RecyclerView.ViewHolder {
+        private TextView title, address, description, upvotes;
+        private ImageView icon, status;
+
+        public ReportViewHolder(View v) {
+            super(v);
+            title =  (TextView) v.findViewById(R.id.report_TV_title);
+            address = (TextView)  v.findViewById(R.id.report_TV_address);
+            description = (TextView)  v.findViewById(R.id.report_TV_description);
+            upvotes = (TextView) v.findViewById(R.id.report_TV_upvotes);
+
+            icon = (ImageView) v.findViewById(R.id.report_IV_icon);
+            status = (ImageView) v.findViewById(R.id.report_IV_status);
         }
-
-        TextView reportTextView = (TextView) convertView.findViewById(R.id.ReportText);
-        TextView addressTxtView = (TextView) convertView.findViewById(R.id.AddressTxt);
-        ImageView  image = (ImageView) convertView.findViewById(R.id.reportImage);
-        ImageView image2 =(ImageView) convertView.findViewById(R.id.seenNotifier);
-        TextView descriptionTxtView = (TextView) convertView.findViewById(R.id.DescriptionTxt);
-        ImageView image4 = (ImageView) convertView.findViewById(R.id.reportNumberTxt);
-
-
-        reportTextView.setText(report.getCategory().getCategoryName());
-        addressTxtView.setText(report.getLocation().getStreet() + " " + report.getLocation().getHouseNumber());
-        descriptionTxtView.setText(report.getDescription());
-
-        return convertView;
-
-
     }
 
 }

@@ -7,7 +7,7 @@ import android.support.v4.app.FragmentPagerAdapter;
 
 import com.svenwesterlaken.gemeentebreda.R;
 import com.svenwesterlaken.gemeentebreda.presentation.fragments.ReportMapFragment;
-import com.svenwesterlaken.gemeentebreda.presentation.fragments.ReportTab2;
+import com.svenwesterlaken.gemeentebreda.presentation.fragments.ReportListFragment;
 
 /**
  * Created by lukab on 4-5-2017.
@@ -15,26 +15,22 @@ import com.svenwesterlaken.gemeentebreda.presentation.fragments.ReportTab2;
 
 public class ReportPagerAdapter extends FragmentPagerAdapter {
 
-    ReportMapFragment tab1;
-    ReportTab2 tab2;
-    int mNumOfTabs;
-    Context context;
+    private ReportMapFragment mapFragment;
+    private ReportListFragment listFragment;
+    private int tabCount;
+    private Context context;
 
-    public ReportPagerAdapter(FragmentManager fm, int mNumOfTabs, Context context) {
-        super(fm);
-        this.mNumOfTabs = mNumOfTabs;
+    public ReportPagerAdapter(FragmentManager fragmentmanager, int tabCount, Context context, ReportMapFragment mapFragment) {
+        super(fragmentmanager);
+        this.tabCount = tabCount;
         this.context = context;
-
-
+        this.mapFragment = mapFragment;
     }
 
-    /**
-     * Retrieve the number of tabs
-     * @return A int data type
-     */
+    //Return the amount of tabas
     @Override
     public int getCount() {
-        return mNumOfTabs;
+        return tabCount;
     }
 
 
@@ -48,11 +44,10 @@ public class ReportPagerAdapter extends FragmentPagerAdapter {
 
         switch (position) {
             case 0:
-                tab1 = new ReportMapFragment();
-                return tab1;
+                return mapFragment;
             case 1:
-                tab2 = new ReportTab2();
-                return tab2;
+                listFragment = new ReportListFragment();
+                return listFragment;
 
             default:
                 return null;
@@ -68,13 +63,11 @@ public class ReportPagerAdapter extends FragmentPagerAdapter {
      * @return the title that belongs to the tab
      */
     public CharSequence getPageTitle(int position){
-
         switch (position) {
             case 0:
                 return context.getResources().getString(R.string.homepage_tab1);
             case 1:
                 return context.getResources().getString(R.string.homepage_tab2);
-
             default:
                 return null;
         }

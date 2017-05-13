@@ -46,13 +46,32 @@
         android:layout="@layout/row_preference_category">
 
         <ListPreference
-            android:defaultValue="@string/pref_default_theme"
             android:title="@string/pref_title_theme"
+            android:key="pref_theme"
             android:icon="@drawable/invert_colors"
             android:entries="@array/pref_entries_theme"
             android:entryValues="@array/pref_values_theme"
             android:layout="@layout/row_preference"
-            android:key="pref_theme"/>
+            android:defaultValue="1"/>
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:title="App"
+        android:layout="@layout/row_preference_category">
+
+        <Preference
+            android:title="@string/pref_title_reset"
+            android:icon="@drawable/restart"
+            android:key="pref_reset"
+            android:layout="@layout/row_preference"
+            android:summary="@string/pref_value_reset"/>
+
+        <Preference
+            android:title="@string/pref_title_info"
+            android:icon="@drawable/information_outline"
+            android:key="pref_info"
+            android:layout="@layout/row_preference"/>
 
     </PreferenceCategory>
 

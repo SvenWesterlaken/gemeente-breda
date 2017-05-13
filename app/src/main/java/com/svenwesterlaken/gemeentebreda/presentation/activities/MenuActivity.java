@@ -1,14 +1,20 @@
 package com.svenwesterlaken.gemeentebreda.presentation.activities;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
+import android.support.v4.content.IntentCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.design.widget.NavigationView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.TextView;
 
 import com.svenwesterlaken.gemeentebreda.R;
 
@@ -17,6 +23,7 @@ import com.svenwesterlaken.gemeentebreda.R;
  */
 
 public class MenuActivity extends BaseActivity implements NavigationView.OnNavigationItemSelectedListener {
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -29,8 +36,18 @@ public class MenuActivity extends BaseActivity implements NavigationView.OnNavig
         drawer.setDrawerListener(toggle);
         toggle.syncState();
 
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+        View header = navigationView.getHeaderView(0);
+
+        TextView name = (TextView) header.findViewById(R.id.drawerMenu_TV_username);
+        TextView email = (TextView) header.findViewById(R.id.drawerMenu_TV_useremail);
+
+        name.setText(preferences.getString("pref_name", ""));
+        email.setText(preferences.getString("pref_email", ""));
     }
 
     //Add Closing mechanism when backbutton is pressed
@@ -44,21 +61,6 @@ public class MenuActivity extends BaseActivity implements NavigationView.OnNavig
         }
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
-
     //Add intents for each menu item
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
@@ -68,17 +70,18 @@ public class MenuActivity extends BaseActivity implements NavigationView.OnNavig
 
         if (id == R.id.drawer_reports) {
             Intent i = new Intent(getApplicationContext(), ReportActivity.class);
+            i.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(i);
         } else if (id == R.id.drawer_myreports) {
-//            Intent i = new Intent(getApplicationContext(), ShowActivity.class);
+//            Intent i = new Intent(getApplicationContext(), MyReportActivity.class);
+//            i.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
 //            startActivity(i);
         } else if (id == R.id.drawer_settings) {
             Intent i = new Intent(getApplicationContext(), SettingsActivity.class);
+            i.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(i);
-        } else if (id == R.id.drawer_info) {
-//            Intent i = new Intent(getApplicationContext(), SettingsActivity.class);
-//            startActivity(i);
         }
+
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;

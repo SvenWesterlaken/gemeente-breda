@@ -2,6 +2,7 @@ package com.svenwesterlaken.gemeentebreda.presentation.activities;
 
 import android.Manifest;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.support.design.widget.TabLayout;
 import android.support.design.widget.FloatingActionButton;
@@ -30,6 +31,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.svenwesterlaken.gemeentebreda.R;
 import com.svenwesterlaken.gemeentebreda.data.database.DatabaseHandler;
@@ -45,23 +47,13 @@ import java.util.ArrayList;
 
 public class ReportActivity extends MenuActivity {
 
-    /**
-     * The {@link android.support.v4.view.PagerAdapter} that will provide
-     * fragments for each of the sections. We use a
-     * {@link FragmentPagerAdapter} derivative, which will keep every
-     * loaded fragment in memory. If this becomes too memory intensive, it
-     * may be best to switch to a
-     * {@link android.support.v4.app.FragmentStatePagerAdapter}.
-     */
     private PagerAdapter mSectionsPagerAdapter;
-
-    /**
-     * The {@link ViewPager} that will host the section contents.
-     */
     private ViewPager mViewPager;
-    ArrayList<Report> spotifyItemsList = new ArrayList<Report>();
+    private ReportMapFragment mapFragment;
+
 
     private static final int MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 1;
+    DatabaseHandler handler;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,10 +65,16 @@ public class ReportActivity extends MenuActivity {
 
         super.onCreateDrawer(toolbar, this);
 
+        mapFragment = new ReportMapFragment();
 
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
-        mSectionsPagerAdapter = new ReportPagerAdapter(getSupportFragmentManager(), 2, getApplicationContext());
+        mSectionsPagerAdapter = new ReportPagerAdapter(getSupportFragmentManager(), 2, getApplicationContext(), mapFragment);
+        handler = new DatabaseHandler(getApplicationContext(),null, null, 1);
+
+        if(handler.getAllReports().size() == 0) {
+            handler.testData();
+        }
 
         // Set up the ViewPager with the sections adapter.
         mViewPager = (ViewPager) findViewById(R.id.container);
@@ -85,20 +83,42 @@ public class ReportActivity extends MenuActivity {
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(mViewPager);
 
+
         FloatingActionButton myFab = (FloatingActionButton) findViewById(R.id.fab);
         myFab.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                DatabaseHandler handler = new DatabaseHandler(getApplicationContext(),null, null, 1);
-                handler.addReport(new Report(1, new User(1, "mobiel", "naam", "email"), new Location("straat", "city", 00, "postcode", 1, "longitude", "langitude"), "toegevoegd na klikken knop", new
-                        Category(1, "category" )));
+
+
+                Category testCategory = new Category(handler.getAllReports().size()+1, "category");
+                handler.addCategory(testCategory);
+                User testUser = new User(handler.getAllReports().size(), "mobiel", "naam", "email");
+                handler.addUser(testUser);
+                Location testLocation = new Location("straat", "city", 00, "postcode", handler.getAllReports().size()+1, "longitude", "langitude");
+                handler.addLocation(testLocation);
+
+
+
+                handler.addReport(new Report(handler.getAllReports().size()+1, testUser, testLocation, "toegevoegd na klikken knop", testCategory));
 
                 mSectionsPagerAdapter.notifyDataSetChanged();
 
+
+                Toast toast = Toast.makeText(getApplicationContext(), "De nieuwe melding is toegevoegd", Toast.LENGTH_SHORT);
+                toast.show();
+
+                Intent intent = getIntent();
+                finish();
+                startActivity(intent);
+
             }
         });
+
         requestPermissions();
 
+
+
     }
+
 
     public void requestPermissions() {
 
@@ -159,29 +179,15 @@ public class ReportActivity extends MenuActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_report, menu);
+        menu.findItem(R.id.action_search).setOnMenuItemClickListener(new NotImplementedListener());
+        menu.findItem(R.id.action_filter).setOnMenuItemClickListener(new NotImplementedListener());
         return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
     }
 
 
     @Override
     public void onRequestPermissionsResult(int requestCode,
                                            String permissions[], int[] grantResults) {
-        // ReportMapFragment mapFragment = (ReportMapFragment) f1;
 
         switch (requestCode) {
 
@@ -210,65 +216,16 @@ public class ReportActivity extends MenuActivity {
         }
     }
 
-    /**
-     * A placeholder fragment containing a simple view.
-     */
-    public static class PlaceholderFragment extends Fragment {
-        /**
-         * The fragment argument representing the section number for this
-         * fragment.
-         */
-        private static final String ARG_SECTION_NUMBER = "section_number";
 
-        public PlaceholderFragment() {
-        }
-
-        /**
-         * Returns a new instance of this fragment for the given section
-         * number.
-         */
-        public static PlaceholderFragment newInstance(int sectionNumber) {
-            PlaceholderFragment fragment = new PlaceholderFragment();
-            Bundle args = new Bundle();
-            args.putInt(ARG_SECTION_NUMBER, sectionNumber);
-            fragment.setArguments(args);
-            return fragment;
-        }
+    private class NotImplementedListener implements MenuItem.OnMenuItemClickListener {
 
         @Override
-        public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                                 Bundle savedInstanceState) {
-            View rootView = inflater.inflate(R.layout.fragment_reportmap, container, false);
-            return rootView;
+        public boolean onMenuItemClick(MenuItem item) {
+            Toast toast = Toast.makeText(getApplicationContext(), "Deze functie is nog niet geïmplementeerd", Toast.LENGTH_SHORT);
+            toast.show();
+
+            return true;
         }
     }
-
-//    /**
-//     * A {@link FragmentPagerAdapter} that returns a fragment corresponding to
-//     * one of the sections/tabs/pages.
-//     */
-//    private class SectionsPagerAdapter extends FragmentPagerAdapter {
-//
-//        private SectionsPagerAdapter(FragmentManager fm) {
-//            super(fm);
-//        }
-//
-//        @Override
-//        public Fragment getItem(int position) {
-//            switch (position) {
-//                case 0:
-//                    return f1;
-//                default:
-//                    return PlaceholderFragment.newInstance(position + 1);
-//            }
-//        }
-//
-//        @Override
-//        public int getCount() {
-//            return 2;
-//        }
-//
-//
-//    }
-
 }
+
