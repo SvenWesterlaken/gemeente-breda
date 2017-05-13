@@ -24,26 +24,28 @@ router.get('/reports/:latitude/:longitude/:area', function(request, response) {
     var minLong = +longitude - +area;
 
     var query_str;
-    if (longitude !== '' && latitude !== '') {
+    if (!isNaN(longitude) && !isNaN(latitude) && !isNaN(area)) {
         query_str = 'SELECT * FROM report INNER JOIN location ON report.locationId = location.locationId ' +
             'WHERE longitude BETWEEN ' + minLong + ' AND ' + maxLong + ' AND latitude BETWEEN ' + minLat + ' AND ' + maxLat + ';';
-        console.log(query_str);
     } else {
-        query_str = 'SELECT * FROM location;';
+        response.status(200);
+        response.json({"error": "params can only contain numbers"});
     }
 
-    pool.getConnection(function (err, connection) {
-        if (err) {
-            throw err
-        }
-        connection.query(query_str, function (err, rows, fields) {
-            connection.release();
+    if (query_str) {
+        pool.getConnection(function (err, connection) {
             if (err) {
                 throw err
             }
-            response.status(200).json(rows);
+            connection.query(query_str, function (err, rows, fields) {
+                connection.release();
+                if (err) {
+                    throw err
+                }
+                response.status(200).json(rows);
+            });
         });
-    });
+    }
 
     // response.status(200);
     // response.json({"description": "this will return a report", "reportID": reportID});
