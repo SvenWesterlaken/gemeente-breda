@@ -18,10 +18,10 @@ router.get('/reports/:latitude/:longitude/:area', function(request, response) {
     var longitude = request.params.longitude;
     var area = request.params.area;
 
-    var maxLat = latitude + area;
-    var minLat = latitude - area;
-    var maxLong = longitude + area;
-    var minLong = longitude - area;
+    var maxLat = +latitude + +area;
+    var minLat = +latitude - +area;
+    var maxLong = +longitude + +area;
+    var minLong = +longitude - +area;
 
     var query_str;
     if (longitude !== '' && latitude !== '') {
