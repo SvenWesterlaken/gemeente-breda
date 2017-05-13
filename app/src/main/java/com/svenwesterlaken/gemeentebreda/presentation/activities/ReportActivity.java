@@ -93,7 +93,7 @@ public class ReportActivity extends MenuActivity {
                 handler.addCategory(testCategory);
                 User testUser = new User(handler.getAllReports().size(), "mobiel", "naam", "email");
                 handler.addUser(testUser);
-                Location testLocation = new Location("straat", "city", 00, "postcode", handler.getAllReports().size()+1, "longitude", "langitude");
+                Location testLocation = new Location("straat", "city", 00, "postcode", handler.getAllReports().size()+1, 51.584385, 4.796032);
                 handler.addLocation(testLocation);
 
 
