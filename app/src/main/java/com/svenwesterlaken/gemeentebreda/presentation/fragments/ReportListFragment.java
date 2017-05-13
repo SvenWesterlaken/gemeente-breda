@@ -2,6 +2,8 @@ package com.svenwesterlaken.gemeentebreda.presentation.fragments;
 
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,32 +20,25 @@ import java.util.ArrayList;
 
 public class ReportListFragment extends Fragment {
 
-    ReportAdapter mReportAdapter;
-    ArrayList<Report> reports = new ArrayList<>();
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-    }
-
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
+        //Select view & cardView to inflate
         View rootView = inflater.inflate(R.layout.fragment_reportlist, container, false);
+        RecyclerView reportList = (RecyclerView) rootView.findViewById(R.id.report_RV_reports);
+        reportList.setHasFixedSize(true);
 
-        ListView reportListView = (ListView) rootView.findViewById(R.id.ReportListView);
-//        ReportDatabase database = new ReportDatabase(getContext());
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
+        layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+        reportList.setLayoutManager(layoutManager);
 
         DatabaseHandler handler = new DatabaseHandler(this.getContext(),null, null, 1);
 
-
-        mReportAdapter = new ReportAdapter(getContext(), handler.getAllReports());
-        reportListView.setAdapter(mReportAdapter);
+        ReportAdapter reportAdapter = new ReportAdapter(getContext(), handler.getAllReports());
+        reportList.setAdapter(reportAdapter);
 
         handler.close();
-
-        this.mReportAdapter.notifyDataSetChanged();
+        reportAdapter.notifyDataSetChanged();
 
         return rootView;
     }

@@ -59,6 +59,15 @@ public class ReportActivity extends MenuActivity {
 
         super.onCreateDrawer(toolbar, this);
 
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast toast = Toast.makeText(getApplicationContext(), "Deze functie is nog niet geïmplementeerd", Toast.LENGTH_SHORT);
+                toast.show();
+            }
+        });
+
         mapFragment = new ReportMapFragment();
 
         // Create the adapter that will return a fragment for each of the three
@@ -72,8 +81,9 @@ public class ReportActivity extends MenuActivity {
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(mViewPager);
 
-
         requestPermissions();
+
+
 
     }
 
