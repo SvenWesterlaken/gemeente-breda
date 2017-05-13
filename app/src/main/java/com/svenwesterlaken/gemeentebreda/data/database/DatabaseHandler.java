@@ -93,10 +93,10 @@ public class DatabaseHandler extends SQLiteOpenHelper{
                 REPORT_COLUMN_LOCATIONID + " TEXT," +
                 USER_REPORT_COLUMN_USERID + "INTEGER " +
 
-                "FOREIGN KEY (" + REPORT_COLUMN_CATEGORYID + ")" +
+                "FOREIGN KEY (" + REPORT_COLUMN_CATEGORYID + ") " +
                 "REFERENCES " + CATEGORY_TABLE_NAME + "(" + CATEGORY_COLUMN_ID + ")," +
 
-                "FOREIGN KEY (" + REPORT_COLUMN_LOCATIONID + ")" +
+                " FOREIGN KEY (" + REPORT_COLUMN_LOCATIONID + ")" +
                 "REFERENCES " + REPORT_TABLE_NAME +  "(" + REPORT_COLUMN_ID + ")," +
 
                 "FOREIGN KEY (" + REPORT_COLUMN_MEDIAID + ")" +

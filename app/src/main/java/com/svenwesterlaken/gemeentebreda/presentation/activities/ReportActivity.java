@@ -32,7 +32,11 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.svenwesterlaken.gemeentebreda.R;
+import com.svenwesterlaken.gemeentebreda.data.database.DatabaseHandler;
+import com.svenwesterlaken.gemeentebreda.domain.Category;
+import com.svenwesterlaken.gemeentebreda.domain.Location;
 import com.svenwesterlaken.gemeentebreda.domain.Report;
+import com.svenwesterlaken.gemeentebreda.domain.User;
 import com.svenwesterlaken.gemeentebreda.logic.adapters.ReportPagerAdapter;
 import com.svenwesterlaken.gemeentebreda.presentation.fragments.ReportMapFragment;
 
@@ -81,7 +85,17 @@ public class ReportActivity extends MenuActivity {
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(mViewPager);
 
+        FloatingActionButton myFab = (FloatingActionButton) findViewById(R.id.fab);
+        myFab.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                DatabaseHandler handler = new DatabaseHandler(getApplicationContext(),null, null, 1);
+                handler.addReport(new Report(1, new User(1, "mobiel", "naam", "email"), new Location("straat", "city", 00, "postcode", 1, "longitude", "langitude"), "toegevoegd na klikken knop", new
+                        Category(1, "category" )));
 
+                mSectionsPagerAdapter.notifyDataSetChanged();
+
+            }
+        });
         requestPermissions();
 
     }
@@ -167,7 +181,7 @@ public class ReportActivity extends MenuActivity {
     @Override
     public void onRequestPermissionsResult(int requestCode,
                                            String permissions[], int[] grantResults) {
-        ReportMapFragment mapFragment = (ReportMapFragment) f1;
+        // ReportMapFragment mapFragment = (ReportMapFragment) f1;
 
         switch (requestCode) {
 
@@ -179,7 +193,7 @@ public class ReportActivity extends MenuActivity {
                     // permission was granted.
                     // Do the task you need to do.
                     Log.i("LOCATION_PERMISSION", "GRANTED");
-                    mapFragment.enableMyLocation();
+                    //      mapFragment.enableMyLocation();
 
                 } else {
 
@@ -229,31 +243,32 @@ public class ReportActivity extends MenuActivity {
         }
     }
 
-    /**
-     * A {@link FragmentPagerAdapter} that returns a fragment corresponding to
-     * one of the sections/tabs/pages.
-     */
-    private class SectionsPagerAdapter extends FragmentPagerAdapter {
+//    /**
+//     * A {@link FragmentPagerAdapter} that returns a fragment corresponding to
+//     * one of the sections/tabs/pages.
+//     */
+//    private class SectionsPagerAdapter extends FragmentPagerAdapter {
+//
+//        private SectionsPagerAdapter(FragmentManager fm) {
+//            super(fm);
+//        }
+//
+//        @Override
+//        public Fragment getItem(int position) {
+//            switch (position) {
+//                case 0:
+//                    return f1;
+//                default:
+//                    return PlaceholderFragment.newInstance(position + 1);
+//            }
+//        }
+//
+//        @Override
+//        public int getCount() {
+//            return 2;
+//        }
+//
+//
+//    }
 
-        private SectionsPagerAdapter(FragmentManager fm) {
-            super(fm);
-        }
-
-        @Override
-        public Fragment getItem(int position) {
-            switch (position) {
-                case 0:
-                    return f1;
-                default:
-                    return PlaceholderFragment.newInstance(position + 1);
-            }
-        }
-
-        @Override
-        public int getCount() {
-            return 2;
-        }
-
-
-    }
 }
