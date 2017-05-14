@@ -2,6 +2,7 @@ package com.svenwesterlaken.gemeentebreda.presentation.activities;
 
 import android.Manifest;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.support.design.widget.TabLayout;
 import android.support.design.widget.FloatingActionButton;
@@ -33,7 +34,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.svenwesterlaken.gemeentebreda.R;
+import com.svenwesterlaken.gemeentebreda.data.database.DatabaseHandler;
+import com.svenwesterlaken.gemeentebreda.domain.Category;
+import com.svenwesterlaken.gemeentebreda.domain.Location;
 import com.svenwesterlaken.gemeentebreda.domain.Report;
+import com.svenwesterlaken.gemeentebreda.domain.User;
 import com.svenwesterlaken.gemeentebreda.logic.adapters.ReportPagerAdapter;
 import com.svenwesterlaken.gemeentebreda.presentation.fragments.ReportMapFragment;
 
@@ -48,6 +53,7 @@ public class ReportActivity extends MenuActivity {
 
 
     private static final int MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 1;
+    DatabaseHandler handler;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,20 +65,16 @@ public class ReportActivity extends MenuActivity {
 
         super.onCreateDrawer(toolbar, this);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Toast toast = Toast.makeText(getApplicationContext(), "Deze functie is nog niet geïmplementeerd", Toast.LENGTH_SHORT);
-                toast.show();
-            }
-        });
-
         mapFragment = new ReportMapFragment();
 
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
         mSectionsPagerAdapter = new ReportPagerAdapter(getSupportFragmentManager(), 2, getApplicationContext(), mapFragment);
+        handler = new DatabaseHandler(getApplicationContext(),null, null, 1);
+
+        if(handler.getAllReports().size() == 0) {
+            handler.testData();
+        }
 
         // Set up the ViewPager with the sections adapter.
         mViewPager = (ViewPager) findViewById(R.id.container);
@@ -81,11 +83,42 @@ public class ReportActivity extends MenuActivity {
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(mViewPager);
 
+
+        FloatingActionButton myFab = (FloatingActionButton) findViewById(R.id.fab);
+        myFab.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+
+
+                Category testCategory = new Category(handler.getAllReports().size()+1, "category", "summary");
+                handler.addCategory(testCategory);
+                User testUser = new User(handler.getAllReports().size(), "mobiel", "naam", "email");
+                handler.addUser(testUser);
+                Location testLocation = new Location("straat", "city", 00, "postcode", handler.getAllReports().size()+1, 0.0, 0.0);
+                handler.addLocation(testLocation);
+
+
+
+                handler.addReport(new Report(handler.getAllReports().size()+1, testUser, testLocation, "toegevoegd na klikken knop", testCategory, 2));
+
+                mSectionsPagerAdapter.notifyDataSetChanged();
+
+
+                Toast toast = Toast.makeText(getApplicationContext(), "De nieuwe melding is toegevoegd", Toast.LENGTH_SHORT);
+                toast.show();
+
+                Intent intent = getIntent();
+                finish();
+                startActivity(intent);
+
+            }
+        });
+
         requestPermissions();
 
 
 
     }
+
 
     public void requestPermissions() {
 
@@ -155,6 +188,7 @@ public class ReportActivity extends MenuActivity {
     @Override
     public void onRequestPermissionsResult(int requestCode,
                                            String permissions[], int[] grantResults) {
+
         switch (requestCode) {
 
             case MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION: {
@@ -165,7 +199,7 @@ public class ReportActivity extends MenuActivity {
                     // permission was granted.
                     // Do the task you need to do.
                     Log.i("LOCATION_PERMISSION", "GRANTED");
-                    mapFragment.enableMyLocation();
+                    //      mapFragment.enableMyLocation();
 
                 } else {
 
@@ -182,6 +216,7 @@ public class ReportActivity extends MenuActivity {
         }
     }
 
+
     private class NotImplementedListener implements MenuItem.OnMenuItemClickListener {
 
         @Override
@@ -193,3 +228,4 @@ public class ReportActivity extends MenuActivity {
         }
     }
 }
+

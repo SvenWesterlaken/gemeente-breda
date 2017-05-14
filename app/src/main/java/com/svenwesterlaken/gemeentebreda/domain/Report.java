@@ -18,13 +18,14 @@ public class Report {
     public Report() {
     }
 
-    public Report(int reportID, User user, Location location, String description, Category category) {
+    public Report(int reportID, User user, Location location, String description, Category category, int locationID) {
         this.reportID = reportID;
         this.category = category;
         this.user = user;
         this.location = location;
         this.description = description;
         this.category = category;
+        this.locationID = locationID;
     }
 
 

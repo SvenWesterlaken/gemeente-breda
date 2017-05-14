@@ -35,6 +35,8 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.svenwesterlaken.gemeentebreda.R;
+import com.svenwesterlaken.gemeentebreda.data.database.DatabaseHandler;
+import com.svenwesterlaken.gemeentebreda.domain.Report;
 
 import java.util.ArrayList;
 
@@ -124,6 +126,8 @@ public class ReportMapFragment extends Fragment {
                 // Add markers
                 mMap.addMarker(new MarkerOptions().position(hogeschool).title("Hogeschoollaan 1").snippet("Avans Locatie Hogeschoollaan"));
 
+                placeMarkers(getAllReports());
+
 
                 map.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
 
@@ -143,6 +147,34 @@ public class ReportMapFragment extends Fragment {
 
         return v;
     }
+
+    public ArrayList<Report> getAllReports() {
+        DatabaseHandler handler = new DatabaseHandler(getContext(),null, null, 1);
+        ArrayList<Report> reports;
+        reports = handler.getAllReports();
+
+        for (Report report : reports){
+            com.svenwesterlaken.gemeentebreda.domain.Location location = handler.getLocation(report.getLocationID());
+            report.setLocation(location);
+        }
+
+        handler.close();
+        return reports;
+    }
+
+    public void placeMarkers(ArrayList<Report> reports) {
+
+        for(Report report : reports) {
+            if (report.getLocation() != null) {
+                com.svenwesterlaken.gemeentebreda.domain.Location location = report.getLocation();
+                LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
+                map.addMarker(new MarkerOptions().position(latLng).title(report.getCategory().getCategoryName()).snippet(report.getDescription()));
+            }
+        }
+
+    }
+
+
 
     public void enableMyLocation(){
         if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION)
