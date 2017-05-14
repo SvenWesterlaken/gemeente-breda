@@ -1,6 +1,8 @@
 package com.svenwesterlaken.gemeentebreda.presentation.fragments;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -132,15 +134,39 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
 
         @Override
         public boolean onPreferenceClick(Preference preference) {
-            SharedPreferences sharedPrefs = getDefaultSharedPreferences(getActivity());
-            SharedPreferences.Editor editor = sharedPrefs.edit();
-            editor.clear();
-            editor.commit();
 
-            SettingsActivity activity = (SettingsActivity) getActivity();
-            activity.finish();
-            final Intent intent = activity.getIntent();
-            activity.startActivity(intent);
+            AlertDialog.Builder builder1 = new AlertDialog.Builder(getActivity());
+            builder1.setMessage("Weet u zeker dat u alle instellingen wilt herstellen?");
+            builder1.setCancelable(true);
+
+            builder1.setPositiveButton(
+                    "Ja",
+                    new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            dialog.dismiss();
+
+                            SharedPreferences sharedPrefs = getDefaultSharedPreferences(getActivity());
+                            SharedPreferences.Editor editor = sharedPrefs.edit();
+                            editor.clear();
+                            editor.commit();
+
+                            SettingsActivity activity = (SettingsActivity) getActivity();
+                            activity.finish();
+                            final Intent intent = activity.getIntent();
+                            activity.startActivity(intent);
+                        }
+                    });
+
+            builder1.setNegativeButton(
+                    "Nee",
+                    new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            dialog.cancel();
+                        }
+                    });
+
+            AlertDialog alert = builder1.create();
+            alert.show();
 
             return true;
         }
