@@ -1,0 +1,78 @@
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <PreferenceCategory
+        android:title="Account"
+        android:layout="@layout/row_preference_category">
+
+        <EditTextPreference
+            android:capitalize="words"
+            android:defaultValue="@string/pref_default_display_name"
+            android:inputType="textCapWords"
+            android:key="pref_name"
+            android:icon="@drawable/account"
+            android:layout="@layout/row_preference"
+            android:maxLines="1"
+            android:selectAllOnFocus="true"
+            android:singleLine="true"
+            android:title="@string/pref_title_display_name" />
+
+        <EditTextPreference
+            android:capitalize="none"
+            android:defaultValue="@string/pref_default_email"
+            android:inputType="textEmailAddress"
+            android:key="pref_email"
+            android:icon="@drawable/email"
+            android:layout="@layout/row_preference"
+            android:maxLines="1"
+            android:selectAllOnFocus="true"
+            android:singleLine="true"
+            android:title="@string/pref_title_email" />
+
+        <EditTextPreference
+            android:capitalize="none"
+            android:defaultValue="@string/pref_default_phone"
+            android:inputType="phone"
+            android:key="pref_phone"
+            android:icon="@drawable/cellphone"
+            android:layout="@layout/row_preference"
+            android:maxLines="1"
+            android:selectAllOnFocus="true"
+            android:singleLine="true"
+            android:title="@string/pref_title_phone" />
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:title="Uiterlijk"
+        android:layout="@layout/row_preference_category">
+
+        <ListPreference
+            android:title="@string/pref_title_theme"
+            android:key="pref_theme"
+            android:icon="@drawable/invert_colors"
+            android:entries="@array/pref_entries_theme"
+            android:entryValues="@array/pref_values_theme"
+            android:layout="@layout/row_preference"
+            android:defaultValue="1"/>
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:title="App"
+        android:layout="@layout/row_preference_category">
+
+        <Preference
+            android:title="@string/pref_title_reset"
+            android:icon="@drawable/restart"
+            android:key="pref_reset"
+            android:layout="@layout/row_preference"
+            android:summary="@string/pref_value_reset"/>
+
+        <Preference
+            android:title="@string/pref_title_info"
+            android:icon="@drawable/information_outline"
+            android:key="pref_info"
+            android:layout="@layout/row_preference"/>
+
+    </PreferenceCategory>
+
+</PreferenceScreen>

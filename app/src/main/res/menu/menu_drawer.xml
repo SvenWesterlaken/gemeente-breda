@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+<group
+    android:id="@+id/menu_top"
+    android:checkableBehavior="single">
+
+    <item
+        android:id="@+id/drawer_reports"
+        android:icon="@drawable/comment_alert"
+        android:title="Meldingen" />
+    <item
+        android:id="@+id/drawer_myreports"
+        android:icon="@drawable/inbox"
+        android:title="Mijn Meldingen" />
+    <item
+        android:id="@+id/drawer_settings"
+        android:icon="@drawable/settings"
+        android:title="Instellingen" />
+</group>
+
+</menu>
