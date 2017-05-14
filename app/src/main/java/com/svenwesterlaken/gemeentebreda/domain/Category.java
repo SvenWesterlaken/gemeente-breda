@@ -6,11 +6,12 @@ package com.svenwesterlaken.gemeentebreda.domain;
 
 public class Category {
     int categoryID;
-    String categoryName;
+    String categoryName, categorySummary;
 
-    public Category(int categoryID, String categoryName) {
+    public Category(int categoryID, String categoryName, String categorySummary) {
         this.categoryID = categoryID;
         this.categoryName = categoryName;
+        this.categorySummary = categorySummary;
     }
 
     public Category(){
@@ -27,6 +28,10 @@ public class Category {
         return categoryName;
     }
 
+    public String getCategorySummary() {
+        return categorySummary;
+    }
+
     //setters
 
 
@@ -36,5 +41,9 @@ public class Category {
 
     public void setCategoryName(String categoryName) {
         this.categoryName = categoryName;
+    }
+
+    public void setCategorySummary(String categorySummary) {
+        this.categorySummary = categorySummary;
     }
 }
