@@ -89,11 +89,11 @@ public class ReportActivity extends MenuActivity {
             public void onClick(View v) {
 
 
-                Category testCategory = new Category(handler.getAllReports().size()+1, "category");
+                Category testCategory = new Category(handler.getAllReports().size()+1, "category", "summary");
                 handler.addCategory(testCategory);
                 User testUser = new User(handler.getAllReports().size(), "mobiel", "naam", "email");
                 handler.addUser(testUser);
-                Location testLocation = new Location("straat", "city", 00, "postcode", handler.getAllReports().size()+1, "longitude", "langitude");
+                Location testLocation = new Location("straat", "city", 00, "postcode", handler.getAllReports().size()+1, 0.0, 0.0);
                 handler.addLocation(testLocation);
 
 
