@@ -27,46 +27,46 @@ public class DatabaseHandler extends SQLiteOpenHelper{
     private static final String DB_NAME = "gemeente.db";
 
     private static final String USER_TABLE_NAME = "user";
-        private static final String USER_COLUMN_ID = "userId";
-        private static final String USER_COLUMN_NAME = "name";
-        private static final String USER_COLUMN_PHONE = "phone";
-        private static final String USER_COLUMN_EMAIL = "email";
+    private static final String USER_COLUMN_ID = "userId";
+    private static final String USER_COLUMN_NAME = "name";
+    private static final String USER_COLUMN_PHONE = "phone";
+    private static final String USER_COLUMN_EMAIL = "email";
 
     private static final String REPORT_TABLE_NAME = "report";
-        private static final String REPORT_COLUMN_ID = "reportId";
-        private static final String REPORT_COLUMN_CATEGORYID = "categoryId";
-        private static final String REPORT_COLUMN_DESCRIPTION = "description";
-        private static final String REPORT_COLUMN_MEDIAID = "mediaId";
-        private static final String REPORT_COLUMN_LOCATIONID = "locationId";
+    private static final String REPORT_COLUMN_ID = "reportId";
+    private static final String REPORT_COLUMN_CATEGORYID = "categoryId";
+    private static final String REPORT_COLUMN_DESCRIPTION = "description";
+    private static final String REPORT_COLUMN_MEDIAID = "mediaId";
+    private static final String REPORT_COLUMN_LOCATIONID = "locationId";
 
 
     private static final String USER_REPORT_TABLE_NAME = "user_report";
-        private static final String USER_REPORT_COLUMN_USERID = "userId";
-        private static final String USER_REPORT_COLUMN_REPORTID = "reportId";
+    private static final String USER_REPORT_COLUMN_USERID = "userId";
+    private static final String USER_REPORT_COLUMN_REPORTID = "reportId";
 
     private static final String LOCATION_TABLE_NAME = "location";
-        private static final String LOCATION_COLUMN_ID = "locationId";
-        private static final String LOCATION_COLUMN_LATITUDE = "latitude";
-        private static final String LOCATION_COLUMN_LONGITUDE = "longitude";
-        private static final String LOCATION_COLUMN_STREET = "steet";
-        private static final String LOCATION_COLUMN_STREETNR = "streetnr";
-        private static final String LOCATION_COLUMN_POSTALCODE = "postalcode";
-        private static final String LOCATION_COLUMN_CITY = "city";
+    private static final String LOCATION_COLUMN_ID = "locationId";
+    private static final String LOCATION_COLUMN_LATITUDE = "latitude";
+    private static final String LOCATION_COLUMN_LONGITUDE = "longitude";
+    private static final String LOCATION_COLUMN_STREET = "steet";
+    private static final String LOCATION_COLUMN_STREETNR = "streetnr";
+    private static final String LOCATION_COLUMN_POSTALCODE = "postalcode";
+    private static final String LOCATION_COLUMN_CITY = "city";
 
     private static final String CATEGORY_TABLE_NAME = "category";
-        private static final String CATEGORY_COLUMN_ID = "categoryId";
-        private static final String CATEGORY_COLUMN_NAME = "categoryName";
-        private static final String CATEGORY_COLUMN_SUMMARY = "summary";
+    private static final String CATEGORY_COLUMN_ID = "categoryId";
+    private static final String CATEGORY_COLUMN_NAME = "categoryName";
+    private static final String CATEGORY_COLUMN_SUMMARY = "summary";
 
     private static final String MEDIA_TABLE_NAME = "media";
-        private static final String MEDIA_COLUMN_ID = "mediaId";
+    private static final String MEDIA_COLUMN_ID = "mediaId";
 
     private static final String VIDEO_TABLE_NAME = "video";
-        private static final String VIDEO_COLUMN_ID = "mediaId";
-        private static final String VIDEO_COLUMN_LENGTH = "length";
+    private static final String VIDEO_COLUMN_ID = "mediaId";
+    private static final String VIDEO_COLUMN_LENGTH = "length";
 
     private static final String PHOTO_TABLE_NAME = "photo";
-        private static final String PHOTO_COLUMN_ID = "mediaId";
+    private static final String PHOTO_COLUMN_ID = "mediaId";
 
     public DatabaseHandler (Context context, String name, SQLiteDatabase.CursorFactory factory, int version){
         super(context, DB_NAME, factory, DB_VERSION);
@@ -168,23 +168,23 @@ public class DatabaseHandler extends SQLiteOpenHelper{
 
     public void testData(){
 
-        Category category1 = new Category(1, "Straatverlichting");
+        Category category1 = new Category(1, "Straatverlichting", "Kapot");
         addCategory(category1);
         User user1 = new User(1, "0642584793", "gebruiker1", "gebruiker1@gmail.com");
         addUser(user1);
-        Location location1 = new Location("Rijckevorsel", "Breda", 54, "2991kc", 1, "iets", "iets");
+        Location location1 = new Location("Rijckevorsel", "Breda", 54, "2991kc", 1, 51.584385, 4.796032);
         addLocation(location1);
 
         addReport(new Report(1, user1, location1, "Eerste test", category1));
 
-        Category category2 = new Category(2, "Vuilnis");
-        addCategory(category2);
-        User user2 = new User(2, "0642584423", "Gebruiker2", "gebruiker2@gmail.com");
-        addUser(user2);
-        Location location2 = new Location("Vrijenburg", "Breda", 52, "4815kc", 2, "iets", "iets");
-        addLocation(location2);
-
-        addReport(new Report(2, user2, location2, "Tweede test", category2));
+//        Category category2 = new Category(2, "Vuilnis");
+//        addCategory(category2);
+//        User user2 = new User(2, "0642584423", "Gebruiker2", "gebruiker2@gmail.com");
+//        addUser(user2);
+//        Location location2 = new Location("Vrijenburg", "Breda", 52, "4815kc", 2, "iets", "iets");
+//        addLocation(location2);
+//
+//        addReport(new Report(2, user2, location2, "Tweede test", category2));
     }
     //ADD USERS
     public void addUser(User user){
@@ -221,7 +221,7 @@ public class DatabaseHandler extends SQLiteOpenHelper{
     public void addLocation(Location location){
         ContentValues values = new ContentValues();
 
-        values.put(LOCATION_COLUMN_LATITUDE, location.getLattitude());
+        values.put(LOCATION_COLUMN_LATITUDE, location.getLatitude());
         values.put(LOCATION_COLUMN_LONGITUDE, location.getLongitude());
         values.put(LOCATION_COLUMN_STREET, location.getStreet());
         values.put(LOCATION_COLUMN_STREETNR, location.getHouseNumber());
@@ -238,6 +238,7 @@ public class DatabaseHandler extends SQLiteOpenHelper{
     public void addCategory(Category category){
         ContentValues values = new ContentValues();
         values.put(CATEGORY_COLUMN_NAME, category.getCategoryName());
+        values.put(CATEGORY_COLUMN_SUMMARY, category.getCategorySummary());
 
 
         SQLiteDatabase db = this.getWritableDatabase();
@@ -301,8 +302,9 @@ public class DatabaseHandler extends SQLiteOpenHelper{
     public Location getLocation(int locationID){
         Location location = null;
 
-        String query = "SELECT * FROM " + LOCATION_TABLE_NAME + " WHERE " +
-                LOCATION_COLUMN_ID + "="  + locationID + ";";
+//        String query = "SELECT * FROM " + LOCATION_TABLE_NAME + " WHERE " +
+//                LOCATION_COLUMN_ID + "="  + locationID + ";";
+        String query = "SELECT * FROM " + LOCATION_TABLE_NAME + ";";
 
         SQLiteDatabase db = this.getWritableDatabase();
 
@@ -316,6 +318,8 @@ public class DatabaseHandler extends SQLiteOpenHelper{
             location.setCity(cursor.getString(cursor.getColumnIndex(LOCATION_COLUMN_CITY)));
             location.setStreet(cursor.getString(cursor.getColumnIndex(LOCATION_COLUMN_STREET)));
             location.setHouseNumber(cursor.getInt(cursor.getColumnIndex(LOCATION_COLUMN_STREETNR)));
+            location.setLatitude(cursor.getDouble(cursor.getColumnIndex(LOCATION_COLUMN_LATITUDE)));
+            location.setLongitude(cursor.getDouble(cursor.getColumnIndex(LOCATION_COLUMN_LONGITUDE)));
             Log.i("TAG", "got location");
         };
 
@@ -326,39 +330,39 @@ public class DatabaseHandler extends SQLiteOpenHelper{
 
 
 
-    //ARRAYLIST FOR REPORTS
-    public ArrayList<Report> getReport(String name){
-        ArrayList<Report> reports = new ArrayList<>();
-
-        String query = "SELECT * FROM " + REPORT_TABLE_NAME + " WHERE " +
-                USER_REPORT_COLUMN_REPORTID + "=" + "\"" + name + "\"";
-
-        String queryALL = "SELECT * FROM " + REPORT_TABLE_NAME;
-
-        SQLiteDatabase db = this.getReadableDatabase();
-
-        Cursor cursor = db.rawQuery(query, null);
-
-        while(cursor.moveToNext() ) {
-
-            Report report = new Report();
-
-            report.setReportID(cursor.getInt(cursor.getColumnIndex(REPORT_COLUMN_ID)));
-            report.setCategoryID(cursor.getInt(cursor.getColumnIndex(REPORT_COLUMN_CATEGORYID)));
-            report.setDescription(cursor.getString(cursor.getColumnIndex(REPORT_COLUMN_DESCRIPTION)));
-//            report.setMediaId(cursor.getInt(cursor.getColumnIndex(REPORT_COLUMN_MEDIAID)));
-            report.setLocationID(cursor.getInt(cursor.getColumnIndex(REPORT_COLUMN_LOCATIONID)));
-//            report.setUserID(cursor.getInt(cursor.getColumnIndex(REPORT_COLUMN_USERID)));
-
-            reports.add(report);
-        }
-
-        db.close();
-
-
-
-        return reports;
-    }
+//    //ARRAYLIST FOR REPORTS
+//    public ArrayList<Report> getReport(String name){
+//        ArrayList<Report> reports = new ArrayList<>();
+//
+//        String query = "SELECT * FROM " + REPORT_TABLE_NAME + " WHERE " +
+//                USER_REPORT_COLUMN_REPORTID + "=" + "\"" + name + "\"";
+//
+//        String queryALL = "SELECT * FROM " + REPORT_TABLE_NAME;
+//
+//        SQLiteDatabase db = this.getReadableDatabase();
+//
+//        Cursor cursor = db.rawQuery(query, null);
+//
+//        while(cursor.moveToNext() ) {
+//
+//            Report report = new Report();
+//
+//            report.setReportID(cursor.getInt(cursor.getColumnIndex(REPORT_COLUMN_ID)));
+//            report.setCategoryID(cursor.getInt(cursor.getColumnIndex(REPORT_COLUMN_CATEGORYID)));
+//            report.setDescription(cursor.getString(cursor.getColumnIndex(REPORT_COLUMN_DESCRIPTION)));
+////            report.setMediaId(cursor.getInt(cursor.getColumnIndex(REPORT_COLUMN_MEDIAID)));
+//            report.setLocationID(cursor.getInt(cursor.getColumnIndex(REPORT_COLUMN_LOCATIONID)));
+////            report.setUserID(cursor.getInt(cursor.getColumnIndex(REPORT_COLUMN_USERID)));
+//
+//            reports.add(report);
+//        }
+//
+//        db.close();
+//
+//
+//
+//        return reports;
+//    }
 
     public Category getCategory(int reportID){
 
