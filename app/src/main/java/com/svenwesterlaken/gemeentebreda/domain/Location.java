@@ -9,7 +9,7 @@ public class Location {
     int houseNumber,  locationID;
     Double latitude, longitude;
 
-    public Location(String street, String city, int houseNumber, String postalCode, int locationID, Double longitude, Double latitude ) {
+    public Location(String street, String city, int houseNumber, String postalCode, int locationID, Double latitude, Double longitude ) {
         this.street = street;
         this.locationID = locationID;
         this.city = city;
