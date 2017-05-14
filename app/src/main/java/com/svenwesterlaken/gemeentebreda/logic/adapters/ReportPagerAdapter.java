@@ -65,9 +65,9 @@ public class ReportPagerAdapter extends FragmentPagerAdapter {
     public CharSequence getPageTitle(int position){
         switch (position) {
             case 0:
-                return context.getResources().getString(R.string.homepage_tab1);
+                return context.getResources().getString(R.string.report_activity_title_map);
             case 1:
-                return context.getResources().getString(R.string.homepage_tab2);
+                return context.getResources().getString(R.string.report_activity_title_list);
             default:
                 return null;
         }

@@ -22,6 +22,9 @@
         <item name="windowNoTitle">true</item>
         <item name="android:windowTitleStyle">@style/ToolBarTitle</item>
         <item name="android:backgroundDimAmount">0.9</item>
+        <item name="colorControlNormal">@color/colorPrimaryTextSecondary</item>
+        <item name="colorControlActivated">@color/colorPrimaryText</item>
+        <item name="colorControlHighlight">@color/colorPrimaryText</item>
     </style>
 
     <style name="AppTheme.Light" parent="Theme.AppCompat.Light">

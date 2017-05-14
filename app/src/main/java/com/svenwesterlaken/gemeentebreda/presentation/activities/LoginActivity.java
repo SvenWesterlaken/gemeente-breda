@@ -3,9 +3,11 @@ package com.svenwesterlaken.gemeentebreda.presentation.activities;
 
 import android.app.Fragment;
 import android.app.FragmentManager;
+import android.content.Context;
 import android.support.v13.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,7 +19,10 @@ import android.widget.TextView;
 import com.svenwesterlaken.gemeentebreda.R;
 import com.svenwesterlaken.gemeentebreda.logic.adapters.LoginPagerAdapter;
 
-public class LoginActivity extends BaseActivity implements ViewPager.OnPageChangeListener{
+import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
+import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
+
+public class LoginActivity extends AppCompatActivity implements ViewPager.OnPageChangeListener{
 
     private LoginPagerAdapter mSectionsPagerAdapter;
     private ViewPager mViewPager;
@@ -58,6 +63,12 @@ public class LoginActivity extends BaseActivity implements ViewPager.OnPageChang
 
         dots[0].setImageDrawable(getResources().getDrawable(R.drawable.indicator_selected));
 
+        CalligraphyConfig.initDefault(new CalligraphyConfig.Builder()
+                .setDefaultFontPath("fonts/Roboto-Regular.ttf")
+                .setFontAttrId(R.attr.fontPath)
+                .build()
+        );
+
     }
 
     @Override
@@ -74,4 +85,9 @@ public class LoginActivity extends BaseActivity implements ViewPager.OnPageChang
 
     @Override
     public void onPageScrollStateChanged(int state) {}
+
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
+    }
 }
