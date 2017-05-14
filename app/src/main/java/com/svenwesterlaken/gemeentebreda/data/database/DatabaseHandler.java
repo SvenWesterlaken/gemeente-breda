@@ -168,7 +168,7 @@ public class DatabaseHandler extends SQLiteOpenHelper{
 
     public void testData(){
 
-        Category category1 = new Category(1, "Straatverlichting");
+        Category category1 = new Category(1, "Straatverlichting", "Kapot");
         addCategory(category1);
         User user1 = new User(1, "0642584793", "gebruiker1", "gebruiker1@gmail.com");
         addUser(user1);
@@ -238,6 +238,7 @@ public class DatabaseHandler extends SQLiteOpenHelper{
     public void addCategory(Category category){
         ContentValues values = new ContentValues();
         values.put(CATEGORY_COLUMN_NAME, category.getCategoryName());
+        values.put(CATEGORY_COLUMN_SUMMARY, category.getCategorySummary());
 
 
         SQLiteDatabase db = this.getWritableDatabase();
@@ -301,8 +302,9 @@ public class DatabaseHandler extends SQLiteOpenHelper{
     public Location getLocation(int locationID){
         Location location = null;
 
-        String query = "SELECT * FROM " + LOCATION_TABLE_NAME + " WHERE " +
-                LOCATION_COLUMN_ID + "="  + locationID + ";";
+//        String query = "SELECT * FROM " + LOCATION_TABLE_NAME + " WHERE " +
+//                LOCATION_COLUMN_ID + "="  + locationID + ";";
+        String query = "SELECT * FROM " + LOCATION_TABLE_NAME + ";";
 
         SQLiteDatabase db = this.getWritableDatabase();
 
