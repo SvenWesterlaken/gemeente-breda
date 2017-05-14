@@ -175,7 +175,7 @@ public class DatabaseHandler extends SQLiteOpenHelper{
         Location location1 = new Location("Rijckevorsel", "Breda", 54, "2991kc", 1, 51.584385, 4.796032);
         addLocation(location1);
 
-        addReport(new Report(1, user1, location1, "Eerste test", category1));
+        addReport(new Report(1, user1, location1, "Eerste test", category1, 1));
 
 //        Category category2 = new Category(2, "Vuilnis");
 //        addCategory(category2);
@@ -226,6 +226,7 @@ public class DatabaseHandler extends SQLiteOpenHelper{
         values.put(LOCATION_COLUMN_STREET, location.getStreet());
         values.put(LOCATION_COLUMN_STREETNR, location.getHouseNumber());
         values.put(LOCATION_COLUMN_CITY, location.getCity());
+        values.put(LOCATION_COLUMN_ID, location.getLocationID());
         SQLiteDatabase db = this.getWritableDatabase();
         db.insert(LOCATION_TABLE_NAME, null, values);
         Log.i("TAG", "added location");
@@ -302,9 +303,9 @@ public class DatabaseHandler extends SQLiteOpenHelper{
     public Location getLocation(int locationID){
         Location location = null;
 
-//        String query = "SELECT * FROM " + LOCATION_TABLE_NAME + " WHERE " +
-//                LOCATION_COLUMN_ID + "="  + locationID + ";";
-        String query = "SELECT * FROM " + LOCATION_TABLE_NAME + ";";
+        String query = "SELECT * FROM " + LOCATION_TABLE_NAME + " WHERE " +
+                LOCATION_COLUMN_ID + "="  + locationID + ";";
+//        String query = "SELECT * FROM " + LOCATION_TABLE_NAME + ";";
 
         SQLiteDatabase db = this.getWritableDatabase();
 
@@ -320,7 +321,7 @@ public class DatabaseHandler extends SQLiteOpenHelper{
             location.setHouseNumber(cursor.getInt(cursor.getColumnIndex(LOCATION_COLUMN_STREETNR)));
             location.setLatitude(cursor.getDouble(cursor.getColumnIndex(LOCATION_COLUMN_LATITUDE)));
             location.setLongitude(cursor.getDouble(cursor.getColumnIndex(LOCATION_COLUMN_LONGITUDE)));
-            Log.i("TAG", "got location");
+            Log.i("TAG", "got location " + cursor.getColumnIndex(LOCATION_COLUMN_LONGITUDE) + " " + cursor.getColumnIndex(LOCATION_COLUMN_LATITUDE));
         };
 
         db.close();
@@ -402,6 +403,8 @@ public class DatabaseHandler extends SQLiteOpenHelper{
             report.setCategory(getCategory(cursor.getInt(cursor.getColumnIndex(REPORT_COLUMN_ID))));
 
             report.setReportID( cursor.getInt(cursor.getColumnIndex(REPORT_COLUMN_ID)));
+
+            report.setLocationID( cursor.getInt(cursor.getColumnIndex(LOCATION_COLUMN_ID)));
 
             report.setDescription( cursor.getString(cursor.getColumnIndex(REPORT_COLUMN_DESCRIPTION)));
 //            report.setMediaId(cursor.getInt(cursor.getColumnIndex(REPORT_COLUMN_MEDIAID)));

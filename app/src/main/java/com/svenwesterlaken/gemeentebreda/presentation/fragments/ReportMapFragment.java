@@ -158,15 +158,18 @@ public class ReportMapFragment extends Fragment {
             report.setLocation(location);
         }
 
+        handler.close();
         return reports;
     }
 
     public void placeMarkers(ArrayList<Report> reports) {
 
         for(Report report : reports) {
-            com.svenwesterlaken.gemeentebreda.domain.Location location = report.getLocation();
-            LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
-            map.addMarker(new MarkerOptions().position(latLng).title(report.getCategory().getCategoryName()).snippet(report.getDescription()));
+            if (report.getLocation() != null) {
+                com.svenwesterlaken.gemeentebreda.domain.Location location = report.getLocation();
+                LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
+                map.addMarker(new MarkerOptions().position(latLng).title(report.getCategory().getCategoryName()).snippet(report.getDescription()));
+            }
         }
 
     }

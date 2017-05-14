@@ -98,7 +98,7 @@ public class ReportActivity extends MenuActivity {
 
 
 
-                handler.addReport(new Report(handler.getAllReports().size()+1, testUser, testLocation, "toegevoegd na klikken knop", testCategory));
+                handler.addReport(new Report(handler.getAllReports().size()+1, testUser, testLocation, "toegevoegd na klikken knop", testCategory, 2));
 
                 mSectionsPagerAdapter.notifyDataSetChanged();
 
