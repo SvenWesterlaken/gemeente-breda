@@ -20,6 +20,8 @@ import java.util.ArrayList;
 
 public class ReportListFragment extends Fragment {
 
+    ReportAdapter reportAdapter;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
@@ -34,7 +36,7 @@ public class ReportListFragment extends Fragment {
 
         DatabaseHandler handler = new DatabaseHandler(this.getContext(),null, null, 1);
 
-        ReportAdapter reportAdapter = new ReportAdapter(getContext(), handler.getAllReports());
+        reportAdapter = new ReportAdapter(getContext(), handler.getAllReports());
         reportList.setAdapter(reportAdapter);
 
         handler.close();
@@ -42,4 +44,10 @@ public class ReportListFragment extends Fragment {
 
         return rootView;
     }
+
+    public void updateList(ArrayList<Report> list){
+        reportAdapter.updateReports(list);
+        reportAdapter.notifyDataSetChanged();
+    }
+
 }

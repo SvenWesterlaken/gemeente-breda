@@ -68,4 +68,8 @@ public class ReportAdapter extends RecyclerView.Adapter<ReportAdapter.ReportView
         }
     }
 
+    public void updateReports(List<Report> list){
+        reports = list;
+    }
+
 }

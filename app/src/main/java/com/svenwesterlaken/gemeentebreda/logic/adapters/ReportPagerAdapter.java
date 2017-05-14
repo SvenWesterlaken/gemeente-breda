@@ -20,11 +20,12 @@ public class ReportPagerAdapter extends FragmentPagerAdapter {
     private int tabCount;
     private Context context;
 
-    public ReportPagerAdapter(FragmentManager fragmentmanager, int tabCount, Context context, ReportMapFragment mapFragment) {
+    public ReportPagerAdapter(FragmentManager fragmentmanager, int tabCount, Context context, ReportMapFragment mapFragment, ReportListFragment listFragment) {
         super(fragmentmanager);
         this.tabCount = tabCount;
         this.context = context;
         this.mapFragment = mapFragment;
+        this.listFragment = listFragment;
     }
 
     //Return the amount of tabas
@@ -46,7 +47,6 @@ public class ReportPagerAdapter extends FragmentPagerAdapter {
             case 0:
                 return mapFragment;
             case 1:
-                listFragment = new ReportListFragment();
                 return listFragment;
 
             default:

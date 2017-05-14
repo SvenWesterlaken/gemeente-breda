@@ -40,6 +40,7 @@ import com.svenwesterlaken.gemeentebreda.domain.Location;
 import com.svenwesterlaken.gemeentebreda.domain.Report;
 import com.svenwesterlaken.gemeentebreda.domain.User;
 import com.svenwesterlaken.gemeentebreda.logic.adapters.ReportPagerAdapter;
+import com.svenwesterlaken.gemeentebreda.presentation.fragments.ReportListFragment;
 import com.svenwesterlaken.gemeentebreda.presentation.fragments.ReportMapFragment;
 
 import java.util.ArrayList;
@@ -51,6 +52,7 @@ public class ReportActivity extends MenuActivity {
     private PagerAdapter mSectionsPagerAdapter;
     private ViewPager mViewPager;
     private ReportMapFragment mapFragment;
+    private ReportListFragment listFragment;
 
 
     private static final int MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 1;
@@ -67,10 +69,11 @@ public class ReportActivity extends MenuActivity {
         super.onCreateDrawer(toolbar, this);
 
         mapFragment = new ReportMapFragment();
+        listFragment = new ReportListFragment();
 
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
-        mSectionsPagerAdapter = new ReportPagerAdapter(getSupportFragmentManager(), 2, getApplicationContext(), mapFragment);
+        mSectionsPagerAdapter = new ReportPagerAdapter(getSupportFragmentManager(), 2, getApplicationContext(), mapFragment, listFragment);
         handler = new DatabaseHandler(getApplicationContext(),null, null, 1);
 
         if(handler.getAllReports().size() == 0) {
@@ -113,6 +116,7 @@ public class ReportActivity extends MenuActivity {
                 toast.show();
 
                 mapFragment.placeMarkers(mapFragment.getAllReports());
+                listFragment.updateList(handler.getAllReports());
 
 //                Intent intent = getIntent();
 //                finish();
