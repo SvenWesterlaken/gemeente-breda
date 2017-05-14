@@ -295,6 +295,7 @@ public class DatabaseHandler extends SQLiteOpenHelper{
             Log.i("TAG", "got user");
         };
 
+        cursor.close();
         db.close();
 
         return user;
@@ -323,7 +324,7 @@ public class DatabaseHandler extends SQLiteOpenHelper{
             location.setLongitude(cursor.getDouble(cursor.getColumnIndex(LOCATION_COLUMN_LONGITUDE)));
             Log.i("TAG", "got location " + cursor.getDouble(cursor.getColumnIndex(LOCATION_COLUMN_LONGITUDE)) + " " + cursor.getDouble(cursor.getColumnIndex(LOCATION_COLUMN_LATITUDE)));
         };
-
+        cursor.close();
         db.close();
 
         return location;
@@ -358,6 +359,7 @@ public class DatabaseHandler extends SQLiteOpenHelper{
 //            reports.add(report);
 //        }
 //
+//        cursor.close();
 //        db.close();
 //
 //
@@ -380,6 +382,8 @@ public class DatabaseHandler extends SQLiteOpenHelper{
             category.setCategoryName(cursor.getString(cursor.getColumnIndex(CATEGORY_COLUMN_NAME)));
 
         }
+
+        cursor.close();
 
         return category;
     }
@@ -417,7 +421,6 @@ public class DatabaseHandler extends SQLiteOpenHelper{
         }
 
         cursor.close();
-
         return reports;
 
     }

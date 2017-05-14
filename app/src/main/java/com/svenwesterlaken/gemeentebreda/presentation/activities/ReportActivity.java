@@ -43,6 +43,7 @@ import com.svenwesterlaken.gemeentebreda.logic.adapters.ReportPagerAdapter;
 import com.svenwesterlaken.gemeentebreda.presentation.fragments.ReportMapFragment;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 
 public class ReportActivity extends MenuActivity {
@@ -93,7 +94,12 @@ public class ReportActivity extends MenuActivity {
                 handler.addCategory(testCategory);
                 User testUser = new User(handler.getAllReports().size(), "mobiel", "naam", "email");
                 handler.addUser(testUser);
-                Location testLocation = new Location("straat", "city", 00, "postcode", handler.getAllReports().size()+1, 0.0, 0.0);
+
+                Random r = new Random();
+                double randomValue1 = -50 + (50 - -50) * r.nextDouble();
+                double randomValue2 = -50 + (50 - -50) * r.nextDouble();
+
+                Location testLocation = new Location("straat", "city", 00, "postcode", handler.getAllReports().size()+1, randomValue1, randomValue2);
                 handler.addLocation(testLocation);
 
 
@@ -106,9 +112,11 @@ public class ReportActivity extends MenuActivity {
                 Toast toast = Toast.makeText(getApplicationContext(), "De nieuwe melding is toegevoegd", Toast.LENGTH_SHORT);
                 toast.show();
 
-                Intent intent = getIntent();
-                finish();
-                startActivity(intent);
+                mapFragment.placeMarkers(mapFragment.getAllReports());
+
+//                Intent intent = getIntent();
+//                finish();
+//                startActivity(intent);
 
             }
         });
