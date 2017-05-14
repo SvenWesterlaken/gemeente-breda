@@ -321,7 +321,7 @@ public class DatabaseHandler extends SQLiteOpenHelper{
             location.setHouseNumber(cursor.getInt(cursor.getColumnIndex(LOCATION_COLUMN_STREETNR)));
             location.setLatitude(cursor.getDouble(cursor.getColumnIndex(LOCATION_COLUMN_LATITUDE)));
             location.setLongitude(cursor.getDouble(cursor.getColumnIndex(LOCATION_COLUMN_LONGITUDE)));
-            Log.i("TAG", "got location " + cursor.getColumnIndex(LOCATION_COLUMN_LONGITUDE) + " " + cursor.getColumnIndex(LOCATION_COLUMN_LATITUDE));
+            Log.i("TAG", "got location " + cursor.getDouble(cursor.getColumnIndex(LOCATION_COLUMN_LONGITUDE)) + " " + cursor.getDouble(cursor.getColumnIndex(LOCATION_COLUMN_LATITUDE)));
         };
 
         db.close();

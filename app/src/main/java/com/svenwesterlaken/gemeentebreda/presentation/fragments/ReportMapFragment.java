@@ -167,7 +167,7 @@ public class ReportMapFragment extends Fragment {
         for(Report report : reports) {
             if (report.getLocation() != null) {
                 com.svenwesterlaken.gemeentebreda.domain.Location location = report.getLocation();
-                LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
+                LatLng latLng = new LatLng(location.getLongitude(), location.getLatitude());
                 map.addMarker(new MarkerOptions().position(latLng).title(report.getCategory().getCategoryName()).snippet(report.getDescription()));
             }
         }
