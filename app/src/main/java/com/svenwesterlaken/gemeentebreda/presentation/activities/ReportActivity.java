@@ -99,8 +99,8 @@ public class ReportActivity extends MenuActivity {
                 handler.addUser(testUser);
 
                 Random r = new Random();
-                double randomValue1 = -50 + (50 - -50) * r.nextDouble();
-                double randomValue2 = -50 + (50 - -50) * r.nextDouble();
+                double randomValue1 = 51.619139 + (51.560467 - 51.619139) * r.nextDouble();
+                double randomValue2 = 4.730599 + (4.815561 - 4.730599) * r.nextDouble();
 
                 Location testLocation = new Location("straat", "city", 00, "postcode", handler.getAllReports().size()+1, randomValue1, randomValue2);
                 handler.addLocation(testLocation);
