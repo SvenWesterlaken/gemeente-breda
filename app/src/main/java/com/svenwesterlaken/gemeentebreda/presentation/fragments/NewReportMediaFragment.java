@@ -25,7 +25,7 @@ import java.io.IOException;
 import static android.app.Activity.RESULT_OK;
 
 public class NewReportMediaFragment extends Fragment {
-    private Button mediaBTN;
+    private Button mediaBTN, selectBTN;
     private ImageView image;
 
     static final int REQUEST_IMAGE_CAPTURE = 1;
@@ -44,6 +44,9 @@ public class NewReportMediaFragment extends Fragment {
         mediaBTN = (Button) rootView.findViewById(R.id.media_btn_make);
         mediaBTN.setOnClickListener(new MediaClickListener());
 
+        selectBTN = (Button) rootView.findViewById(R.id.media_btn_select);
+        selectBTN.setOnClickListener(new SelectMediaClickListener());
+
         return rootView;
     }
 
@@ -52,6 +55,14 @@ public class NewReportMediaFragment extends Fragment {
         @Override
         public void onClick(View v) {
             dispatchTakePictureIntent();
+        }
+    }
+
+    private class SelectMediaClickListener implements View.OnClickListener {
+
+        @Override
+        public void onClick(View v) {
+
         }
     }
 
