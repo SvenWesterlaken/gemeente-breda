@@ -79,12 +79,12 @@ public class LoginTwoFragment extends Fragment {
     }
 
     private boolean validatePhone() {
-        String regex = "^\\+?[0-9]{9,13}$";
+        String regex = "^\\+?[0-9]{10,13}$";
         String str = phone.getText().toString().trim();
 
         if (!str.isEmpty()) {
             if(!str.matches(regex)) {
-                inputLayoutPhone.setError(getString(R.string.login_error_email));
+                inputLayoutPhone.setError(getString(R.string.login_error_phone));
                 requestFocus(phone);
                 return false;
             }
