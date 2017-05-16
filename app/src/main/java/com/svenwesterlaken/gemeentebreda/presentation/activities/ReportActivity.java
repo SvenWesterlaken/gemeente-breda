@@ -92,32 +92,35 @@ public class ReportActivity extends MenuActivity {
         myFab.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
 
-
-                Category testCategory = new Category(handler.getAllReports().size()+1, "category", "summary");
-                handler.addCategory(testCategory);
-                User testUser = new User(handler.getAllReports().size(), "mobiel", "naam", "email");
-                handler.addUser(testUser);
-
-                Random r = new Random();
-                double randomValue1 = 51.619139 + (51.560467 - 51.619139) * r.nextDouble();
-                double randomValue2 = 4.730599 + (4.815561 - 4.730599) * r.nextDouble();
-
-                Location testLocation = new Location("straat", "city", 00, "postcode", handler.getAllReports().size()+1, randomValue1, randomValue2);
-                handler.addLocation(testLocation);
+                Intent i = new Intent(getApplicationContext(), NewReportActivity.class);
+                startActivity(i);
 
 
-
-                handler.addReport(new Report(handler.getAllReports().size()+1, testUser, testLocation, "toegevoegd na klikken knop", testCategory, 2));
-
-                mSectionsPagerAdapter.notifyDataSetChanged();
-
-
-                Toast toast = Toast.makeText(getApplicationContext(), "De nieuwe melding is toegevoegd", Toast.LENGTH_SHORT);
-                toast.show();
-
-                mapFragment.placeMarkers(mapFragment.getAllReports());
-                listFragment.updateList(handler.getAllReports());
-
+//                Category testCategory = new Category(handler.getAllReports().size()+1, "category", "summary");
+//                handler.addCategory(testCategory);
+//                User testUser = new User(handler.getAllReports().size(), "mobiel", "naam", "email");
+//                handler.addUser(testUser);
+//
+//                Random r = new Random();
+//                double randomValue1 = 51.619139 + (51.560467 - 51.619139) * r.nextDouble();
+//                double randomValue2 = 4.730599 + (4.815561 - 4.730599) * r.nextDouble();
+//
+//                Location testLocation = new Location("straat", "city", 00, "postcode", handler.getAllReports().size()+1, randomValue1, randomValue2);
+//                handler.addLocation(testLocation);
+//
+//
+//
+//                handler.addReport(new Report(handler.getAllReports().size()+1, testUser, testLocation, "toegevoegd na klikken knop", testCategory, 2));
+//
+//                mSectionsPagerAdapter.notifyDataSetChanged();
+//
+//
+//                Toast toast = Toast.makeText(getApplicationContext(), "De nieuwe melding is toegevoegd", Toast.LENGTH_SHORT);
+//                toast.show();
+//
+//                mapFragment.placeMarkers(mapFragment.getAllReports());
+//                listFragment.updateList(handler.getAllReports());
+//
 //                Intent intent = getIntent();
 //                finish();
 //                startActivity(intent);

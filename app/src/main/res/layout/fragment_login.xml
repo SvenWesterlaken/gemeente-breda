@@ -4,7 +4,6 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     tools:ignore="missingPrefix"
-    android:theme="@style/AppTheme"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/colorBackgroundLogin">
@@ -146,7 +145,7 @@
         android:layout_marginTop="24dp"
         android:elevation="2dp"
         android:text="@string/login_btn_register"
-        android:textColor="@color/colorPrimaryText"
+        android:textColor="@color/colorLightPrimaryText"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintLeft_toLeftOf="parent"

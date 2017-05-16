@@ -56,4 +56,6 @@
     <string name="login_error_name">Voer uw volledige naam in</string>
     <string name="login_error_email">Voer een geldig emailadres in</string>
     <string name="login_error_phone">Voer een geldig nummer in</string>
+
+    <string name="title_activity_new_report">Nieuwe Melding</string>
 </resources>
