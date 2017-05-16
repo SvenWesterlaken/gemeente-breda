@@ -2,6 +2,7 @@ package com.svenwesterlaken.gemeentebreda.presentation.fragments;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -10,11 +11,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 
 import com.svenwesterlaken.gemeentebreda.R;
 
+import static android.app.Activity.RESULT_OK;
+
 public class NewReportMediaFragment extends Fragment {
     private Button mediaBTN;
+    private ImageView image;
 
     static final int REQUEST_IMAGE_CAPTURE = 1;
 
@@ -27,6 +32,7 @@ public class NewReportMediaFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_new_report_media, container, false);
 
+        image = (ImageView) rootView.findViewById(R.id.media_IV_image);
 
         mediaBTN = (Button) rootView.findViewById(R.id.media_btn_make);
         mediaBTN.setOnClickListener(new MediaClickListener());
@@ -39,6 +45,15 @@ public class NewReportMediaFragment extends Fragment {
         @Override
         public void onClick(View v) {
             dispatchTakePictureIntent();
+        }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
+            Bundle extras = data.getExtras();
+            Bitmap imageBitmap = (Bitmap) extras.get("data");
+            image.setImageBitmap(imageBitmap);
         }
     }
 
