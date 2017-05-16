@@ -7,6 +7,7 @@ import android.support.v4.app.FragmentManager;
 import com.svenwesterlaken.gemeentebreda.presentation.fragments.NewReportCategoryFragment;
 import com.svenwesterlaken.gemeentebreda.presentation.fragments.NewReportDescriptionFragment;
 import com.svenwesterlaken.gemeentebreda.presentation.fragments.NewReportLocationFragment;
+import com.svenwesterlaken.gemeentebreda.presentation.fragments.NewReportMediaFragment;
 import com.svenwesterlaken.gemeentebreda.presentation.fragments.NewReportSummaryFragment;
 
 /**
@@ -40,7 +41,7 @@ public class NewReportPagerAdapter extends FragmentPagerAdapter {
 
         switch (position) {
             case 0:
-                return new NewReportCategoryFragment();
+                return new NewReportMediaFragment();
             case 1:
                 return new NewReportLocationFragment();
             case 2:
