@@ -8,6 +8,7 @@ import android.support.v13.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -72,7 +73,9 @@ public class LoginActivity extends AppCompatActivity implements ViewPager.OnPage
     }
 
     @Override
-    public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {}
+    public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+        Log.i("SCROLLEDLISTENER", "pos: " + position + " offset: " + positionOffset);
+    }
 
     @Override
     public void onPageSelected(int position) {
@@ -84,7 +87,9 @@ public class LoginActivity extends AppCompatActivity implements ViewPager.OnPage
     }
 
     @Override
-    public void onPageScrollStateChanged(int state) {}
+    public void onPageScrollStateChanged(int state) {
+        Log.i("STATELISTENER", "" + state);
+    }
 
     @Override
     protected void attachBaseContext(Context newBase) {
