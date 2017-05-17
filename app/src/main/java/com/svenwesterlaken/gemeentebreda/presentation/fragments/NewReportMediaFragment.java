@@ -22,6 +22,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 
 import static android.app.Activity.RESULT_OK;
 
@@ -30,6 +31,7 @@ public class NewReportMediaFragment extends Fragment {
     private ImageView image;
 
     static final int REQUEST_IMAGE_CAPTURE = 1;
+    static final int REQUEST_LOAD_IMG = 2;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -63,6 +65,9 @@ public class NewReportMediaFragment extends Fragment {
 
         @Override
         public void onClick(View v) {
+            Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
+            photoPickerIntent.setType("image/*");
+            startActivityForResult(photoPickerIntent, REQUEST_LOAD_IMG);
 
         }
     }
@@ -74,6 +79,22 @@ public class NewReportMediaFragment extends Fragment {
             Bitmap imageBitmap = (Bitmap) extras.get("data");
             image.setImageBitmap(imageBitmap);
             MediaStore.Images.Media.insertImage(getContext().getContentResolver(), imageBitmap, "testTitle" , "testDescription");
+
+        }
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQUEST_LOAD_IMG && resultCode == RESULT_OK) {
+            try {
+                final Uri imageUri = data.getData();
+                final InputStream imageStream = getContext().getContentResolver().openInputStream(imageUri);
+                final Bitmap selectedImage = BitmapFactory.decodeStream(imageStream);
+                image.setImageBitmap(selectedImage);
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+
+            }
+
+        }else {
+
         }
     }
 
