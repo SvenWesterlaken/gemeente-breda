@@ -9,6 +9,7 @@ import android.icu.util.ULocale;
 public class Report {
 
     int reportID, locationID, categoryID, userID;
+    String report;
     User user;
     Location location;
     String description;
@@ -18,7 +19,7 @@ public class Report {
     public Report() {
     }
 
-    public Report(int reportID, User user, Location location, String description, Category category, int locationID) {
+    public Report(int reportID, User user, Location location, String description, Category category, int locationID, String report) {
         this.reportID = reportID;
         this.category = category;
         this.user = user;
@@ -26,6 +27,7 @@ public class Report {
         this.description = description;
         this.category = category;
         this.locationID = locationID;
+        this.report = report;
     }
 
 
@@ -69,6 +71,8 @@ public class Report {
         return category;
     }
 
+    public String getReport(){return report;}
+
     //setters
 
 
@@ -107,4 +111,6 @@ public class Report {
     public void setCategory(Category category) {
         this.category = category;
     }
+
+    public void setReport(String report) {this.report = report;}
 }
