@@ -29,6 +29,7 @@ import static android.app.Activity.RESULT_OK;
 public class NewReportMediaFragment extends Fragment {
     private Button mediaBTN, selectBTN;
     private ImageView image;
+    private Bitmap bitmap;
 
     static final int REQUEST_IMAGE_CAPTURE = 1;
     static final int REQUEST_LOAD_IMG = 2;
@@ -73,12 +74,18 @@ public class NewReportMediaFragment extends Fragment {
     }
 
     @Override
+    public void onResume(){
+        super.onResume();
+        image.setImageBitmap(bitmap);
+    }
+
+    @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
             Bundle extras = data.getExtras();
-            Bitmap imageBitmap = (Bitmap) extras.get("data");
-            image.setImageBitmap(imageBitmap);
-            MediaStore.Images.Media.insertImage(getContext().getContentResolver(), imageBitmap, "testTitle" , "testDescription");
+            bitmap = (Bitmap) extras.get("data");
+            image.setImageBitmap(bitmap);
+            MediaStore.Images.Media.insertImage(getContext().getContentResolver(), bitmap, "testTitle" , "testDescription");
 
         }
         super.onActivityResult(requestCode, resultCode, data);
