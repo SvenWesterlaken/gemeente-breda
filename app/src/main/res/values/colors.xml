@@ -10,6 +10,7 @@
     <color name="colorPrimaryTextSecondary">#c5ffffff</color>
     <color name="colorPrimaryDisabled">#4dffffff</color>
     <color name="colorPrimaryDivider">#1fffffff</color>
+    <color name="colorPrimaryIcon">#ffffff</color>
 
     <!-- Light Theme -->
     <color name="colorLightAccent">#D91D49</color>
@@ -21,6 +22,7 @@
     <color name="colorLightPrimaryTextSecondary">#8a000000</color>
     <color name="colorLightPrimaryDisabled">#61000000</color>
     <color name="colorLightPrimaryDivider">#1f000000</color>
+    <color name="colorLightPrimaryIcon">#8a000000</color>
 
     <color name="colorBackgroundLogin">#7F3244</color>
 
