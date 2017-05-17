@@ -2,8 +2,8 @@
 <resources>
     <!-- Dark Theme -->
     <color name="colorAccent">#e43a61</color>
-    <color name="colorPrimary">#2F2F2F</color>
-    <color name="colorPrimaryDark">#212121</color>
+    <color name="colorPrimary">#212121</color>
+    <color name="colorPrimaryDark">#000000</color>
     <color name="colorPrimaryLight">#424242</color>
     <color name="colorPrimaryBackground">#303030</color>
     <color name="colorPrimaryText">#ffffff</color>

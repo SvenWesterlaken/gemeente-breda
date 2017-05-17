@@ -59,6 +59,11 @@
 
     <string name="title_activity_new_report">Nieuwe Melding</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="media_button">Media maken</string>
-    <string name="select">Selecteer media</string>
+
+    <string name="new_report_title_media">Media Toevoegen</string>
+
+    <string name="media_photo">Foto maken</string>
+    <string name="media_video">Video maken</string>
+    <string name="media_select">Media selecteren</string>
+    <string name="media_delete">Media verwijderen</string>
 </resources>

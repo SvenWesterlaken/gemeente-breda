@@ -8,6 +8,7 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.support.constraint.ConstraintLayout;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -27,7 +28,6 @@ import java.io.InputStream;
 import static android.app.Activity.RESULT_OK;
 
 public class NewReportMediaFragment extends Fragment {
-    private Button mediaBTN, selectBTN;
     private ImageView image;
 
     static final int REQUEST_IMAGE_CAPTURE = 1;
@@ -42,13 +42,11 @@ public class NewReportMediaFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_new_report_media, container, false);
 
-        image = (ImageView) rootView.findViewById(R.id.media_IV_image);
+        ConstraintLayout mediaBTN = (ConstraintLayout) rootView.findViewById(R.id.media_BTN_mediaSelect);
+        mediaBTN.setOnClickListener(new SelectMediaClickListener());
 
-        mediaBTN = (Button) rootView.findViewById(R.id.media_btn_make);
-        mediaBTN.setOnClickListener(new MediaClickListener());
-
-        selectBTN = (Button) rootView.findViewById(R.id.media_btn_select);
-        selectBTN.setOnClickListener(new SelectMediaClickListener());
+        ConstraintLayout selectBTN = (ConstraintLayout) rootView.findViewById(R.id.media_BTN_photo);
+        selectBTN.setOnClickListener(new MediaClickListener());
 
         return rootView;
     }

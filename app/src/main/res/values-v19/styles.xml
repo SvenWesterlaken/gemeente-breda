@@ -20,6 +20,7 @@
         <item name="android:listDivider">@null</item>
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
+        <item name="disabledAlpha">0.38</item>
         <item name="android:windowTitleStyle">@style/ToolBarTitle</item>
         <item name="android:backgroundDimAmount">0.9</item>
         <item name="android:windowTranslucentStatus">true</item>
@@ -36,6 +37,7 @@
         <item name="android:listDivider">@null</item>
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
+        <item name="disabledAlpha">0.5</item>
         <item name="android:textColorPrimary">@color/colorLightPrimaryText</item>
         <item name="android:textColorPrimaryDisableOnly">@color/colorLightPrimaryDisabled</item>
         <item name="android:textColorPrimaryNoDisable">@color/colorLightPrimaryText</item>

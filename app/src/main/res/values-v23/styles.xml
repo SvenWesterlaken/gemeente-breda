@@ -21,6 +21,7 @@
         <item name="android:textAppearanceSmall">@style/CustomtextAppearanceSmall</item>
         <item name="android:windowTitleStyle">@style/ToolBarTitle</item>
         <item name="android:windowLightStatusBar">true</item>
+        <item name="disabledAlpha">0.5</item>
     </style>
 
     <style name="AppTheme.Login" parent="Theme.AppCompat">
