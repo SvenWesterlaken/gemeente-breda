@@ -14,6 +14,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.MediaController;
+import android.widget.VideoView;
 
 import com.svenwesterlaken.gemeentebreda.R;
 
@@ -23,16 +25,20 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URI;
 
 import static android.app.Activity.RESULT_OK;
 
 public class NewReportMediaFragment extends Fragment {
     private Button mediaBTN, selectBTN;
+    private VideoView video;
     private ImageView image;
     private Bitmap bitmap;
+    private Uri videoUri;
 
     static final int REQUEST_IMAGE_CAPTURE = 1;
     static final int REQUEST_LOAD_IMG = 2;
+    static final int REQUEST_VIDEO_CAPTURE = 3;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -44,6 +50,10 @@ public class NewReportMediaFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_new_report_media, container, false);
 
         image = (ImageView) rootView.findViewById(R.id.media_IV_image);
+
+        MediaController mediaController = new MediaController(getContext());
+        video = (VideoView) rootView.findViewById(R.id.media_VV_video);
+        video.setMediaController(mediaController);
 
         mediaBTN = (Button) rootView.findViewById(R.id.media_btn_make);
         mediaBTN.setOnClickListener(new MediaClickListener());
@@ -58,7 +68,7 @@ public class NewReportMediaFragment extends Fragment {
 
         @Override
         public void onClick(View v) {
-            dispatchTakePictureIntent();
+            dispatchTakeVideoIntent();
         }
     }
 
@@ -77,6 +87,7 @@ public class NewReportMediaFragment extends Fragment {
     public void onResume(){
         super.onResume();
         image.setImageBitmap(bitmap);
+        video.setVideoURI(videoUri);
     }
 
     @Override
@@ -86,8 +97,13 @@ public class NewReportMediaFragment extends Fragment {
             bitmap = (Bitmap) extras.get("data");
             image.setImageBitmap(bitmap);
             MediaStore.Images.Media.insertImage(getContext().getContentResolver(), bitmap, "testTitle" , "testDescription");
-
         }
+
+        if (requestCode == REQUEST_VIDEO_CAPTURE && resultCode == RESULT_OK) {
+            videoUri = data.getData();
+            video.setVideoURI(videoUri);
+        }
+
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQUEST_LOAD_IMG && resultCode == RESULT_OK) {
             try {
@@ -109,6 +125,13 @@ public class NewReportMediaFragment extends Fragment {
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         if (takePictureIntent.resolveActivity(getContext().getPackageManager()) != null) {
             startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
+        }
+    }
+
+    private void dispatchTakeVideoIntent() {
+        Intent takeVideoIntent = new Intent(MediaStore.ACTION_VIDEO_CAPTURE);
+        if (takeVideoIntent.resolveActivity(getContext().getPackageManager()) != null) {
+            startActivityForResult(takeVideoIntent, REQUEST_VIDEO_CAPTURE);
         }
     }
 
