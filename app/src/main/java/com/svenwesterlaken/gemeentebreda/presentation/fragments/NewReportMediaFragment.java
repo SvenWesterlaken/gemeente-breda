@@ -30,7 +30,7 @@ import java.net.URI;
 import static android.app.Activity.RESULT_OK;
 
 public class NewReportMediaFragment extends Fragment {
-    private Button mediaBTN, selectBTN;
+    private Button mediaBTN, selectBTN, videoBTN;
     private VideoView video;
     private ImageView image;
     private Bitmap bitmap;
@@ -39,6 +39,7 @@ public class NewReportMediaFragment extends Fragment {
     static final int REQUEST_IMAGE_CAPTURE = 1;
     static final int REQUEST_LOAD_IMG = 2;
     static final int REQUEST_VIDEO_CAPTURE = 3;
+    static final int REQUEST_LOAD_VIDEO = 4;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -55,8 +56,11 @@ public class NewReportMediaFragment extends Fragment {
         video = (VideoView) rootView.findViewById(R.id.media_VV_video);
         video.setMediaController(mediaController);
 
-        mediaBTN = (Button) rootView.findViewById(R.id.media_btn_make);
-        mediaBTN.setOnClickListener(new MediaClickListener());
+        mediaBTN = (Button) rootView.findViewById(R.id.media_btn_photo);
+        mediaBTN.setOnClickListener(new PhotoClickListener());
+
+        videoBTN = (Button) rootView.findViewById(R.id.media_btn_video);
+        videoBTN.setOnClickListener(new VideoClickListener());
 
         selectBTN = (Button) rootView.findViewById(R.id.media_btn_select);
         selectBTN.setOnClickListener(new SelectMediaClickListener());
@@ -64,7 +68,15 @@ public class NewReportMediaFragment extends Fragment {
         return rootView;
     }
 
-    private class MediaClickListener implements View.OnClickListener {
+    private class PhotoClickListener implements View.OnClickListener {
+
+        @Override
+        public void onClick(View v) {
+            dispatchTakePictureIntent();
+        }
+    }
+
+    private class VideoClickListener implements View.OnClickListener {
 
         @Override
         public void onClick(View v) {
@@ -77,9 +89,8 @@ public class NewReportMediaFragment extends Fragment {
         @Override
         public void onClick(View v) {
             Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
-            photoPickerIntent.setType("image/*");
+            photoPickerIntent.setType("image/*" "video/*");
             startActivityForResult(photoPickerIntent, REQUEST_LOAD_IMG);
-
         }
     }
 
@@ -113,11 +124,19 @@ public class NewReportMediaFragment extends Fragment {
                 image.setImageBitmap(selectedImage);
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
-
             }
+        }
 
-        }else {
-
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQUEST_LOAD_VIDEO && resultCode == RESULT_OK) {
+            try {
+                final Uri imageUri = data.getData();
+                final InputStream imageStream = getContext().getContentResolver().openInputStream(imageUri);
+                final Bitmap selectedImage = BitmapFactory.decodeStream(imageStream);
+                image.setImageBitmap(selectedImage);
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
         }
     }
 
