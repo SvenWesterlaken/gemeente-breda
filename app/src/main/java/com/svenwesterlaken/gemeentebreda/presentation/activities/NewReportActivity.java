@@ -2,40 +2,22 @@ package com.svenwesterlaken.gemeentebreda.presentation.activities;
 
 
 import android.Manifest;
-import android.app.Activity;
-import android.app.ActionBar;
-import android.app.FragmentTransaction;
 
-import android.app.Fragment;
-import android.app.FragmentManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.pm.PackageManager;
-import android.support.v13.app.FragmentPagerAdapter;
 import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.NavUtils;
 import android.support.v4.content.ContextCompat;
-import android.support.v4.content.res.ResourcesCompat;
 import android.support.v4.view.ViewPager;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
-import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
-
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.TextView;
 
 import com.svenwesterlaken.gemeentebreda.R;
 import com.svenwesterlaken.gemeentebreda.logic.adapters.NewReportPagerAdapter;
-import com.svenwesterlaken.gemeentebreda.presentation.partials.PageIndicator;
 
-import java.security.acl.Permission;
-
+import me.relex.circleindicator.CircleIndicator;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class NewReportActivity extends BaseActivity {
@@ -55,13 +37,12 @@ public class NewReportActivity extends BaseActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         mSectionsPagerAdapter = new NewReportPagerAdapter(getSupportFragmentManager());
-        mViewPager = (ViewPager) findViewById(R.id.container);
-        mViewPager.setAdapter(mSectionsPagerAdapter);
 
         mViewPager = (ViewPager) findViewById(R.id.container);
+        CircleIndicator page_indicator = (CircleIndicator) findViewById(R.id.pageIndicator);
         mViewPager.setAdapter(mSectionsPagerAdapter);
         mViewPager.setCurrentItem(0);
-        new PageIndicator(mSectionsPagerAdapter, this, mViewPager, this);
+        page_indicator.setViewPager(mViewPager);
         requestPermissions();
 
     }
