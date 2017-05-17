@@ -33,6 +33,8 @@ import android.widget.TextView;
 import com.svenwesterlaken.gemeentebreda.R;
 import com.svenwesterlaken.gemeentebreda.logic.adapters.NewReportPagerAdapter;
 
+import java.security.acl.Permission;
+
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class NewReportActivity extends BaseActivity implements ViewPager.OnPageChangeListener {
@@ -44,7 +46,8 @@ public class NewReportActivity extends BaseActivity implements ViewPager.OnPageC
     private int dotsCount;
     private ImageView[] dots;
 
-    private static final int MY_PERMISSIONS_REQUEST_CAMERA = 2;
+    private static final int PERMISSIONS_REQUEST_CAMERA = 2;
+    private static final int PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE = 2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -132,12 +135,61 @@ public class NewReportActivity extends BaseActivity implements ViewPager.OnPageC
             }
         }
 
+        // Request ACCESS_FINE_LOCATION permission
+        if (ContextCompat.checkSelfPermission(this,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                != PackageManager.PERMISSION_GRANTED) {
+
+            // Should we show an explanation?
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this,
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+
+                // Show an explanation to the user *asynchronously* -- don't block
+                // sees the explanation, try again to request the permission.
+
+                // 1. Instantiate an AlertDialog.Builder with its constructor
+                AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
+                // 2. Chain together various setter methods to set the dialog characteristics
+                builder.setMessage(R.string.body_permission_alert)
+                        .setTitle(R.string.title_permission_alert);
+
+                // 3. Add button.
+                builder.setNeutralButton(R.string.button_ok, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        requestWritePermission();
+                    }
+                });
+
+                // 4. Get the AlertDialog from create()
+                AlertDialog dialog = builder.create();
+
+                dialog.show();
+
+            } else {
+
+                // No explanation needed, we can request the permission.
+
+                requestWritePermission();
+
+                // MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION is an
+                // app-defined int constant. The callback method gets the
+                // result of the request.
+            }
+        }
+
     }
 
     public void requestCameraPermission() {
         ActivityCompat.requestPermissions(this,
                 new String[]{Manifest.permission.CAMERA},
-                MY_PERMISSIONS_REQUEST_CAMERA);
+                PERMISSIONS_REQUEST_CAMERA);
+    }
+
+    public void requestWritePermission() {
+        ActivityCompat.requestPermissions(this,
+                new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE);
     }
 
     @Override
