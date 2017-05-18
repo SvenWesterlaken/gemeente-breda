@@ -8,13 +8,10 @@
     tools:layout_editor_absoluteX="0dp">
 
     <!-- TODO: Update blank fragment layout -->
-<<<<<<< HEAD
-=======
     <EditText
         android:id="@+id/reportText"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
->>>>>>> 56878d5596fb7587517c3e8c581a913b5c14dbba
 
     <ScrollView
         android:layout_width="368dp"
