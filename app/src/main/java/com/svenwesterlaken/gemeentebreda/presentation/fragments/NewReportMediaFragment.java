@@ -76,10 +76,10 @@ public class NewReportMediaFragment extends Fragment {
 
         @Override
         public void onClick(View v) {
-            Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
+            Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
             //TODO: Video wordt niet weergegeven.
-            photoPickerIntent.setType("video/* image/*");
-            startActivityForResult(photoPickerIntent, REQUEST_LOAD_IMG);
+            intent.setType("image/* video/*");
+            startActivityForResult(intent, REQUEST_LOAD_IMG);
 
         }
     }
