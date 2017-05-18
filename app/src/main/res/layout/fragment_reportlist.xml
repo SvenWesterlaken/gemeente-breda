@@ -11,7 +11,6 @@
         android:id="@+id/report_RV_reports"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:refreshType="material"
-        app:refreshColors="@array/scheme_colors"/>
+        app:refreshType="material"/>
 
 </com.baoyz.widget.PullRefreshLayout>

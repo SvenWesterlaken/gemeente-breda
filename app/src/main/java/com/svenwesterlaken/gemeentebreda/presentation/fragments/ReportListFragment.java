@@ -1,7 +1,9 @@
 package com.svenwesterlaken.gemeentebreda.presentation.fragments;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.graphics.ColorUtils;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -52,6 +54,7 @@ public class ReportListFragment extends Fragment implements PullRefreshLayout.On
         reportAdapter.notifyDataSetChanged();
 
         prf = (PullRefreshLayout) rootView.findViewById(R.id.swipeRefreshLayout);
+        prf.setColorSchemeColors(Color.argb(255, 217, 29, 73));
         prf.setOnRefreshListener(this);
 
 
@@ -67,7 +70,7 @@ public class ReportListFragment extends Fragment implements PullRefreshLayout.On
 
     public void updateList(ArrayList<Report> list){
         reportAdapter.notifyItemRangeInserted(0, list.size());
-        prf.setRefreshing(false);
+        //prf.setRefreshing(false);
 
     }
 
