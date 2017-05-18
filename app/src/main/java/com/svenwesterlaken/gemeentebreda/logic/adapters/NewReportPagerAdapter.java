@@ -16,25 +16,15 @@ import com.svenwesterlaken.gemeentebreda.presentation.fragments.NewReportSummary
 public class NewReportPagerAdapter extends FragmentPagerAdapter {
 
     private static int tabCount = 5;
-    private Context context;
 
-    public NewReportPagerAdapter(FragmentManager fm, Context context) {
+    public NewReportPagerAdapter(FragmentManager fm) {
         super(fm);
-        this.context = context;
     }
-
-    //Return the amount of tabs
     @Override
     public int getCount() {
         return tabCount;
     }
 
-
-    /**
-     * Method that decides which tab class the application is showing
-     * @param position the position of the tab
-     * @return the fragment that belongs to the tab
-     */
     @Override
     public Fragment getItem(int position) {
 
