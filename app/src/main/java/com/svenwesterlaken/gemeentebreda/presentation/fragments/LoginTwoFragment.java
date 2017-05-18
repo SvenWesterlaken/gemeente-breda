@@ -79,7 +79,7 @@ public class LoginTwoFragment extends Fragment {
     }
 
     private boolean validatePhone() {
-        String regex = "^\\+?[0-9]{10,13}$";
+        String regex = "(^\\+[0-9]{2}|^\\+[0-9]{2}\\(0\\)|^\\(\\+[0-9]{2}\\)\\(0\\)|^00[0-9]{2}|^0)([0-9]{9}$|[0-9\\-\\s]{9}$)";
         String str = phone.getText().toString().trim();
 
         if (!str.isEmpty()) {
