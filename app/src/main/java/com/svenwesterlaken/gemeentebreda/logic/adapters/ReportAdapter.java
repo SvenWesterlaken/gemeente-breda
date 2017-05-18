@@ -21,12 +21,10 @@ import java.util.List;
 public class ReportAdapter extends RecyclerView.Adapter<ReportAdapter.ReportViewHolder> {
 
     private List<Report> reports;
-    private Context context;
 
     // Constructor
-    public ReportAdapter(Context context, List<Report> reports) {
+    public ReportAdapter(List<Report> reports) {
         this.reports = reports;
-        this.context = context;
     }
 
     public int getItemCount() {
@@ -36,7 +34,6 @@ public class ReportAdapter extends RecyclerView.Adapter<ReportAdapter.ReportView
     @Override
     public ReportViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.row_report, parent, false);
-
         return new ReportViewHolder(itemView);
     }
 
@@ -50,6 +47,8 @@ public class ReportAdapter extends RecyclerView.Adapter<ReportAdapter.ReportView
 
         contactViewHolder.icon.setImageResource( R.drawable.lightbulb);
         contactViewHolder.status.setImageResource( R.drawable.eye_off);
+
+        //notifyItemInserted(i);
     }
 
     public static class ReportViewHolder extends RecyclerView.ViewHolder {
