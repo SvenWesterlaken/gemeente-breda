@@ -1,5 +1,6 @@
 package com.svenwesterlaken.gemeentebreda.logic.adapters;
 
+
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
@@ -32,10 +33,10 @@ public class ReportAdapter extends RecyclerView.Adapter<ReportAdapter.ReportView
     private Intent intent;
     private Report report;
 
+
     // Constructor
-    public ReportAdapter(Context context, List<Report> reports) {
+    public ReportAdapter(List<Report> reports) {
         this.reports = reports;
-        this.context = context;
     }
 
     public int getItemCount() {
@@ -48,7 +49,11 @@ public class ReportAdapter extends RecyclerView.Adapter<ReportAdapter.ReportView
 
 
 
+
         return new ReportViewHolder(itemView, reports);
+
+
+
     }
 
     @Override
@@ -68,7 +73,7 @@ public class ReportAdapter extends RecyclerView.Adapter<ReportAdapter.ReportView
             public void onClick(View v) {
 
 
-                Intent intent = new Intent(context, DetailedReportActivity.class);
+                Intent intent = new Intent(v.getContext(), DetailedReportActivity.class);
 
                 intent.putExtra("REPORT", reports.get(i));
 
@@ -79,6 +84,7 @@ public class ReportAdapter extends RecyclerView.Adapter<ReportAdapter.ReportView
 
 
 
+        //notifyItemInserted(i);
 
     }
 
@@ -90,13 +96,14 @@ public class ReportAdapter extends RecyclerView.Adapter<ReportAdapter.ReportView
 
         public ReportViewHolder(View v, final List<Report> reports) {
             super(v);
-            title = (TextView) v.findViewById(R.id.report_TV_title);
-            address = (TextView) v.findViewById(R.id.report_TV_address);
-            description = (TextView) v.findViewById(R.id.report_TV_description);
+
+
+            title =  (TextView) v.findViewById(R.id.summary_TV_reportTitle);
+            address = (TextView)  v.findViewById(R.id.summary_TV_address);
+            description = (TextView)  v.findViewById(R.id.summary_TV_description);
             upvotes = (TextView) v.findViewById(R.id.report_TV_upvotes);
 
-
-            icon = (ImageView) v.findViewById(R.id.report_IV_icon);
+            icon = (ImageView) v.findViewById(R.id.summary_IV_icon);
             status = (ImageView) v.findViewById(R.id.report_IV_status);
 
             layout =  v.findViewById(R.id.layout);

@@ -3,4 +3,5 @@
     <attr name="colorDivider" format="color"/>
     <attr name="colorIcons" format="color"/>
     <attr name="actionBarTheme" format="reference"/>
+    <attr name="disabledAlpha" format="float"/>
 </resources>

@@ -7,9 +7,9 @@
         <EditTextPreference
             android:capitalize="words"
             android:defaultValue="@string/pref_default_display_name"
+            android:icon="@drawable/account_accent"
             android:inputType="textCapWords"
             android:key="pref_name"
-            android:icon="@drawable/account"
             android:layout="@layout/row_preference"
             android:maxLines="1"
             android:selectAllOnFocus="true"
