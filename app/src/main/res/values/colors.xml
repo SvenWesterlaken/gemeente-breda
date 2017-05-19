@@ -1,15 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- Dark Theme -->
-    <color name="colorAccent">#E43A61</color>
-    <color name="colorPrimary">#2F2F2F</color>
-    <color name="colorPrimaryDark">#212121</color>
+    <color name="colorAccent">#e43a61</color>
+    <color name="colorPrimary">#212121</color>
+    <color name="colorPrimaryDark">#000000</color>
     <color name="colorPrimaryLight">#424242</color>
     <color name="colorPrimaryBackground">#303030</color>
     <color name="colorPrimaryText">#ffffff</color>
     <color name="colorPrimaryTextSecondary">#c5ffffff</color>
     <color name="colorPrimaryDisabled">#4dffffff</color>
     <color name="colorPrimaryDivider">#1fffffff</color>
+    <color name="colorPrimaryIcon">#ffffff</color>
 
     <!-- Light Theme -->
     <color name="colorLightAccent">#D91D49</color>
@@ -21,7 +22,9 @@
     <color name="colorLightPrimaryTextSecondary">#8a000000</color>
     <color name="colorLightPrimaryDisabled">#61000000</color>
     <color name="colorLightPrimaryDivider">#1f000000</color>
+    <color name="colorLightPrimaryIcon">#8a000000</color>
 
     <color name="colorBackgroundLogin">#7F3244</color>
+    <color name="colorImageBackground">#14000000</color>
 
 </resources>
