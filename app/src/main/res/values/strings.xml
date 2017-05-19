@@ -61,9 +61,25 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
 
     <string name="new_report_title_media">Media Toevoegen</string>
-
     <string name="media_photo">Foto maken</string>
     <string name="media_video">Video maken</string>
     <string name="media_select">Media selecteren</string>
     <string name="media_delete">Media verwijderen</string>
+
+    <string name="new_report_title_location">Locatie Toevoegen</string>
+    <string name="location_current">Huidige locatie</string>
+    <string name="location_meta">Locatie van foto</string>
+    <string name="location_choose">Locatie kiezen</string>
+    <string name="location_unavailable">Niet gevonden</string>
+
+    <string name="new_report_title_category">Categorie Toevoegen</string>
+
+    <string name="new_report_title_description">Omschrijving Toevoegen</string>
+    <string name="description_hint">Plaats hier uw omschrijving (optioneel)</string>
+
+    <string name="new_report_title_summary">Concept</string>
+    <string name="summary_description_title">Omschrijving</string>
+    <string name="summary_author_title">Geplaatst door</string>
+    <string name="summary_edit">U kunt de onderdelen wijzigen door terug te gaan naar de vorige schermen</string>
+
 </resources>

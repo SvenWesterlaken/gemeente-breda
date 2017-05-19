@@ -1,7 +1,5 @@
 package com.svenwesterlaken.gemeentebreda.logic.adapters;
 
-import android.content.Context;
-import android.graphics.drawable.Drawable;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -57,12 +55,12 @@ public class ReportAdapter extends RecyclerView.Adapter<ReportAdapter.ReportView
 
         public ReportViewHolder(View v) {
             super(v);
-            title =  (TextView) v.findViewById(R.id.report_TV_title);
-            address = (TextView)  v.findViewById(R.id.report_TV_address);
-            description = (TextView)  v.findViewById(R.id.report_TV_description);
+            title =  (TextView) v.findViewById(R.id.summary_TV_reportTitle);
+            address = (TextView)  v.findViewById(R.id.summary_TV_address);
+            description = (TextView)  v.findViewById(R.id.summary_TV_description);
             upvotes = (TextView) v.findViewById(R.id.report_TV_upvotes);
 
-            icon = (ImageView) v.findViewById(R.id.report_IV_icon);
+            icon = (ImageView) v.findViewById(R.id.summary_IV_icon);
             status = (ImageView) v.findViewById(R.id.report_IV_status);
         }
     }

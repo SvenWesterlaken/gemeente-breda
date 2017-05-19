@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingTop="24dp"
+    android:paddingTop="32dp"
     tools:context="com.svenwesterlaken.gemeentebreda.presentation.fragments.NewReportMediaFragment">
 
     <TextView
@@ -23,16 +23,18 @@
 
     <android.support.constraint.ConstraintLayout
         android:id="@+id/media_BTN_photo"
+        android:minHeight="56dp"
         android:clickable="true"
         android:background="?attr/selectableItemBackground"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="0dp"
+        android:layout_marginTop="8dp"
         app:layout_constraintTop_toBottomOf="@+id/media_TV_title"
         android:layout_marginLeft="0dp"
         app:layout_constraintLeft_toLeftOf="parent"
         android:layout_marginRight="0dp"
-        app:layout_constraintRight_toRightOf="parent">
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintHorizontal_bias="0.0">
 
         <ImageView
             android:id="@+id/media_IV_photoIcon"
@@ -66,6 +68,7 @@
 
     <android.support.constraint.ConstraintLayout
         android:id="@+id/media_BTN_video"
+        android:minHeight="56dp"
         android:clickable="true"
         android:background="?attr/selectableItemBackground"
         android:layout_width="0dp"
@@ -110,6 +113,7 @@
 
     <android.support.constraint.ConstraintLayout
         android:id="@+id/media_BTN_mediaSelect"
+        android:minHeight="56dp"
         android:clickable="true"
         android:background="?attr/selectableItemBackground"
         android:layout_width="0dp"
@@ -154,6 +158,7 @@
         android:id="@+id/media_BTN_delete"
         android:alpha="?attr/disabledAlpha"
         android:background="?attr/selectableItemBackground"
+        android:minHeight="56dp"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="0dp"
@@ -171,9 +176,9 @@
             android:layout_marginLeft="16dp"
             android:layout_marginTop="0dp"
             app:srcCompat="@drawable/close"
-            app:layout_constraintBottom_toBottomOf="@+id/media_IV_deleteTitle"
+            app:layout_constraintBottom_toBottomOf="@+id/media_TV_deleteTitle"
             app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/media_IV_deleteTitle"
+            app:layout_constraintTop_toTopOf="@+id/media_TV_deleteTitle"
             app:layout_constraintVertical_bias="0.5" />
 
         <TextView
@@ -189,7 +194,7 @@
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            android:id="@+id/media_IV_deleteTitle"
+            android:id="@+id/media_TV_deleteTitle"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintVertical_bias="0.5" />
 

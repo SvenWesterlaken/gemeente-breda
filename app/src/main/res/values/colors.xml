@@ -25,5 +25,6 @@
     <color name="colorLightPrimaryIcon">#8a000000</color>
 
     <color name="colorBackgroundLogin">#7F3244</color>
+    <color name="colorImageBackground">#14000000</color>
 
 </resources>
