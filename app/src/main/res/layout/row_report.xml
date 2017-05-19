@@ -8,11 +8,13 @@
     android:layout_margin="8dp"
     tools:ignore="missingPrefix"
     app:cardCornerRadius="2dp"
-    app:cardElevation="2dp">
+    app:cardElevation="2dp"
+    >
 
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:id="@+id/layout">
 
         <ImageView
             android:id="@+id/report_IV_icon"
