@@ -6,6 +6,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
 import android.util.Log;
 
@@ -23,7 +24,7 @@ public class  NewReportDescriptionFragment extends Fragment{
         final View rootView = inflater.inflate(R.layout.fragment_new_report_description, container, false);
 
         final EditText descriptionView = (EditText) rootView.findViewById(R.id.description_ET_description);
-        FloatingActionButton descriptionBtn = (FloatingActionButton) rootView.findViewById(R.id.description_FAB_submit);
+        Button descriptionBtn = (Button) rootView.findViewById(R.id.description_BTN_submit);
 
         descriptionBtn.setOnClickListener(new View.OnClickListener() {
             @Override

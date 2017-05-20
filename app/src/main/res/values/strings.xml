@@ -76,10 +76,13 @@
 
     <string name="new_report_title_description">Omschrijving Toevoegen</string>
     <string name="description_hint">Plaats hier uw omschrijving (optioneel)</string>
+    <string name="description_btn_submit">Opslaan</string>
 
     <string name="new_report_title_summary">Concept</string>
     <string name="summary_description_title">Omschrijving</string>
     <string name="summary_author_title">Geplaatst door</string>
-    <string name="summary_edit">U kunt de onderdelen wijzigen door terug te gaan naar de vorige schermen</string>
+    <string name="summary_edit">U kunt de onderdelen wijzigen door terug te gaan naar de vorige schermen.</string>
+    <string name="summary_author_info">Uw e-mailadres en mobiele nummer zijn alleen zichtbaar voor de gemeente om eventueel conctact met u op te nemen.</string>
+    <string name="summary_btn_submit">Melding plaatsen</string>
 
 </resources>
