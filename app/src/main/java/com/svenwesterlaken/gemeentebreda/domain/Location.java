@@ -1,10 +1,12 @@
 package com.svenwesterlaken.gemeentebreda.domain;
 
+import java.io.Serializable;
+
 /**
  * Created by lukab on 9-5-2017.
  */
 
-public class Location {
+public class Location implements Serializable{
     String street, city, postalCode;
     int houseNumber,  locationID;
     Double latitude, longitude;

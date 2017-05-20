@@ -1,6 +1,10 @@
 package com.svenwesterlaken.gemeentebreda.presentation.fragments;
 
+
+import android.content.Intent;
+import android.support.v4.app.Fragment;
 import android.graphics.Color;
+
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.graphics.ColorUtils;
@@ -10,11 +14,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import android.widget.AdapterView;
+import android.widget.ListView;
+
 import com.baoyz.widget.PullRefreshLayout;
 import com.svenwesterlaken.gemeentebreda.R;
 import com.svenwesterlaken.gemeentebreda.data.database.DatabaseHandler;
 import com.svenwesterlaken.gemeentebreda.domain.Report;
 import com.svenwesterlaken.gemeentebreda.logic.adapters.ReportAdapter;
+import com.svenwesterlaken.gemeentebreda.presentation.activities.DetailedReportActivity;
 
 import java.util.ArrayList;
 
@@ -43,8 +51,13 @@ public class ReportListFragment extends Fragment implements PullRefreshLayout.On
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         reportList.setLayoutManager(layoutManager);
 
+
+
+        DatabaseHandler handler = new DatabaseHandler(this.getContext(),null, null, 1);
+
         handler = new DatabaseHandler(this.getContext(),null, null, 1);
         reports = handler.getAllReports();
+
 
 
         reportAdapter = new ReportAdapter(reports);
