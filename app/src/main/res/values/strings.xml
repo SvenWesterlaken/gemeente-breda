@@ -85,4 +85,9 @@
     <string name="summary_author_info">Uw e-mailadres en mobiele nummer zijn alleen zichtbaar voor de gemeente om eventueel conctact met u op te nemen.</string>
     <string name="summary_btn_submit">Melding plaatsen</string>
 
+    <string name="confirmation_succes_message">Melding is geplaatst</string>
+    <string name="confirmation_error_message">Er is een fout opgetreden</string>
+    <string name="confirmation_btn_home">Naar Hoofdscherm</string>
+    <string name="confirmation_btn_report">Melding bekijken</string>
+
 </resources>
