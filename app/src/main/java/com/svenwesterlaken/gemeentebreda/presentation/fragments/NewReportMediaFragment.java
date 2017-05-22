@@ -1,8 +1,6 @@
 package com.svenwesterlaken.gemeentebreda.presentation.fragments;
 
-import android.content.ContentValues;
 import android.content.Context;
-import android.content.ContextWrapper;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
@@ -11,7 +9,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,21 +25,14 @@ import com.drew.metadata.Tag;
 import com.svenwesterlaken.gemeentebreda.R;
 
 import java.io.BufferedInputStream;
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.URI;
-import java.net.URL;
 
 import static android.app.Activity.RESULT_OK;
 
 public class NewReportMediaFragment extends Fragment {
-    private Button mediaBTN, selectBTN;
+    private Button photoBTN, selectBTN, videoBTN;
     private VideoView video;
     private ImageView image;
     private Bitmap bitmap;
@@ -67,8 +57,11 @@ public class NewReportMediaFragment extends Fragment {
         video = (VideoView) rootView.findViewById(R.id.media_VV_video);
         video.setMediaController(mediaController);
 
-        mediaBTN = (Button) rootView.findViewById(R.id.media_btn_make);
-        mediaBTN.setOnClickListener(new MediaClickListener());
+        photoBTN = (Button) rootView.findViewById(R.id.media_btn_photo);
+        photoBTN.setOnClickListener(new PhotoClickListener());
+
+        videoBTN = (Button) rootView.findViewById(R.id.media_btn_video);
+        videoBTN.setOnClickListener(new VideoClickListener());
 
         selectBTN = (Button) rootView.findViewById(R.id.media_btn_select);
         selectBTN.setOnClickListener(new SelectMediaClickListener());
@@ -76,7 +69,14 @@ public class NewReportMediaFragment extends Fragment {
         return rootView;
     }
 
-    private class MediaClickListener implements View.OnClickListener {
+    private class PhotoClickListener implements View.OnClickListener {
+
+        @Override
+        public void onClick(View v) {
+            dispatchTakePictureIntent();
+        }
+    }
+    private class VideoClickListener implements View.OnClickListener {
 
         @Override
         public void onClick(View v) {
