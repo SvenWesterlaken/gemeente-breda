@@ -174,16 +174,16 @@ public class DatabaseHandler extends SQLiteOpenHelper{
         addUser(user1);
         Location location1 = new Location("Rijckevorsel", "Breda", 54, "2991kc", 1, 51.584385, 4.796032);
         addLocation(location1);
-        //addReport(new Report(1, user1, location1, "Eerste test", category1, 1));
+        addReport(new Report(1, user1, location1, "Eerste test", category1, 1));
 
-//        Category category2 = new Category(2, "Vuilnis");
-//        addCategory(category2);
-//        User user2 = new User(2, "0642584423", "Gebruiker2", "gebruiker2@gmail.com");
-//        addUser(user2);
-//        Location location2 = new Location("Vrijenburg", "Breda", 52, "4815kc", 2, "iets", "iets");
-//        addLocation(location2);
-//
-//        addReport(new Report(2, user2, location2, "Tweede test", category2));
+        Category category2 = new Category(2, "Vuilnis", "Overal vuilnis");
+        addCategory(category2);
+        User user2 = new User(2, "0642584423", "Gebruiker2", "gebruiker2@gmail.com");
+        addUser(user2);
+        Location location2 = new Location("Vrijenburg", "Breda", 52, "4815kc", 2, 51.619139, 4.730599);
+        addLocation(location2);
+
+        addReport(new Report(2, user2, location2, "Tweede test", category2, 2));
     }
     //ADD USERS
     public void addUser(User user){

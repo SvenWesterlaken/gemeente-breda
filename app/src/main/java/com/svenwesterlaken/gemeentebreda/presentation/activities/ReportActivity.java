@@ -42,6 +42,7 @@ import com.svenwesterlaken.gemeentebreda.domain.User;
 import com.svenwesterlaken.gemeentebreda.logic.adapters.ReportPagerAdapter;
 import com.svenwesterlaken.gemeentebreda.presentation.fragments.ReportListFragment;
 import com.svenwesterlaken.gemeentebreda.presentation.fragments.ReportMapFragment;
+import com.svenwesterlaken.gemeentebreda.presentation.partials.NotImplementedListener;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -94,32 +95,6 @@ public class ReportActivity extends MenuActivity {
 
                 Intent i = new Intent(getApplicationContext(), NewReportActivity.class);
                 startActivity(i);
-
-
-//                Category testCategory = new Category(handler.getAllReports().size()+1, "category", "summary");
-//                handler.addCategory(testCategory);
-//                User testUser = new User(handler.getAllReports().size(), "mobiel", "naam", "email");
-//                handler.addUser(testUser);
-//
-//                Random r = new Random();
-//                double randomValue1 = 51.619139 + (51.560467 - 51.619139) * r.nextDouble();
-//                double randomValue2 = 4.730599 + (4.815561 - 4.730599) * r.nextDouble();
-//
-//                Location testLocation = new Location("straat", "city", 00, "postcode", handler.getAllReports().size()+1, randomValue1, randomValue2);
-//                handler.addLocation(testLocation);
-//
-//
-//
-//                handler.addReport(new Report(handler.getAllReports().size()+1, testUser, testLocation, "toegevoegd na klikken knop", testCategory, 2));
-//
-//                mSectionsPagerAdapter.notifyDataSetChanged();
-//
-//
-//                Toast toast = Toast.makeText(getApplicationContext(), "De nieuwe melding is toegevoegd", Toast.LENGTH_SHORT);
-//                toast.show();
-//
-//                mapFragment.placeMarkers(mapFragment.getAllReports());
-//                listFragment.updateList(handler.getAllReports());
 //
 //                Intent intent = getIntent();
 //                finish();
@@ -194,8 +169,8 @@ public class ReportActivity extends MenuActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_report, menu);
-        menu.findItem(R.id.action_search).setOnMenuItemClickListener(new NotImplementedListener());
-        menu.findItem(R.id.action_filter).setOnMenuItemClickListener(new NotImplementedListener());
+        menu.findItem(R.id.action_search).setOnMenuItemClickListener(new NotImplementedListener(getApplicationContext()));
+        menu.findItem(R.id.action_filter).setOnMenuItemClickListener(new NotImplementedListener(getApplicationContext()));
         return true;
     }
 
@@ -228,18 +203,6 @@ public class ReportActivity extends MenuActivity {
 
             // other 'case' lines to check for other
             // permissions this app might request
-        }
-    }
-
-
-    private class NotImplementedListener implements MenuItem.OnMenuItemClickListener {
-
-        @Override
-        public boolean onMenuItemClick(MenuItem item) {
-            Toast toast = Toast.makeText(getApplicationContext(), "Deze functie is nog niet geïmplementeerd", Toast.LENGTH_SHORT);
-            toast.show();
-
-            return true;
         }
     }
 }

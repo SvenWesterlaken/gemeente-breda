@@ -11,7 +11,6 @@ import java.io.Serializable;
 public class Report implements Serializable {
 
     int reportID, locationID, categoryID, userID;
-    String report;
     User user;
     Location location;
     String description;
@@ -21,7 +20,7 @@ public class Report implements Serializable {
     public Report() {
     }
 
-    public Report(int reportID, User user, Location location, String description, Category category, int locationID, String report) {
+    public Report(int reportID, User user, Location location, String description, Category category, int locationID) {
         this.reportID = reportID;
         this.category = category;
         this.user = user;
@@ -29,7 +28,6 @@ public class Report implements Serializable {
         this.description = description;
         this.category = category;
         this.locationID = locationID;
-        this.report = report;
     }
 
 
@@ -73,8 +71,6 @@ public class Report implements Serializable {
         return category;
     }
 
-    public String getReport(){return report;}
-
     //setters
 
 
@@ -114,5 +110,4 @@ public class Report implements Serializable {
         this.category = category;
     }
 
-    public void setReport(String report) {this.report = report;}
 }

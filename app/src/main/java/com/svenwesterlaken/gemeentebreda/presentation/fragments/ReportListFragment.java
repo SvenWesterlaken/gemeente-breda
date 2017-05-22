@@ -51,14 +51,8 @@ public class ReportListFragment extends Fragment implements PullRefreshLayout.On
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         reportList.setLayoutManager(layoutManager);
 
-
-
-        DatabaseHandler handler = new DatabaseHandler(this.getContext(),null, null, 1);
-
         handler = new DatabaseHandler(this.getContext(),null, null, 1);
         reports = handler.getAllReports();
-
-
 
         reportAdapter = new ReportAdapter(reports);
         reportList.setAdapter(reportAdapter);
@@ -69,7 +63,6 @@ public class ReportListFragment extends Fragment implements PullRefreshLayout.On
         prf = (PullRefreshLayout) rootView.findViewById(R.id.swipeRefreshLayout);
         prf.setColorSchemeColors(Color.argb(255, 217, 29, 73));
         prf.setOnRefreshListener(this);
-
 
         return rootView;
     }
@@ -83,7 +76,7 @@ public class ReportListFragment extends Fragment implements PullRefreshLayout.On
 
     public void updateList(ArrayList<Report> list){
         reportAdapter.notifyItemRangeInserted(0, list.size());
-        //prf.setRefreshing(false);
+        prf.setRefreshing(false);
 
     }
 
