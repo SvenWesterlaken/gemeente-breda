@@ -21,9 +21,11 @@ import android.widget.VideoView;
 
 import com.drew.imaging.ImageMetadataReader;
 import com.drew.imaging.ImageProcessingException;
+import com.drew.lang.GeoLocation;
 import com.drew.metadata.Directory;
 import com.drew.metadata.Metadata;
 import com.drew.metadata.Tag;
+import com.drew.metadata.exif.GpsDirectory;
 import com.svenwesterlaken.gemeentebreda.R;
 
 import java.io.BufferedInputStream;
@@ -31,6 +33,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Collection;
 
 import static android.app.Activity.RESULT_OK;
 
@@ -130,17 +133,15 @@ public class NewReportMediaFragment extends Fragment {
                 File file = new File(getRealPathFromURI(getContext(), imageUri));
 
                 //Prints location data for all video files.
-                getLocalVideoFiles(getContext());
+                //getLocalVideoFiles(getContext());
 
                 //Prints metadata tags for selected image.
-                printMetadata(file);
+                getLocationMetadata(file);
 
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
 
             }
-
-        }else {
 
         }
     }
@@ -168,6 +169,7 @@ public class NewReportMediaFragment extends Fragment {
                 String thisRes = Double.toString(videoCursor.getDouble(resColumn));
                 String thisDuration = Double.toString(videoCursor.getDouble(durationColumn));
 
+                Log.d("video","------------------");
                 Log.d("video Duration",thisDuration);
                 Log.d("video Resolution",thisRes);
                 Log.d("video Latitude",thisLat);
@@ -219,8 +221,29 @@ public class NewReportMediaFragment extends Fragment {
             }
 
         }
-        catch (ImageProcessingException e){ e.printStackTrace();}
-        catch (IOException e) { e.printStackTrace();}
+        catch (ImageProcessingException | IOException e){ e.printStackTrace();}
+    }
+
+    private void getLocationMetadata(File file) {
+
+        try {
+            // Read all metadata from the image
+            Metadata metadata = ImageMetadataReader.readMetadata(file);
+            // See whether it has GPS data
+            Collection<GpsDirectory> gpsDirectories = metadata.getDirectoriesOfType(GpsDirectory.class);
+            for (GpsDirectory gpsDirectory : gpsDirectories) {
+                // Try to read out the location, making sure it's non-zero
+                GeoLocation geoLocation = gpsDirectory.getGeoLocation();
+                if (geoLocation != null && !geoLocation.isZero()) {
+                    // Add to our collection for use below
+                    Log.i("Photo Latitude", "Latitude: " + geoLocation.getLatitude());
+                    Log.i("Photo Longitude", "Longitude: " + geoLocation.getLongitude());
+                    break;
+                }
+            }
+        } catch (IOException | ImageProcessingException e){
+            e.printStackTrace();
+        }
     }
 
 }
