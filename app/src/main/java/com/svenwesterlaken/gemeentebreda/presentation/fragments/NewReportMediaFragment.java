@@ -25,6 +25,7 @@ import com.drew.metadata.Tag;
 import com.svenwesterlaken.gemeentebreda.R;
 
 import java.io.BufferedInputStream;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
@@ -89,7 +90,7 @@ public class NewReportMediaFragment extends Fragment {
         @Override
         public void onClick(View v) {
             Intent intent = new Intent(Intent.ACTION_PICK);
-            intent.setType("image/* video/*");
+            intent.setType("*/*");
             startActivityForResult(intent, REQUEST_LOAD_IMG);
         }
     }
@@ -123,7 +124,10 @@ public class NewReportMediaFragment extends Fragment {
                 final Bitmap selectedImage = BitmapFactory.decodeStream(imageStream);
                 image.setImageBitmap(selectedImage);
 
-                printMetadata(imageStream);
+
+                File file = new File(getRealPathFromURI(getContext(), imageUri));
+
+                printMetadata(file);
 
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
@@ -164,11 +168,10 @@ public class NewReportMediaFragment extends Fragment {
         }
     }
 
-    private void printMetadata(InputStream is) {
+    private void printMetadata(File file) {
         try {
-            BufferedInputStream bis = new BufferedInputStream(is);
-            //BufferedReader reader = new BufferedReader(new InputStreamReader(is));
-            Metadata metadata = ImageMetadataReader.readMetadata(bis);
+
+            Metadata metadata = ImageMetadataReader.readMetadata(file);
 
             for (Directory directory : metadata.getDirectories()) {
                 for (Tag tag : directory.getTags()) {
