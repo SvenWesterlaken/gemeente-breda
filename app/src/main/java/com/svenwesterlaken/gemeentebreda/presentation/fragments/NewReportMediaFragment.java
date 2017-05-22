@@ -1,5 +1,6 @@
 package com.svenwesterlaken.gemeentebreda.presentation.fragments;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.ContextWrapper;
 import android.content.Intent;
@@ -10,6 +11,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -76,7 +78,7 @@ public class NewReportMediaFragment extends Fragment {
 
         @Override
         public void onClick(View v) {
-            dispatchTakePictureIntent();
+            dispatchTakeVideoIntent();
         }
     }
 
@@ -121,20 +123,7 @@ public class NewReportMediaFragment extends Fragment {
                 final Bitmap selectedImage = BitmapFactory.decodeStream(imageStream);
                 image.setImageBitmap(selectedImage);
 
-                try {
-                    BufferedInputStream bis = new BufferedInputStream(imageStream);
-                    Metadata metadata = ImageMetadataReader.readMetadata(bis);
-
-
-                    for (Directory directory : metadata.getDirectories()) {
-                        for (Tag tag : directory.getTags()) {
-                            System.out.println(tag);
-                        }
-                    }
-
-                }
-                catch (ImageProcessingException e){}
-                catch (IOException e) {}
+                printMetadata(imageStream);
 
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
@@ -173,6 +162,23 @@ public class NewReportMediaFragment extends Fragment {
         if (takeVideoIntent.resolveActivity(getContext().getPackageManager()) != null) {
             startActivityForResult(takeVideoIntent, REQUEST_VIDEO_CAPTURE);
         }
+    }
+
+    private void printMetadata(InputStream is) {
+        try {
+            BufferedInputStream bis = new BufferedInputStream(is);
+            Metadata metadata = ImageMetadataReader.readMetadata(bis);
+
+
+            for (Directory directory : metadata.getDirectories()) {
+                for (Tag tag : directory.getTags()) {
+                    System.out.println(tag);
+                }
+            }
+
+        }
+        catch (ImageProcessingException e){ e.printStackTrace();}
+        catch (IOException e) { e.printStackTrace();}
     }
 
 }
