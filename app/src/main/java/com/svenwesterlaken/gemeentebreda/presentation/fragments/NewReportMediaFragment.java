@@ -1,5 +1,6 @@
 package com.svenwesterlaken.gemeentebreda.presentation.fragments;
 
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
@@ -9,6 +10,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -81,7 +83,7 @@ public class NewReportMediaFragment extends Fragment {
 
         @Override
         public void onClick(View v) {
-            dispatchTakePictureIntent();
+            dispatchTakeVideoIntent();
         }
     }
 
@@ -127,6 +129,10 @@ public class NewReportMediaFragment extends Fragment {
 
                 File file = new File(getRealPathFromURI(getContext(), imageUri));
 
+                //Prints location data for all video files.
+                getLocalVideoFiles(getContext());
+
+                //Prints metadata tags for selected image.
                 printMetadata(file);
 
             } catch (FileNotFoundException e) {
@@ -137,6 +143,39 @@ public class NewReportMediaFragment extends Fragment {
         }else {
 
         }
+    }
+
+    public void getLocalVideoFiles(Context context) {
+        ContentResolver videoResolver = context.getContentResolver();
+        Uri videoUri = MediaStore.Video.Media.EXTERNAL_CONTENT_URI;
+        String test = getRealPathFromURI(context, videoUri);
+        Cursor videoCursor = videoResolver.query(videoUri, null, null, null, null);
+
+        if(videoCursor!=null && videoCursor.moveToFirst()){
+            //get columns
+            int latColumn = videoCursor.getColumnIndex
+                    (MediaStore.Video.Media.LATITUDE);
+            int lonColumn = videoCursor.getColumnIndex
+                    (MediaStore.Video.Media.LONGITUDE);
+            int resColumn = videoCursor.getColumnIndex
+                    (MediaStore.Video.Media.RESOLUTION);
+            int durationColumn = videoCursor.getColumnIndex
+                    (MediaStore.Video.Media.DURATION);
+
+            do {
+                String thisLat = Double.toString(videoCursor.getDouble(latColumn));
+                String thisLon = Double.toString(videoCursor.getDouble(lonColumn));
+                String thisRes = Double.toString(videoCursor.getDouble(resColumn));
+                String thisDuration = Double.toString(videoCursor.getDouble(durationColumn));
+
+                Log.d("video Duration",thisDuration);
+                Log.d("video Resolution",thisRes);
+                Log.d("video Latitude",thisLat);
+                Log.d("video Longitude",thisLon);
+            }
+            while (videoCursor.moveToNext());
+        }
+
     }
 
     public String getRealPathFromURI(Context context, Uri contentUri) {
