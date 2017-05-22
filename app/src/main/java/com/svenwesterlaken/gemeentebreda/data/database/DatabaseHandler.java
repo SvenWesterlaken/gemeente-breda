@@ -424,6 +424,35 @@ public class DatabaseHandler extends SQLiteOpenHelper{
 
     }
 
+    public ArrayList<Category> getAllCategories(){
+        ArrayList<Category> categories  = new ArrayList<>();
+
+        String query = "SELECT * FROM " + CATEGORY_TABLE_NAME + ";";
+
+
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        Cursor cursor = db.rawQuery(query, null);
+
+
+        while(cursor.moveToNext() ) {
+
+            Category category = new Category();
+
+            category.setCategoryID(cursor.getInt(cursor.getColumnIndex(CATEGORY_COLUMN_ID)));
+            category.setCategoryName(cursor.getString(cursor.getColumnIndex(CATEGORY_COLUMN_NAME)));
+            category.setCategorySummary(cursor.getString(cursor.getColumnIndex(CATEGORY_COLUMN_SUMMARY)));
+
+
+
+            categories.add(category);
+        }
+
+        cursor.close();
+        return categories;
+
+    }
+
 
 
 }
