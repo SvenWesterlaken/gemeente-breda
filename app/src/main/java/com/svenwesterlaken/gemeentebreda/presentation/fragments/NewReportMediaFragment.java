@@ -28,12 +28,14 @@ import com.drew.metadata.Tag;
 import com.svenwesterlaken.gemeentebreda.R;
 
 import java.io.BufferedInputStream;
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.net.URI;
 import java.net.URL;
 
@@ -78,7 +80,7 @@ public class NewReportMediaFragment extends Fragment {
 
         @Override
         public void onClick(View v) {
-            dispatchTakeVideoIntent();
+            dispatchTakePictureIntent();
         }
     }
 
@@ -86,11 +88,9 @@ public class NewReportMediaFragment extends Fragment {
 
         @Override
         public void onClick(View v) {
-            Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
-            //TODO: Video wordt niet weergegeven.
-            photoPickerIntent.setType("video/* image/*");
-            startActivityForResult(photoPickerIntent, REQUEST_LOAD_IMG);
-
+            Intent intent = new Intent(Intent.ACTION_PICK);
+            intent.setType("image/* video/*");
+            startActivityForResult(intent, REQUEST_LOAD_IMG);
         }
     }
 
@@ -167,8 +167,8 @@ public class NewReportMediaFragment extends Fragment {
     private void printMetadata(InputStream is) {
         try {
             BufferedInputStream bis = new BufferedInputStream(is);
+            //BufferedReader reader = new BufferedReader(new InputStreamReader(is));
             Metadata metadata = ImageMetadataReader.readMetadata(bis);
-
 
             for (Directory directory : metadata.getDirectories()) {
                 for (Tag tag : directory.getTags()) {
