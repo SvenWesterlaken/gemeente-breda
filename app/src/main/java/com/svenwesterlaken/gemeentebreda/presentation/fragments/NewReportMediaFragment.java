@@ -96,6 +96,12 @@ public class NewReportMediaFragment extends Fragment {
         public void onClick(View v) {
             Intent intent = new Intent(Intent.ACTION_PICK);
             intent.setType("*/*");
+
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.KITKAT){
+                String[] mimetypes = {"image/*", "video/*"};
+                intent.putExtra(Intent.EXTRA_MIME_TYPES, mimetypes);
+            }
+
             startActivityForResult(intent, REQUEST_LOAD_IMG);
         }
     }
@@ -135,7 +141,9 @@ public class NewReportMediaFragment extends Fragment {
                 //Prints location data for all video files.
                 //getLocalVideoFiles(getContext());
 
-                //Prints metadata tags for selected image.
+                //Prints all
+
+                //Prints location metadata tags for selected image.
                 getLocationMetadata(file);
 
             } catch (FileNotFoundException e) {
@@ -231,6 +239,9 @@ public class NewReportMediaFragment extends Fragment {
             Metadata metadata = ImageMetadataReader.readMetadata(file);
             // See whether it has GPS data
             Collection<GpsDirectory> gpsDirectories = metadata.getDirectoriesOfType(GpsDirectory.class);
+            if (gpsDirectories.isEmpty()){
+                Log.i("GEOLOCATION", "Geolocation is not available for this image: " + file.getAbsolutePath());
+            }
             for (GpsDirectory gpsDirectory : gpsDirectories) {
                 // Try to read out the location, making sure it's non-zero
                 GeoLocation geoLocation = gpsDirectory.getGeoLocation();
@@ -239,6 +250,8 @@ public class NewReportMediaFragment extends Fragment {
                     Log.i("Photo Latitude", "Latitude: " + geoLocation.getLatitude());
                     Log.i("Photo Longitude", "Longitude: " + geoLocation.getLongitude());
                     break;
+                } else {
+                    Log.i("GEOLOCATION", "Geolocation is not available for this image: " + file.getAbsolutePath());
                 }
             }
         } catch (IOException | ImageProcessingException e){
