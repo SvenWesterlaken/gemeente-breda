@@ -3,6 +3,7 @@ package com.svenwesterlaken.gemeentebreda.presentation.fragments;
 import android.content.Context;
 import android.content.ContextWrapper;
 import android.content.Intent;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
@@ -17,8 +18,14 @@ import android.widget.ImageView;
 import android.widget.MediaController;
 import android.widget.VideoView;
 
+import com.drew.imaging.ImageMetadataReader;
+import com.drew.imaging.ImageProcessingException;
+import com.drew.metadata.Directory;
+import com.drew.metadata.Metadata;
+import com.drew.metadata.Tag;
 import com.svenwesterlaken.gemeentebreda.R;
 
+import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -26,6 +33,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
+import java.net.URL;
 
 import static android.app.Activity.RESULT_OK;
 
@@ -68,7 +76,7 @@ public class NewReportMediaFragment extends Fragment {
 
         @Override
         public void onClick(View v) {
-            dispatchTakeVideoIntent();
+            dispatchTakePictureIntent();
         }
     }
 
@@ -112,6 +120,22 @@ public class NewReportMediaFragment extends Fragment {
                 final InputStream imageStream = getContext().getContentResolver().openInputStream(imageUri);
                 final Bitmap selectedImage = BitmapFactory.decodeStream(imageStream);
                 image.setImageBitmap(selectedImage);
+
+                try {
+                    BufferedInputStream bis = new BufferedInputStream(imageStream);
+                    Metadata metadata = ImageMetadataReader.readMetadata(bis);
+
+
+                    for (Directory directory : metadata.getDirectories()) {
+                        for (Tag tag : directory.getTags()) {
+                            System.out.println(tag);
+                        }
+                    }
+
+                }
+                catch (ImageProcessingException e){}
+                catch (IOException e) {}
+
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
 
@@ -119,6 +143,21 @@ public class NewReportMediaFragment extends Fragment {
 
         }else {
 
+        }
+    }
+
+    public String getRealPathFromURI(Context context, Uri contentUri) {
+        Cursor cursor = null;
+        try {
+            String[] proj = { MediaStore.Images.Media.DATA };
+            cursor = context.getContentResolver().query(contentUri,  proj, null, null, null);
+            int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+            cursor.moveToFirst();
+            return cursor.getString(column_index);
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
         }
     }
 
