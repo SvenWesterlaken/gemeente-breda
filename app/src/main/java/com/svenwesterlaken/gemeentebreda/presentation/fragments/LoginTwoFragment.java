@@ -1,6 +1,6 @@
 package com.svenwesterlaken.gemeentebreda.presentation.fragments;
 
-import android.app.Fragment;
+import android.support.v4.app.Fragment;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -79,12 +79,12 @@ public class LoginTwoFragment extends Fragment {
     }
 
     private boolean validatePhone() {
-        String regex = "^\\+?[0-9]{9,13}$";
+        String regex = "(^\\+[0-9]{2}|^\\+[0-9]{2}\\(0\\)|^\\(\\+[0-9]{2}\\)\\(0\\)|^00[0-9]{2}|^0)([0-9]{9}$|[0-9\\-\\s]{9}$)";
         String str = phone.getText().toString().trim();
 
         if (!str.isEmpty()) {
             if(!str.matches(regex)) {
-                inputLayoutPhone.setError(getString(R.string.login_error_email));
+                inputLayoutPhone.setError(getString(R.string.login_error_phone));
                 requestFocus(phone);
                 return false;
             }

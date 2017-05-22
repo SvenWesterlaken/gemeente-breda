@@ -6,7 +6,7 @@
         <item name="colorPrimaryDark">@color/colorLightPrimaryDark</item>
         <item name="colorAccent">@color/colorLightAccent</item>
         <item name="colorDivider">@color/colorLightPrimaryDivider</item>
-        <item name="colorIcons">@color/colorLightPrimaryText</item>
+        <item name="colorIcons">@color/colorLightPrimaryIcon</item>
         <item name="actionBarTheme">@style/ThemeOverlay.AppCompat.Light</item>
         <item name="android:windowBackground">@color/colorLightPrimaryBackground</item>
         <item name="android:listDivider">@null</item>
@@ -21,5 +21,29 @@
         <item name="android:textAppearanceSmall">@style/CustomtextAppearanceSmall</item>
         <item name="android:windowTitleStyle">@style/ToolBarTitle</item>
         <item name="android:windowLightStatusBar">true</item>
+        <item name="disabledAlpha">0.5</item>
+    </style>
+
+    <style name="AppTheme.Login" parent="Theme.AppCompat">
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorPrimaryText</item>
+        <item name="android:windowBackground">@color/colorBackgroundLogin</item>
+        <item name="colorDivider">@color/colorPrimaryDivider</item>
+        <item name="colorIcons">@color/colorPrimaryText</item>
+        <item name="actionBarTheme">@style/ThemeOverlay.AppCompat.Dark.ActionBar</item>
+        <item name="android:textColorPrimary">@color/colorPrimaryText</item>
+        <item name="android:textColorPrimaryDisableOnly">@color/colorPrimaryDisabled</item>
+        <item name="android:textColorPrimaryNoDisable">@color/colorPrimaryText</item>
+        <item name="android:textColorSecondary">@color/colorPrimaryTextSecondary</item>
+        <item name="android:textColorSecondaryNoDisable">@color/colorPrimaryTextSecondary</item>
+        <item name="android:textAppearanceMedium">@style/CustomtextAppearanceMedium</item>
+        <item name="android:textAppearanceSmall">@style/CustomtextAppearanceSmall</item>
+        <item name="android:listDivider">@null</item>
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+        <item name="android:windowTitleStyle">@style/ToolBarTitle</item>
+        <item name="android:backgroundDimAmount">0.9</item>
+        <item name="android:windowTranslucentStatus">true</item>
     </style>
 </resources>

@@ -2,11 +2,13 @@ package com.svenwesterlaken.gemeentebreda.domain;
 
 import android.icu.util.ULocale;
 
+import java.io.Serializable;
+
 /**
  * Created by lukab on 9-5-2017.
  */
 
-public class Report {
+public class Report implements Serializable {
 
     int reportID, locationID, categoryID, userID;
     User user;
@@ -107,4 +109,5 @@ public class Report {
     public void setCategory(Category category) {
         this.category = category;
     }
+
 }
