@@ -1,6 +1,7 @@
 package com.svenwesterlaken.gemeentebreda.presentation.fragments;
 
 import android.content.ContentResolver;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
@@ -8,6 +9,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -125,6 +127,12 @@ public class NewReportMediaFragment extends Fragment {
         if (requestCode == REQUEST_VIDEO_CAPTURE && resultCode == RESULT_OK) {
             videoUri = data.getData();
             video.setVideoURI(videoUri);
+
+            File file = new File(videoUri.getPath());
+            String filePath = file.getAbsolutePath();
+            ContentValues values = new ContentValues();
+            values.put(MediaStore.Video.Media.DATA, filePath);
+            getContext().getContentResolver().insert(MediaStore.Video.Media.EXTERNAL_CONTENT_URI, values);
         }
 
         super.onActivityResult(requestCode, resultCode, data);
@@ -134,7 +142,6 @@ public class NewReportMediaFragment extends Fragment {
                 final InputStream imageStream = getContext().getContentResolver().openInputStream(imageUri);
                 final Bitmap selectedImage = BitmapFactory.decodeStream(imageStream);
                 image.setImageBitmap(selectedImage);
-
 
                 File file = new File(getRealPathFromURI(getContext(), imageUri));
 
