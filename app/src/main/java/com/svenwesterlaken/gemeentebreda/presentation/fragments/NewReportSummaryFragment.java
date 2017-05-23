@@ -38,6 +38,8 @@ public class NewReportSummaryFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 Intent i = new Intent(getActivity(), ConfirmationActivity.class);
+
+
                 //handle the sending of the report
                 Category testCategory = new Category(handler.getAllReports().size()+1, "category", "summary");
                 handler.addCategory(testCategory);
@@ -51,9 +53,9 @@ public class NewReportSummaryFragment extends Fragment {
                 Location testLocation = new Location("straat", "city", 00, "postcode", handler.getAllReports().size()+1, randomValue1, randomValue2);
                 handler.addLocation(testLocation);
 
-
-
-                handler.addReport(new Report(handler.getAllReports().size()+1, testUser, testLocation, "toegevoegd na klikken knop", testCategory, 2));
+                Report report = new Report(handler.getAllReports().size()+1, testUser, testLocation, "toegevoegd na klikken knop", testCategory, 2);
+                handler.addReport(report);
+                i.putExtra("REPORT", report);
 
                 getActivity().finish();
                 startActivity(i);

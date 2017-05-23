@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.Button;
 
 import com.svenwesterlaken.gemeentebreda.R;
+import com.svenwesterlaken.gemeentebreda.domain.Report;
 import com.svenwesterlaken.gemeentebreda.presentation.partials.NotImplementedListener;
 
 public class ConfirmationActivity extends AppCompatActivity {
@@ -27,6 +28,21 @@ public class ConfirmationActivity extends AppCompatActivity {
             }
         });
 
-        reportBtn.setOnClickListener(new NotImplementedListener(getApplicationContext()));
+        reportBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Report report;
+
+                Bundle extras = getIntent().getExtras();
+                report = (Report) extras.getSerializable("REPORT");
+
+                Intent intent = new Intent(getApplicationContext(), DetailedReportActivity.class);
+                intent.putExtra("REPORT", report);
+
+                startActivity(intent);
+
+            }
+        });
     }
 }
