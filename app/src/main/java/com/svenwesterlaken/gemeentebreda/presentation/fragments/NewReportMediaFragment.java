@@ -48,7 +48,7 @@ public class NewReportMediaFragment extends Fragment {
     private Uri videoUri;
 
     static final int REQUEST_IMAGE_CAPTURE = 1;
-    static final int REQUEST_LOAD_IMG = 2;
+    static final int REQUEST_LOAD_MEDIA = 2;
     static final int REQUEST_VIDEO_CAPTURE = 3;
 
     @Override
@@ -106,7 +106,7 @@ public class NewReportMediaFragment extends Fragment {
                 intent.putExtra(Intent.EXTRA_MIME_TYPES, mimetypes);
             }
 
-            startActivityForResult(intent, REQUEST_LOAD_IMG);
+            startActivityForResult(intent, REQUEST_LOAD_MEDIA);
         }
     }
 
@@ -138,25 +138,40 @@ public class NewReportMediaFragment extends Fragment {
         }
 
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == REQUEST_LOAD_IMG && resultCode == RESULT_OK) {
-            try {
-                final Uri imageUri = data.getData();
-                final InputStream imageStream = getContext().getContentResolver().openInputStream(imageUri);
-                final Bitmap selectedImage = BitmapFactory.decodeStream(imageStream);
-                image.setImageBitmap(selectedImage);
+        if (requestCode == REQUEST_LOAD_MEDIA && resultCode == RESULT_OK) {
 
-                File file = new File(getRealPathFromURI(getContext(), imageUri));
+            String mime = getContext().getContentResolver().getType(data.getData());
+            Log.d("DEBUG", mime);
 
-                //Prints location data for all video files.
-                //getLocalVideoFiles(getContext());
+            if (mime != null) {
 
-                //Prints all
+                if (mime.contains("video")) {
+                        final Uri videoUri = data.getData();
+                        video.setVideoURI(videoUri);
+                        Log.d("DEBUG", "video loaded");
+                } else if (mime.contains("image")){
+                    try {
+                        final Uri imageUri = data.getData();
+                        final InputStream imageStream = getContext().getContentResolver().openInputStream(imageUri);
+                        final Bitmap selectedImage = BitmapFactory.decodeStream(imageStream);
+                        image.setImageBitmap(selectedImage);
+                        Log.d("DEBUG", "image loaded");
 
-                //Prints location metadata tags for selected image.
-                getLocationMetadata(file);
+                        File file = new File(getRealPathFromURI(getContext(), imageUri));
 
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
+                        //Prints location data for all video files.
+                        //getLocalVideoFiles(getContext());
+
+                        //Prints all
+
+                        //Prints location metadata tags for selected image.
+                        getLocationMetadata(file);
+
+                    } catch (FileNotFoundException e) {
+                        e.printStackTrace();
+
+                    }
+                }
 
             }
 
