@@ -34,6 +34,8 @@ public class  NewReportDescriptionFragment extends Fragment{
             }
         });
 
+
+
         return rootView;
     }
 }
