@@ -12,18 +12,28 @@ import android.support.v4.view.ViewPager;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 
 import com.svenwesterlaken.gemeentebreda.R;
+import com.svenwesterlaken.gemeentebreda.domain.Category;
+import com.svenwesterlaken.gemeentebreda.domain.Location;
+import com.svenwesterlaken.gemeentebreda.domain.Media;
+import com.svenwesterlaken.gemeentebreda.domain.Report;
 import com.svenwesterlaken.gemeentebreda.logic.adapters.NewReportPagerAdapter;
+import com.svenwesterlaken.gemeentebreda.presentation.fragments.NewReportCategoryFragment;
+import com.svenwesterlaken.gemeentebreda.presentation.fragments.NewReportDescriptionFragment;
+import com.svenwesterlaken.gemeentebreda.presentation.fragments.NewReportLocationFragment;
+import com.svenwesterlaken.gemeentebreda.presentation.fragments.NewReportMediaFragment;
 
 import me.relex.circleindicator.CircleIndicator;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
-public class NewReportActivity extends BaseActivity {
+public class NewReportActivity extends BaseActivity implements ViewPager.OnPageChangeListener, NewReportDescriptionFragment.DescriptionChangedListener, NewReportMediaFragment.MediaChangedListener, NewReportLocationFragment.LocationChangedListener, NewReportCategoryFragment.CategoryChangedListener{
 
     private NewReportPagerAdapter mSectionsPagerAdapter;
     private ViewPager mViewPager;
+    private Report newReport;
     protected View view;
 
     private static final int PERMISSIONS_REQUEST_CAMERA = 2;
@@ -36,15 +46,24 @@ public class NewReportActivity extends BaseActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        mSectionsPagerAdapter = new NewReportPagerAdapter(getSupportFragmentManager());
+
+        Bundle bundle = new Bundle();
+        newReport = new Report();
+        bundle.putSerializable("report", newReport);
+
+        mSectionsPagerAdapter = new NewReportPagerAdapter(getSupportFragmentManager(), bundle);
 
         mViewPager = (ViewPager) findViewById(R.id.container);
+        mViewPager.addOnPageChangeListener(this);
         CircleIndicator page_indicator = (CircleIndicator) findViewById(R.id.pageIndicator);
         mViewPager.setAdapter(mSectionsPagerAdapter);
         mViewPager.setCurrentItem(0);
         page_indicator.setViewPager(mViewPager);
         requestPermissions();
+    }
 
+    public Report getNewReport() {
+        return this.newReport;
     }
 
     public void requestPermissions() {
@@ -152,5 +171,53 @@ public class NewReportActivity extends BaseActivity {
     @Override
     protected void attachBaseContext(Context newBase) {
         super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
+    }
+
+    @Override
+    public void setDescription(String t) {
+        newReport.setDescription(t);
+    }
+
+    @Override
+    public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+    }
+
+    @Override
+    public void onPageSelected(int position) {
+        SummaryFragmentListener f;
+
+        try {
+            f = (SummaryFragmentListener) mSectionsPagerAdapter.instantiateItem(mViewPager, position);
+        } catch (Exception e) {
+            f = null;
+        }
+
+        if (f != null) {
+            f.fragmentBecameVisible();
+        }
+    }
+
+    @Override
+    public void onPageScrollStateChanged(int state) {
+
+    }
+
+    @Override
+    public void setLocation(Location t) {
+        newReport.setLocation(t);
+    }
+
+    @Override
+    public void setCategory(Category c) {
+        newReport.setCategory(c);
+    }
+
+    @Override
+    public void setMedia(Media m) {
+        newReport.setMedia(m);
+    }
+
+    public interface SummaryFragmentListener {
+        void fragmentBecameVisible();
     }
 }

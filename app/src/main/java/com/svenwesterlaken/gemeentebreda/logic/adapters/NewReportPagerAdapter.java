@@ -1,6 +1,7 @@
 package com.svenwesterlaken.gemeentebreda.logic.adapters;
 
 import android.content.Context;
+import android.os.Bundle;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -16,10 +17,12 @@ import com.svenwesterlaken.gemeentebreda.presentation.fragments.NewReportSummary
 
 public class NewReportPagerAdapter extends FragmentPagerAdapter {
 
+    private Bundle bundle;
     private static int tabCount = 5;
 
-    public NewReportPagerAdapter(FragmentManager fm) {
+    public NewReportPagerAdapter(FragmentManager fm, Bundle bundle) {
         super(fm);
+        this.bundle = bundle;
     }
     @Override
     public int getCount() {
@@ -31,15 +34,25 @@ public class NewReportPagerAdapter extends FragmentPagerAdapter {
 
         switch (position) {
             case 0:
-                return new NewReportMediaFragment();
+                NewReportMediaFragment media = new NewReportMediaFragment();
+                media.setArguments(bundle);
+                return media;
             case 1:
-                return new NewReportLocationFragment();
+                NewReportLocationFragment location = new NewReportLocationFragment();
+                location.setArguments(bundle);
+                return location;
             case 2:
-                return new NewReportCategoryFragment();
+                NewReportCategoryFragment category = new NewReportCategoryFragment();
+                category.setArguments(bundle);
+                return category;
             case 3:
-                return new NewReportDescriptionFragment();
+                NewReportDescriptionFragment description = new NewReportDescriptionFragment();
+                description.setArguments(bundle);
+                return description;
             case 4:
-                return new NewReportSummaryFragment();
+                NewReportSummaryFragment summary = new NewReportSummaryFragment();
+                summary.setArguments(bundle);
+                return summary;
             default:
                 return null;
         }
