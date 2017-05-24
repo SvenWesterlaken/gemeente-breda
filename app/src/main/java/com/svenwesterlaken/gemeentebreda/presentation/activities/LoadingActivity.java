@@ -35,19 +35,15 @@ public class LoadingActivity extends AppCompatActivity {
             @Override
             public void onFinish() {
                 SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-                Intent i = null;
                 String name = preferences.getString("pref_name", null);
                 String email = preferences.getString("pref_email", null);
                 String phone = preferences.getString("pref_phone", null);
+                Intent i;
 
                 //Start login activity when no name, email and phonenumber is specified (First time using the app)
                 //Otherwise start ReportActivity
-                if (name != null && email != null && phone != null) {
-                    if ( name.equals("Onbekend") && email.equals("Onbekend") && phone.equals("Onbekend")) {
-                        i = new Intent(getApplicationContext(), LoginActivity.class);
-                    } else {
-                        i = new Intent(getApplicationContext(), ReportActivity.class);
-                    }
+                if (name == null && email == null && phone == null) {
+                    i = new Intent(getApplicationContext(), LoginActivity.class);
                 } else {
                     i = new Intent(getApplicationContext(), ReportActivity.class);
                 }
