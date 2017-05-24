@@ -1,5 +1,6 @@
 package com.svenwesterlaken.gemeentebreda.presentation.fragments;
 
+import android.app.Activity;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
@@ -13,11 +14,13 @@ import android.widget.ListView;
 import com.svenwesterlaken.gemeentebreda.R;
 import com.svenwesterlaken.gemeentebreda.data.database.DatabaseHandler;
 import com.svenwesterlaken.gemeentebreda.domain.Category;
+import com.svenwesterlaken.gemeentebreda.domain.Media;
 import com.svenwesterlaken.gemeentebreda.logic.adapters.NewCategoryAdapter;
 
 import java.util.ArrayList;
 
 public class NewReportCategoryFragment extends Fragment {
+    private CategoryChangedListener mListener;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -39,5 +42,32 @@ public class NewReportCategoryFragment extends Fragment {
 
         categoryAdapter.notifyDataSetChanged();
         return rootView;
+
+
+        //-------------------------------------------------
+        //Om te zorgen dat de locatie opgeslagen word met de report moet je de volgende methode aanroepen en een Location object meegeven.
+        //mListener.setCategory(<Location object>);
+        //Doe dit dus met clicklistener wanneer de user een categorie selecteert.
+        //--------------------------------------------------
+
+    }
+
+    public void onAttach(Context context) {
+        super.onAttach(context);
+
+        Activity a = null;
+
+        if (context instanceof Activity){
+            a=(Activity) context;
+        }
+        try {
+            mListener = (CategoryChangedListener) a;
+        } catch (ClassCastException e) {
+            throw new ClassCastException(a.toString() + " must implement CategoryChangedListener");
+        }
+    }
+
+    public interface CategoryChangedListener {
+        void setCategory(Category c);
     }
 }

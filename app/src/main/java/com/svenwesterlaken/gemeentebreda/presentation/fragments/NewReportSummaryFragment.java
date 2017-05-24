@@ -22,10 +22,13 @@ import com.svenwesterlaken.gemeentebreda.domain.Location;
 import com.svenwesterlaken.gemeentebreda.domain.Report;
 import com.svenwesterlaken.gemeentebreda.domain.User;
 import com.svenwesterlaken.gemeentebreda.presentation.activities.ConfirmationActivity;
+import com.svenwesterlaken.gemeentebreda.presentation.activities.NewReportActivity;
 
 import java.util.Random;
 
-public class NewReportSummaryFragment extends Fragment {
+public class NewReportSummaryFragment extends Fragment implements NewReportActivity.SummaryFragmentListener {
+
+    private View rootView;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -34,7 +37,7 @@ public class NewReportSummaryFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        final View rootView = inflater.inflate(R.layout.fragment_new_report_summary, container, false);
+        rootView = inflater.inflate(R.layout.fragment_new_report_summary, container, false);
         final Button send = (Button) rootView.findViewById(R.id.summary_BTN_send);
         final DatabaseHandler handler = new DatabaseHandler(getActivity().getApplicationContext(), null, null, 1);
 
@@ -42,6 +45,8 @@ public class NewReportSummaryFragment extends Fragment {
         String name = preferences.getString("pref_name", null);
         String email = preferences.getString("pref_email", null);
         String phone = preferences.getString("pref_phone", null);
+
+
 
         final TextView authorName = (TextView) rootView.findViewById(R.id.summary_TV_authorName);
         final TextView authorEmail = (TextView) rootView.findViewById(R.id.summary_TV_authorEmail);
@@ -88,5 +93,20 @@ public class NewReportSummaryFragment extends Fragment {
         });
 
         return rootView;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        fragmentBecameVisible();
+    }
+
+    @Override
+    public void fragmentBecameVisible() {
+        Report report = ((NewReportActivity)getActivity()).getNewReport();
+        String description = report.getDescription();
+
+        final TextView descriptionTV = (TextView) rootView.findViewById(R.id.summary_TV_description);
+        descriptionTV.setText(description);
     }
 }

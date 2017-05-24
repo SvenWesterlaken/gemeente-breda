@@ -1,5 +1,6 @@
 package com.svenwesterlaken.gemeentebreda.presentation.fragments;
 
+import android.app.Activity;
 import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
@@ -30,6 +31,8 @@ import com.drew.metadata.Metadata;
 import com.drew.metadata.Tag;
 import com.drew.metadata.exif.GpsDirectory;
 import com.svenwesterlaken.gemeentebreda.R;
+import com.svenwesterlaken.gemeentebreda.domain.Location;
+import com.svenwesterlaken.gemeentebreda.domain.Media;
 
 import java.io.BufferedInputStream;
 import java.io.File;
@@ -41,6 +44,8 @@ import java.util.Collection;
 import static android.app.Activity.RESULT_OK;
 
 public class NewReportMediaFragment extends Fragment {
+    private MediaChangedListener mListener;
+
     private Button photoBTN, selectBTN, videoBTN;
     private VideoView video;
     private ImageView image;
@@ -271,6 +276,25 @@ public class NewReportMediaFragment extends Fragment {
         } catch (IOException | ImageProcessingException e){
             e.printStackTrace();
         }
+    }
+
+    public void onAttach(Context context) {
+        super.onAttach(context);
+
+        Activity a = null;
+
+        if (context instanceof Activity){
+            a=(Activity) context;
+        }
+        try {
+            mListener = (MediaChangedListener) a;
+        } catch (ClassCastException e) {
+            throw new ClassCastException(a.toString() + " must implement MediaChangedListener");
+        }
+    }
+
+    public interface MediaChangedListener {
+        void setMedia(Media m);
     }
 
 }
