@@ -24,6 +24,7 @@ import java.util.ArrayList;
 
 public class NewReportCategoryFragment extends Fragment {
     private CategoryChangedListener mListener;
+    private  View selectedview ;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -34,13 +35,13 @@ public class NewReportCategoryFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         final View rootView = inflater.inflate(R.layout.fragment_new_report_category, container, false);
-        ListView reportList = (ListView) rootView.findViewById(R.id.category_LV_categories);
+        final ListView reportList = (ListView) rootView.findViewById(R.id.category_LV_categories);
 
         final DatabaseHandler handler = new DatabaseHandler(this.getContext(),null, null, 1);
 
-        ArrayList<Category> categories = handler.getAllCategories();
+        final ArrayList<Category> categories = handler.getAllCategories();
 
-        NewCategoryAdapter categoryAdapter = new NewCategoryAdapter(this.getContext(), categories);
+        final NewCategoryAdapter categoryAdapter = new NewCategoryAdapter(this.getContext(), categories);
         reportList.setAdapter(categoryAdapter);
 
         categoryAdapter.notifyDataSetChanged();
@@ -49,11 +50,17 @@ public class NewReportCategoryFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Category categorySelected = handler.getCategory(position + 1);
+                selectedview = view;
 
+                selectedview.setSelected(true);
                 categorySelected.getCategoryName();
+                mListener.setCategory(categorySelected);
+
             }
 
         });
+
+
 
         return rootView;
 

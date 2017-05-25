@@ -56,6 +56,7 @@ public class ReportActivity extends MenuActivity {
     private ReportListFragment listFragment;
 
 
+
     private static final int MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 1;
     DatabaseHandler handler;
 

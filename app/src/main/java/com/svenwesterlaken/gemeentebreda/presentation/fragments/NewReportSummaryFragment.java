@@ -105,8 +105,11 @@ public class NewReportSummaryFragment extends Fragment implements NewReportActiv
     public void fragmentBecameVisible() {
         Report report = ((NewReportActivity)getActivity()).getNewReport();
         String description = report.getDescription();
+        Category category = report.getCategory();
 
         final TextView descriptionTV = (TextView) rootView.findViewById(R.id.summary_TV_description);
+        final TextView categoryTV = (TextView) rootView.findViewById(R.id.summary_TV_reportTitle);
         descriptionTV.setText(description);
+        categoryTV.setText(category.getCategoryName());
     }
 }
