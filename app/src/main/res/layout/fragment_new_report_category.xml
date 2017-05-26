@@ -26,6 +26,7 @@
     <ListView
         android:id="@+id/category_LV_categories"
         android:layout_width="0dp"
+        android:listSelector="@color/colorPrimaryLight"
         android:layout_height="0dp"
         android:layout_marginBottom="0dp"
         android:layout_marginLeft="0dp"
