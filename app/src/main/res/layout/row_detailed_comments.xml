@@ -46,7 +46,7 @@
             app:layout_constraintHorizontal_bias="0.0" />
 
         <TextView
-            android:id ="@+id/detailed_TV_comments"
+            android:id ="@+id/detailed_TV_comment"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="Lorem ipsum blabla"
@@ -60,7 +60,7 @@
             android:layout_width="0dp"
             android:layout_height="1dp"
             android:background="?attr/colorDivider"
-            app:layout_constraintTop_toBottomOf="@id/detailed_TV_comments"
+            app:layout_constraintTop_toBottomOf="@id/detailed_TV_comment"
             android:layout_marginTop="16dp"
             android:layout_marginRight="0dp"
             app:layout_constraintRight_toRightOf="parent"

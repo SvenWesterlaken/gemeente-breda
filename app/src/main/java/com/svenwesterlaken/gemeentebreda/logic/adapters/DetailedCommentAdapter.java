@@ -16,7 +16,7 @@ import com.svenwesterlaken.gemeentebreda.domain.Report;
  * Created by lukab on 17-5-2017.
  */
 
-public class DetailedCommentAdapter extends RecyclerView.Adapter<DetailedReportAdapter.DetailedReportViewHolder>  {
+public class DetailedCommentAdapter extends RecyclerView.Adapter<DetailedCommentAdapter.DetailedCommentViewHolder>  {
 
     private Context context;
     private Intent intent;
@@ -25,7 +25,6 @@ public class DetailedCommentAdapter extends RecyclerView.Adapter<DetailedReportA
     // Constructor
     public DetailedCommentAdapter(Context context) {
         this.context = context;
-
     }
 
     public int getItemCount() {
@@ -33,14 +32,14 @@ public class DetailedCommentAdapter extends RecyclerView.Adapter<DetailedReportA
     }
 
     @Override
-    public DetailedReportAdapter.DetailedReportViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public DetailedCommentAdapter.DetailedCommentViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.row_detailed_comments, parent, false);
 
-        return new DetailedReportAdapter.DetailedReportViewHolder(itemView);
+        return new DetailedCommentAdapter.DetailedCommentViewHolder(itemView);
     }
 
     @Override
-    public void onBindViewHolder(DetailedReportAdapter.DetailedReportViewHolder contactViewHolder, int i) {
+    public void onBindViewHolder(DetailedCommentAdapter.DetailedCommentViewHolder contactViewHolder, int i) {
 
 
 //        contactViewHolder.category.setText(report.getCategory().getCategoryName());
@@ -53,18 +52,15 @@ public class DetailedCommentAdapter extends RecyclerView.Adapter<DetailedReportA
 
     }
 
-    public static class DetailedReportViewHolder extends RecyclerView.ViewHolder {
+    public static class DetailedCommentViewHolder extends RecyclerView.ViewHolder {
         private TextView comment, user, date;
         private ImageView icon, status;
 
-        public DetailedReportViewHolder(View v) {
+        public DetailedCommentViewHolder(View v) {
             super(v);
-            comment = (TextView) v.findViewById(R.id.detailed_TV_username);
+            comment = (TextView) v.findViewById(R.id.detailed_TV_comment);
             user = (TextView) v.findViewById(R.id.detailed_TV_username);
             date = (TextView) v.findViewById(R.id.detailed_TV_date);
-
-
-
         }
 
 

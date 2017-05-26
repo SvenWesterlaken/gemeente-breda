@@ -211,7 +211,7 @@
                         app:layout_constraintTop_toTopOf="parent" />
 
                     <TextView
-                        android:id="@+id/summary_VT_authorEmail"
+                        android:id="@+id/summary_TV_authorEmail"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="0dp"
@@ -221,7 +221,8 @@
                         android:textColor="?android:attr/textColorSecondary"
                         app:layout_constraintLeft_toLeftOf="parent"
                         app:layout_constraintRight_toRightOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/summary_TV_authorName" />
+                        app:layout_constraintTop_toBottomOf="@+id/summary_TV_authorName"
+                        app:layout_constraintHorizontal_bias="0.0" />
 
                     <TextView
                         android:id="@+id/summary_TV_authorPhone"
@@ -234,7 +235,7 @@
                         android:textColor="?android:attr/textColorSecondary"
                         app:layout_constraintLeft_toLeftOf="parent"
                         app:layout_constraintRight_toRightOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/summary_VT_authorEmail" />
+                        app:layout_constraintTop_toBottomOf="@+id/summary_TV_authorEmail" />
 
                 </android.support.constraint.ConstraintLayout>
 
