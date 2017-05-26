@@ -15,7 +15,7 @@ import android.widget.TextView;
 import com.svenwesterlaken.gemeentebreda.R;
 import com.svenwesterlaken.gemeentebreda.domain.Report;
 
-public class ConfirmationActivity extends AppCompatActivity {
+public class ConfirmationActivity extends BaseActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,10 +49,21 @@ public class ConfirmationActivity extends AppCompatActivity {
                 succes.setVisibility(View.VISIBLE);
                 succes.startAnimation(popupAnimation);
                 loader.setVisibility(View.INVISIBLE);
+                message.setText(getString(R.string.confirmation_error_message));
                 message.startAnimation(fadeinAnimation);
                 message.setVisibility(View.VISIBLE);
                 homeBtn.setEnabled(true);
                 reportBtn.setEnabled(true);
+
+                //Error
+//                error.setVisibility(View.VISIBLE);
+//                error.startAnimation(popupAnimation);
+//                loader.setVisibility(View.INVISIBLE);
+//                message.setText(getString(R.string.confirmation_error_message));
+//                message.startAnimation(fadeinAnimation);
+//                message.setVisibility(View.VISIBLE);
+//                homeBtn.setEnabled(true);
+
             }
         }.start();
 
@@ -76,6 +87,7 @@ public class ConfirmationActivity extends AppCompatActivity {
                 Intent intent = new Intent(getApplicationContext(), DetailedReportActivity.class);
                 intent.putExtra("REPORT", report);
 
+                finish();
                 startActivity(intent);
 
             }

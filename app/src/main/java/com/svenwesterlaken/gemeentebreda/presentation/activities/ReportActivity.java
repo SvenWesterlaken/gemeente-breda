@@ -169,7 +169,6 @@ public class ReportActivity extends MenuActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_report, menu);
-        menu.findItem(R.id.action_search).setOnMenuItemClickListener(new NotImplementedListener(getApplicationContext()));
         menu.findItem(R.id.action_filter).setOnMenuItemClickListener(new NotImplementedListener(getApplicationContext()));
         return true;
     }
