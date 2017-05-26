@@ -14,10 +14,9 @@ import com.svenwesterlaken.gemeentebreda.R;
 import com.svenwesterlaken.gemeentebreda.domain.Report;
 import com.svenwesterlaken.gemeentebreda.logic.adapters.DetailedCommentAdapter;
 
-public class DetailedReportActivity extends MenuActivity  {
+public class DetailedReportActivity extends BaseActivity  {
 
     Report report;
-    BottomNavigationView mBottomNav;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
