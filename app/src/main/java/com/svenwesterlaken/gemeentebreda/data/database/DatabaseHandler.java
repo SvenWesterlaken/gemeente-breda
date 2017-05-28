@@ -160,6 +160,8 @@ public class DatabaseHandler extends SQLiteOpenHelper{
         db.execSQL(CREATE_VIDEO_TABLE);
         db.execSQL(CREATE_PHOTO_TABLE);
 
+
+
     }
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
@@ -174,6 +176,8 @@ public class DatabaseHandler extends SQLiteOpenHelper{
         addCategory(new Category(3, "Wegen", "Gat in de weg"));
         addCategory(new Category(4, "Stoplicht", "Is kapot"));
         addCategory(new Category(5, "Riolering", "Last van stank"));
+
+
 
 
 
