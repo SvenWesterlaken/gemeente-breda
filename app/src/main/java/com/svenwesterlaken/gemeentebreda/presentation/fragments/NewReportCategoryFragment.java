@@ -63,14 +63,6 @@ public class NewReportCategoryFragment extends Fragment {
 
 
         return rootView;
-
-
-        //-------------------------------------------------
-        //Om te zorgen dat de locatie opgeslagen word met de report moet je de volgende methode aanroepen en een Location object meegeven.
-        //mListener.setCategory(<Location object>);
-        //Doe dit dus met clicklistener wanneer de user een categorie selecteert.
-        //--------------------------------------------------
-
     }
 
     public void onAttach(Context context) {
