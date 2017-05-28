@@ -78,7 +78,7 @@ public class ReportActivity extends MenuActivity {
         mSectionsPagerAdapter = new ReportPagerAdapter(getSupportFragmentManager(), 2, getApplicationContext(), mapFragment, listFragment);
         handler = new DatabaseHandler(getApplicationContext(),null, null, 1);
 
-        if(handler.getAllReports().size() == 0) {
+        if(handler.getAllCategories().size() == 0) {
             handler.testData();
         }
 

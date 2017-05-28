@@ -88,6 +88,7 @@ public class NewReportCategoryFragment extends Fragment {
         }
     }
 
+
     public interface CategoryChangedListener {
         void setCategory(Category c);
     }
