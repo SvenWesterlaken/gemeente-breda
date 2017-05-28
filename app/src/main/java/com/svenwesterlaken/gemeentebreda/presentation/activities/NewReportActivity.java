@@ -184,6 +184,27 @@ public class NewReportActivity extends BaseActivity implements ViewPager.OnPageC
 
     @Override
     public void onPageSelected(int position) {
+
+        if(position == 1) {
+            NewReportLocationFragment lf;
+
+            try {
+                lf = (NewReportLocationFragment) mSectionsPagerAdapter.instantiateItem(mViewPager, 1);
+            } catch (Exception e) {
+                lf = null;
+            }
+
+            if (lf != null && newReport.getLocation() != null) {
+
+                Double lat = newReport.getLocation().getLatitude();
+                Double lon = newReport.getLocation().getLongitude();
+
+                String str = lat + " " + lon;
+
+                lf.setImageLocationTag(str);
+            }
+        }
+
         SummaryFragmentListener f;
 
         try {

@@ -40,6 +40,7 @@ public class NewReportLocationFragment extends Fragment {
     private TextView mediaLocationTV;
     private AddressResultReceiver mResultReceiver;
     private Location locationFromMedia;
+    private View rootView;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -48,7 +49,7 @@ public class NewReportLocationFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_new_report_location, container, false);
+        rootView = inflater.inflate(R.layout.fragment_new_report_location, container, false);
 
         mediaLocationTV = (TextView) rootView.findViewById(R.id.location_TV_metaMessage);
 
@@ -218,5 +219,11 @@ public class NewReportLocationFragment extends Fragment {
     public interface LocationChangedListener {
         void setLocation(Location t);
     }
+
+    public void setImageLocationTag(String s) {
+        TextView text = (TextView) rootView.findViewById(R.id.location_TV_metaMessage);
+        text.setText(s);
+    }
+
 
 }
