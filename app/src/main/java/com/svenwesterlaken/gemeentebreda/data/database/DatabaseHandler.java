@@ -168,13 +168,12 @@ public class DatabaseHandler extends SQLiteOpenHelper{
 
     public void testData(){
 
-        Category category1 = new Category(1, "Straatverlichting", "Kapot");
-        addCategory(category1);
-        User user1 = new User(1, "0642584793", "gebruiker1", "gebruiker1@gmail.com");
-        addUser(user1);
-        Location location1 = new Location("Rijckevorsel", "Breda", 54, "2991kc", 1, 51.584385, 4.796032);
-        addLocation(location1);
-        addReport(new Report(1, user1, location1, "Eerste test", category1, 1));
+        addCategory(new Category(1, "Vuilnis", "Overal vuilnis" ));
+        addCategory(new Category(2, "Overlast", "Café houdt niet aan regels"));
+        addCategory(new Category(3, "Wegen", "Gat in de weg"));
+        addCategory(new Category(4, "Stoplicht", "Is kapot"));
+        addCategory(new Category(5, "Riolering", "Last van stank"));
+
 
 
     }

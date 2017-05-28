@@ -39,8 +39,6 @@ public class NewReportCategoryFragment extends Fragment {
 
         final DatabaseHandler handler = new DatabaseHandler(this.getContext(),null, null, 1);
 
-        testCategories(handler);
-
         final ArrayList<Category> categories = handler.getAllCategories();
 
         final NewCategoryAdapter categoryAdapter = new NewCategoryAdapter(this.getContext(), categories);
@@ -90,16 +88,6 @@ public class NewReportCategoryFragment extends Fragment {
         }
     }
 
-    public void testCategories(DatabaseHandler handler){
-
-        handler.addCategory(new Category(3, "Vuilnis", "Overal vuilnis" ));
-        handler.addCategory(new Category(4, "Overlast", "Café houdt niet aan regels"));
-        handler.addCategory(new Category(5, "Wegen", "Gat in de weg"));
-        handler.addCategory(new Category(6, "Stoplicht", "Is kapot"));
-        handler.addCategory(new Category(7, "Riolering", "Last van stank"));
-
-
-    }
 
     public interface CategoryChangedListener {
         void setCategory(Category c);
