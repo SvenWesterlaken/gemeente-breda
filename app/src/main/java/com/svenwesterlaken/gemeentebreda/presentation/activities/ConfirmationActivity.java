@@ -49,7 +49,7 @@ public class ConfirmationActivity extends BaseActivity {
                 succes.setVisibility(View.VISIBLE);
                 succes.startAnimation(popupAnimation);
                 loader.setVisibility(View.INVISIBLE);
-                message.setText(getString(R.string.confirmation_error_message));
+                message.setText(getString(R.string.confirmation_succes_message));
                 message.startAnimation(fadeinAnimation);
                 message.setVisibility(View.VISIBLE);
                 homeBtn.setEnabled(true);

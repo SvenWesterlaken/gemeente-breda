@@ -28,6 +28,9 @@ import java.util.Random;
 
 public class NewReportSummaryFragment extends Fragment implements NewReportActivity.SummaryFragmentListener {
 
+    Category category;
+    String description;
+
     private View rootView;
 
     @Override
@@ -71,7 +74,7 @@ public class NewReportSummaryFragment extends Fragment implements NewReportActiv
                 Intent i = new Intent(getActivity(), ConfirmationActivity.class);
 
                 //handle the sending of the report
-                Category testCategory = new Category(handler.getAllReports().size()+1, "category", "summary");
+                Category testCategory = new Category(handler.getAllReports().size()+1, category.getCategoryName(), category.getCategorySummary());
                 handler.addCategory(testCategory);
                 User testUser = new User(handler.getAllReports().size(), "mobiel", "naam", "email");
                 handler.addUser(testUser);
@@ -83,7 +86,7 @@ public class NewReportSummaryFragment extends Fragment implements NewReportActiv
                 Location testLocation = new Location("straat", "city", 00, "postcode", handler.getAllReports().size()+1, randomValue1, randomValue2);
                 handler.addLocation(testLocation);
 
-                Report report = new Report(handler.getAllReports().size()+1, testUser, testLocation, "toegevoegd na klikken knop", testCategory, 2);
+                Report report = new Report(handler.getAllReports().size()+1, testUser, testLocation, description, testCategory, 2);
                 handler.addReport(report);
                 i.putExtra("REPORT", report);
 
@@ -104,8 +107,8 @@ public class NewReportSummaryFragment extends Fragment implements NewReportActiv
     @Override
     public void fragmentBecameVisible() {
         Report report = ((NewReportActivity)getActivity()).getNewReport();
-        String description = report.getDescription();
-        Category category = report.getCategory();
+        description = report.getDescription();
+        category = report.getCategory();
 
         final TextView descriptionTV = (TextView) rootView.findViewById(R.id.summary_TV_description);
         final TextView categoryTV = (TextView) rootView.findViewById(R.id.summary_TV_reportTitle);
