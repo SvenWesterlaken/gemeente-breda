@@ -9,6 +9,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.provider.MediaStore;
+import android.support.constraint.ConstraintLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.os.ResultReceiver;
 import android.util.Log;
@@ -26,9 +27,11 @@ import com.drew.metadata.Tag;
 import com.drew.metadata.exif.GpsDirectory;
 import com.svenwesterlaken.gemeentebreda.R;
 import com.svenwesterlaken.gemeentebreda.domain.Location;
+import com.svenwesterlaken.gemeentebreda.domain.Media;
 import com.svenwesterlaken.gemeentebreda.domain.Report;
 import com.svenwesterlaken.gemeentebreda.logic.services.FetchAddressIntentService;
 import com.svenwesterlaken.gemeentebreda.presentation.activities.NewReportActivity;
+import com.svenwesterlaken.gemeentebreda.presentation.partials.NotImplementedListener;
 
 import java.io.File;
 import java.io.IOException;
@@ -52,6 +55,14 @@ public class NewReportLocationFragment extends Fragment {
         rootView = inflater.inflate(R.layout.fragment_new_report_location, container, false);
 
         mediaLocationTV = (TextView) rootView.findViewById(R.id.location_TV_metaMessage);
+
+        ConstraintLayout chooseBTN = (ConstraintLayout) rootView.findViewById(R.id.location_BTN_choose);
+        ConstraintLayout metaBTN = (ConstraintLayout) rootView.findViewById(R.id.location_BTN_meta);
+        ConstraintLayout currentBTN = (ConstraintLayout) rootView.findViewById(R.id.location_BTN_current);
+
+        chooseBTN.setOnClickListener(new NotImplementedListener(getActivity().getApplicationContext()));
+        metaBTN.setOnClickListener(new NotImplementedListener(getActivity().getApplicationContext()));
+        currentBTN.setOnClickListener(new NotImplementedListener(getActivity().getApplicationContext()));
 
         return rootView;
     }
@@ -220,9 +231,14 @@ public class NewReportLocationFragment extends Fragment {
         void setLocation(Location t);
     }
 
-    public void setImageLocationTag(String s) {
+    public void setImageLocationTag(Media m) {
         TextView text = (TextView) rootView.findViewById(R.id.location_TV_metaMessage);
-        text.setText(s);
+        createLocationFromMedia(m.getUri());
+        Double lat = locationFromMedia.getLatitude();
+        Double lon = locationFromMedia.getLongitude();
+
+
+        text.setText(lat + ", " + lon);
     }
 
 

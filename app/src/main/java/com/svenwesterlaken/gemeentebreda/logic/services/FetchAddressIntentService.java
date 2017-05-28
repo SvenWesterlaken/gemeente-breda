@@ -65,7 +65,7 @@ public class FetchAddressIntentService extends IntentService {
 
                 location.setCity(city);
 
-                deliverResultToReceiver(Constants.SUCCESS_RESULT, city);
+                //deliverResultToReceiver(Constants.SUCCESS_RESULT, city);
             } else {
                 Log.e("ADDRESSES", "No addresses were returned by the geocoder.");
             }

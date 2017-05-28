@@ -194,14 +194,8 @@ public class NewReportActivity extends BaseActivity implements ViewPager.OnPageC
                 lf = null;
             }
 
-            if (lf != null && newReport.getLocation() != null) {
-
-                Double lat = newReport.getLocation().getLatitude();
-                Double lon = newReport.getLocation().getLongitude();
-
-                String str = lat + " " + lon;
-
-                lf.setImageLocationTag(str);
+            if (lf != null && newReport.getMedia() != null) {
+                lf.setImageLocationTag(newReport.getMedia());
             }
         }
 
