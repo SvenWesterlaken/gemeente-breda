@@ -4,4 +4,5 @@
     <attr name="colorIcons" format="color"/>
     <attr name="actionBarTheme" format="reference"/>
     <attr name="disabledAlpha" format="float"/>
+    <attr name="colorPrimaryLight" format="color"/>
 </resources>

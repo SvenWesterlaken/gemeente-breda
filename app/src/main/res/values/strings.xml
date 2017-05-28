@@ -43,6 +43,8 @@
     <string name="pref_title_info">Over de app</string>
     <string name="pref_value_info">Versie</string>
 
+    <string name="report_searchview_hint">Zoeken…</string>
+
     <string name="title_activity_login">LoginActivity</string>
     <string name="welcome_message">Welkom bij \'Gemeente Breda\'. \n\n De app voor al uw problemen waar de gemeente iets van af moet weten!</string>
     <string name="login_message">Wij raden u aan om hier uw naam, emailadres en eventueel uw mobiele nummer in te vullen zodat de gemeente contact met u kan opnemen.</string>
