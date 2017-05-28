@@ -2,19 +2,24 @@ package com.svenwesterlaken.gemeentebreda.presentation.fragments;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.constraint.ConstraintLayout;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.svenwesterlaken.gemeentebreda.R;
 import com.svenwesterlaken.gemeentebreda.domain.Location;
+import com.svenwesterlaken.gemeentebreda.presentation.activities.ConfirmationActivity;
 
 
 public class NewReportLocationFragment extends Fragment {
     private LocationChangedListener mListener;
+    private TextView title;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -23,7 +28,23 @@ public class NewReportLocationFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_new_report_location, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_new_report_location, container, false);
+        ConstraintLayout title = (ConstraintLayout) rootView.findViewById(R.id.location_BTN_choose);
+        title.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+//                Intent i = new Intent(getTargetFragment(), NewReportNewLocationFragment.class);
+//                startActivity(i);
+                NewReportNewLocationFragment nextFrag= new NewReportNewLocationFragment();
+                getActivity().getFragmentManager().beginTransaction()
+                        .replace(R.id.viewpager_content, nextFrag)
+                        .addToBackStack(null)
+                        .commit();
+            }
+
+
+        });
+        return rootView;
     }
 
     @Override
