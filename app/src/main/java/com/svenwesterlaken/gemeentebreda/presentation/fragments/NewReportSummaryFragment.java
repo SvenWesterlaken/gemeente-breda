@@ -113,6 +113,8 @@ public class NewReportSummaryFragment extends Fragment implements NewReportActiv
         final TextView descriptionTV = (TextView) rootView.findViewById(R.id.summary_TV_description);
         final TextView categoryTV = (TextView) rootView.findViewById(R.id.summary_TV_reportTitle);
         descriptionTV.setText(description);
-        categoryTV.setText(category.getCategoryName());
+        if (category != null) {
+            categoryTV.setText(category.getCategoryName());
+        }
     }
 }
