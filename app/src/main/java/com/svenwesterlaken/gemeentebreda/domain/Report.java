@@ -2,14 +2,15 @@ package com.svenwesterlaken.gemeentebreda.domain;
 
 import android.icu.util.ULocale;
 
+import java.io.Serializable;
+
 /**
  * Created by lukab on 9-5-2017.
  */
 
-public class Report {
+public class Report implements Serializable {
 
     int reportID, locationID, categoryID, userID;
-    String report;
     User user;
     Location location;
     String description;
@@ -19,7 +20,7 @@ public class Report {
     public Report() {
     }
 
-    public Report(int reportID, User user, Location location, String description, Category category, int locationID, String report) {
+    public Report(int reportID, User user, Location location, String description, Category category, int locationID) {
         this.reportID = reportID;
         this.category = category;
         this.user = user;
@@ -27,7 +28,6 @@ public class Report {
         this.description = description;
         this.category = category;
         this.locationID = locationID;
-        this.report = report;
     }
 
 
@@ -71,8 +71,6 @@ public class Report {
         return category;
     }
 
-    public String getReport(){return report;}
-
     //setters
 
 
@@ -112,5 +110,4 @@ public class Report {
         this.category = category;
     }
 
-    public void setReport(String report) {this.report = report;}
 }

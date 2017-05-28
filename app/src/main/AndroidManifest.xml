@@ -41,8 +41,8 @@
         <activity
             android:name=".presentation.activities.LoginActivity"
             android:label="@string/title_activity_login"
-            android:theme="@style/AppTheme.Login"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.Login" />
         <activity
             android:name=".presentation.activities.NewReportActivity"
             android:label="@string/title_activity_new_report"
@@ -52,6 +52,10 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.svenwesterlaken.gemeentebreda.presentation.activities.ReportActivity" />
         </activity>
+        <activity
+            android:name=".presentation.activities.DetailedReportActivity"
+            android:label="Melding"/>
+        <activity android:name=".presentation.activities.ConfirmationActivity"/>
     </application>
 
 </manifest>

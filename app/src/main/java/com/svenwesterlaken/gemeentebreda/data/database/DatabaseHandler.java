@@ -169,6 +169,14 @@ public class DatabaseHandler extends SQLiteOpenHelper{
     public void testData(){
 
 
+        addCategory(new Category(1, "Vuilnis", "Overal vuilnis" ));
+        addCategory(new Category(2, "Overlast", "Café houdt niet aan regels"));
+        addCategory(new Category(3, "Wegen", "Gat in de weg"));
+        addCategory(new Category(4, "Stoplicht", "Is kapot"));
+        addCategory(new Category(5, "Riolering", "Last van stank"));
+
+
+
     }
     //ADD USERS
     public void addUser(User user){
@@ -406,6 +414,35 @@ public class DatabaseHandler extends SQLiteOpenHelper{
 
         cursor.close();
         return reports;
+
+    }
+
+    public ArrayList<Category> getAllCategories(){
+        ArrayList<Category> categories  = new ArrayList<>();
+
+        String query = "SELECT * FROM " + CATEGORY_TABLE_NAME + ";";
+
+
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        Cursor cursor = db.rawQuery(query, null);
+
+
+        while(cursor.moveToNext() ) {
+
+            Category category = new Category();
+
+            category.setCategoryID(cursor.getInt(cursor.getColumnIndex(CATEGORY_COLUMN_ID)));
+            category.setCategoryName(cursor.getString(cursor.getColumnIndex(CATEGORY_COLUMN_NAME)));
+            category.setCategorySummary(cursor.getString(cursor.getColumnIndex(CATEGORY_COLUMN_SUMMARY)));
+
+
+
+            categories.add(category);
+        }
+
+        cursor.close();
+        return categories;
 
     }
 

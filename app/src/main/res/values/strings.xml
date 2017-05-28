@@ -43,6 +43,8 @@
     <string name="pref_title_info">Over de app</string>
     <string name="pref_value_info">Versie</string>
 
+    <string name="report_searchview_hint">Zoeken…</string>
+
     <string name="title_activity_login">LoginActivity</string>
     <string name="welcome_message">Welkom bij \'Gemeente Breda\'. \n\n De app voor al uw problemen waar de gemeente iets van af moet weten!</string>
     <string name="login_message">Wij raden u aan om hier uw naam, emailadres en eventueel uw mobiele nummer in te vullen zodat de gemeente contact met u kan opnemen.</string>
@@ -76,10 +78,20 @@
 
     <string name="new_report_title_description">Omschrijving Toevoegen</string>
     <string name="description_hint">Plaats hier uw omschrijving (optioneel)</string>
+    <string name="description_btn_submit">Opslaan</string>
 
     <string name="new_report_title_summary">Concept</string>
     <string name="summary_description_title">Omschrijving</string>
     <string name="summary_author_title">Geplaatst door</string>
-    <string name="summary_edit">U kunt de onderdelen wijzigen door terug te gaan naar de vorige schermen</string>
+    <string name="summary_edit">U kunt de onderdelen wijzigen door terug te gaan naar de vorige schermen.</string>
+    <string name="summary_author_info">Uw e-mailadres en mobiele nummer zijn alleen zichtbaar voor de gemeente om eventueel contact met u op te nemen.</string>
+    <string name="summary_btn_submit">Melding plaatsen</string>
+
+    <string name="confirmation_succes_message">Melding is geplaatst</string>
+    <string name="confirmation_error_message">Er is een fout opgetreden</string>
+    <string name="confirmation_btn_home">Naar Hoofdscherm</string>
+    <string name="confirmation_btn_report">Melding bekijken</string>
+
+    <string name="detailed_comments_title">Opmerkingen</string>
 
 </resources>

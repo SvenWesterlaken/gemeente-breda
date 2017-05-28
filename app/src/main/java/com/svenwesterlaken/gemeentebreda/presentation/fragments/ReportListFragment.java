@@ -1,6 +1,10 @@
 package com.svenwesterlaken.gemeentebreda.presentation.fragments;
 
+
+import android.content.Intent;
+import android.support.v4.app.Fragment;
 import android.graphics.Color;
+
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.graphics.ColorUtils;
@@ -10,11 +14,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import android.widget.AdapterView;
+import android.widget.ListView;
+
 import com.baoyz.widget.PullRefreshLayout;
 import com.svenwesterlaken.gemeentebreda.R;
 import com.svenwesterlaken.gemeentebreda.data.database.DatabaseHandler;
 import com.svenwesterlaken.gemeentebreda.domain.Report;
 import com.svenwesterlaken.gemeentebreda.logic.adapters.ReportAdapter;
+import com.svenwesterlaken.gemeentebreda.presentation.activities.DetailedReportActivity;
 
 import java.util.ArrayList;
 
@@ -46,7 +54,6 @@ public class ReportListFragment extends Fragment implements PullRefreshLayout.On
         handler = new DatabaseHandler(this.getContext(),null, null, 1);
         reports = handler.getAllReports();
 
-
         reportAdapter = new ReportAdapter(reports);
         reportList.setAdapter(reportAdapter);
 
@@ -56,7 +63,6 @@ public class ReportListFragment extends Fragment implements PullRefreshLayout.On
         prf = (PullRefreshLayout) rootView.findViewById(R.id.swipeRefreshLayout);
         prf.setColorSchemeColors(Color.argb(255, 217, 29, 73));
         prf.setOnRefreshListener(this);
-
 
         return rootView;
     }
@@ -70,7 +76,7 @@ public class ReportListFragment extends Fragment implements PullRefreshLayout.On
 
     public void updateList(ArrayList<Report> list){
         reportAdapter.notifyItemRangeInserted(0, list.size());
-        //prf.setRefreshing(false);
+        prf.setRefreshing(false);
 
     }
 

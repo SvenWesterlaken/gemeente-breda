@@ -1,0 +1,325 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main_content"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    tools:context="com.svenwesterlaken.gemeentebreda.presentation.activities.DetailedReportActivity">
+
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/appbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="@dimen/marginSmall"
+        android:theme="@style/AppTheme.AppBarOverlay">
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorPrimary"
+            app:itemIconTint="?android:attr/textColorPrimary"
+            app:itemTextColor="?android:attr/textColorPrimary"
+            android:theme="?attr/actionBarTheme"
+            app:popupTheme="@style/AppTheme.PopupOverlay">
+
+        </android.support.v7.widget.Toolbar>
+
+    </android.support.design.widget.AppBarLayout>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="64dp"
+        android:id="@+id/container">
+
+        <ScrollView
+            android:id="@+id/detailed_SV_content"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="48dp"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior"
+            app:layout_constraintBottom_toTopOf="@+id/detailed_LL_bottomBar"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/appbar"
+            app:layout_constraintVertical_bias="1.0">
+
+            <android.support.constraint.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="16dp">
+
+                <android.support.v7.widget.CardView
+                    android:id="@+id/detailed_CV_report"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginRight="8dp"
+                    app:cardCornerRadius="2dp"
+                    app:cardElevation="2dp"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:ignore="missingPrefix">
+
+                    <android.support.constraint.ConstraintLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+
+                        <ImageView
+                            android:id="@+id/report_IV_icon"
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:layout_marginBottom="8dp"
+                            android:layout_marginLeft="24dp"
+                            android:layout_marginStart="24dp"
+                            android:layout_marginTop="8dp"
+                            app:layout_constraintBottom_toBottomOf="@+id/report_TV_address"
+                            app:layout_constraintLeft_toLeftOf="parent"
+                            app:layout_constraintTop_toTopOf="@+id/report_TV_title"
+                            app:srcCompat="@color/cast_intro_overlay_button_background_color" />
+
+                        <TextView
+                            android:id="@+id/report_TV_address"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_centerHorizontal="true"
+                            android:text="Lovendijkstraat 63"
+                            android:textAppearance="@style/CustomtextAppearanceSmall"
+                            app:layout_constraintLeft_toLeftOf="@+id/report_TV_title"
+                            app:layout_constraintTop_toBottomOf="@+id/report_TV_title" />
+
+                        <TextView
+                            android:id="@+id/report_TV_title"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="72dp"
+                            android:layout_marginStart="72dp"
+                            android:layout_marginTop="16dp"
+                            android:text="Kapotte straatverlichting"
+                            android:textAppearance="@style/CustomtextAppearanceSmall"
+                            app:layout_constraintLeft_toLeftOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <View
+                            android:id="@+id/report_D_header"
+                            android:layout_width="0dp"
+                            android:layout_height="1dp"
+                            android:layout_marginTop="16dp"
+                            android:background="?attr/colorDivider"
+                            app:layout_constraintLeft_toLeftOf="parent"
+                            app:layout_constraintRight_toRightOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/report_TV_address" />
+
+                        <ImageView
+                            android:id="@+id/report_IV_status"
+                            android:layout_width="16dp"
+                            android:layout_height="16dp"
+                            android:layout_marginLeft="16dp"
+                            android:layout_marginStart="16dp"
+                            android:layout_marginTop="16dp"
+                            app:layout_constraintLeft_toLeftOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/report_D_header"
+                            app:srcCompat="@color/clear_btn_color" />
+
+                        <TextView
+                            android:id="@+id/report_TV_seenNotifier"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="8dp"
+                            android:layout_marginLeft="8dp"
+                            android:layout_marginStart="8dp"
+                            android:layout_marginTop="8dp"
+                            android:text="ONBEKEKEN"
+                            android:textAllCaps="true"
+                            app:layout_constraintBottom_toBottomOf="@+id/report_IV_status"
+                            app:layout_constraintLeft_toRightOf="@+id/report_IV_status"
+                            app:layout_constraintTop_toTopOf="@+id/report_IV_status" />
+
+                        <ImageView
+                            android:id="@+id/report_IV_upvotes"
+                            android:layout_width="16dp"
+                            android:layout_height="16dp"
+                            android:layout_marginBottom="8dp"
+                            android:layout_marginEnd="8dp"
+                            android:layout_marginLeft="8dp"
+                            android:layout_marginRight="8dp"
+                            android:layout_marginStart="8dp"
+                            android:layout_marginTop="8dp"
+                            app:layout_constraintBottom_toTopOf="@+id/report_D_header2"
+                            app:layout_constraintHorizontal_bias="1.0"
+                            app:layout_constraintLeft_toRightOf="@+id/report_TV_seenNotifier"
+                            app:layout_constraintRight_toLeftOf="@+id/report_TV_upvotes"
+                            app:layout_constraintTop_toBottomOf="@+id/report_D_header"
+                            app:srcCompat="@color/clear_btn_color" />
+
+                        <TextView
+                            android:id="@+id/report_TV_upvotes"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="16dp"
+                            android:layout_marginEnd="16dp"
+                            android:layout_marginRight="16dp"
+                            android:layout_marginTop="16dp"
+                            android:text="36 upvotes"
+                            android:textAllCaps="true"
+                            app:layout_constraintBottom_toTopOf="@+id/report_D_header2"
+                            app:layout_constraintRight_toRightOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/report_D_header"
+                            app:layout_constraintVertical_bias="0.466" />
+
+                        <View
+                            android:id="@+id/report_D_header2"
+                            android:layout_width="0dp"
+                            android:layout_height="1dp"
+                            android:layout_marginTop="16dp"
+                            android:background="?attr/colorDivider"
+                            app:layout_constraintLeft_toLeftOf="parent"
+                            app:layout_constraintRight_toRightOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/report_IV_status" />
+
+                        <TextView
+                            android:id="@+id/report_TV_descriptionTitle"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="16dp"
+                            android:layout_marginStart="16dp"
+                            android:layout_marginTop="16dp"
+                            android:text="@string/summary_description_title"
+                            android:textAppearance="@style/TextAppearanceSettingsCategory"
+                            app:layout_constraintLeft_toLeftOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/report_D_header2" />
+
+                        <TextView
+                            android:id="@+id/report_TV_description"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="16dp"
+                            android:layout_marginLeft="16dp"
+                            android:layout_marginRight="16dp"
+                            android:layout_marginStart="16dp"
+                            android:layout_marginTop="8dp"
+                            android:text="Lorem ipsum blabla"
+                            android:textAppearance="@style/CustomtextAppearanceSmall"
+                            app:layout_constraintHorizontal_bias="0.0"
+                            app:layout_constraintLeft_toLeftOf="parent"
+                            app:layout_constraintRight_toRightOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/report_TV_descriptionTitle" />
+
+                        <ImageView
+                            android:id="@+id/report_IV_photo"
+                            android:layout_width="0dp"
+                            android:layout_height="144dp"
+                            android:layout_marginBottom="16dp"
+                            android:layout_marginEnd="16dp"
+                            android:layout_marginLeft="16dp"
+                            android:layout_marginRight="16dp"
+                            android:layout_marginStart="16dp"
+                            android:layout_marginTop="16dp"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintHorizontal_bias="0.0"
+                            app:layout_constraintLeft_toLeftOf="parent"
+                            app:layout_constraintRight_toRightOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/report_TV_description"
+                            app:layout_constraintVertical_bias="0.0"
+                            app:srcCompat="@color/cast_intro_overlay_button_background_color" />
+
+                    </android.support.constraint.ConstraintLayout>
+
+                </android.support.v7.widget.CardView>
+
+                <View
+                    android:id="@+id/detailed_D_sections"
+                    android:layout_width="48dp"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="16dp"
+                    android:background="?attr/colorAccent"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/detailed_CV_report" />
+
+                <TextView
+                    android:id="@+id/detailed_TV_commentsTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:text="@string/detailed_comments_title"
+                    android:textAppearance="@style/TextAppearanceSettingsCategory"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/detailed_D_sections" />
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/detailed_RV_comments"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/detailed_TV_commentsTitle" />
+
+
+            </android.support.constraint.ConstraintLayout>
+        </ScrollView>
+
+        <LinearLayout
+            android:id="@+id/detailed_LL_bottomBar"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:layout_gravity="bottom"
+            android:background="?attr/colorPrimary"
+            android:elevation="2dp"
+            android:gravity="bottom"
+            android:orientation="horizontal"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent">
+
+            <ImageView
+                android:id="@+id/detailed_IV_button1"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_gravity="center"
+                android:layout_marginLeft="40dp"
+                android:layout_marginRight="40dp"
+                android:layout_weight="1" />
+
+            <ImageView
+                android:id="@+id/detailed_IV_button2"
+                android:layout_width="24dp"
+                android:layout_height="25dp"
+                android:layout_gravity="center"
+                android:layout_marginLeft="40dp"
+                android:layout_marginRight="40dp"
+                android:layout_weight="1" />
+
+            <ImageView
+                android:id="@+id/detailed_IV_button3"
+                android:layout_width="24dp"
+                android:layout_height="25dp"
+                android:layout_gravity="center"
+                android:layout_marginLeft="40dp"
+                android:layout_marginRight="40dp"
+                android:layout_weight="1" />
+
+            <ImageView
+                android:id="@+id/detailed_IV_button4"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_gravity="center"
+                android:layout_marginLeft="40dp"
+                android:layout_marginRight="40dp"
+                android:layout_weight="1" />
+
+
+        </LinearLayout>
+
+
+    </FrameLayout>
+
+</android.support.design.widget.CoordinatorLayout>

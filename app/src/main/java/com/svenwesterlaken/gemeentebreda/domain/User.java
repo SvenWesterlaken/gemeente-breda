@@ -1,10 +1,12 @@
 package com.svenwesterlaken.gemeentebreda.domain;
 
+import java.io.Serializable;
+
 /**
  * Created by lukab on 9-5-2017.
  */
 
-public class User {
+public class User implements Serializable{
     int userID;
     String name, emailaddress, mobileNumber;
 
