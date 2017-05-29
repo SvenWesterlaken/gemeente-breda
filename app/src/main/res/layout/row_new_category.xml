@@ -5,7 +5,6 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:minHeight="64dp"
-    android:background="?android:attr/activatedBackgroundIndicator"
     tools:ignore="MissingPrefix"
     android:paddingRight="?android:attr/scrollbarSize"
     android:paddingEnd="?android:attr/scrollbarSize">

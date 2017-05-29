@@ -82,6 +82,11 @@ public class NewReportSummaryFragment extends Fragment implements NewReportActiv
                 Location testLocation = new Location("straat", "city", 00, "postcode", handler.getAllReports().size()+1, randomValue1, randomValue2);
                 handler.addLocation(testLocation);
 
+                if(report.getCategory() == null) {
+                    Category temp = new Category(handler.getAllCategories().size()+1, "Test Categorie", "Tijdelijke categorie");
+                    report.setCategory(temp);
+                }
+
                 Report reportNew = new Report(handler.getAllReports().size()+1, user, testLocation, report.getDescription(), report.getCategory(), 2);
                 handler.addReport(reportNew);
                 i.putExtra("REPORT", reportNew);

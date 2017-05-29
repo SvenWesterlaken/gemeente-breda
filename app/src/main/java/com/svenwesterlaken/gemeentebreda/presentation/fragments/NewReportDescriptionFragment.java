@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.svenwesterlaken.gemeentebreda.R;
 import com.svenwesterlaken.gemeentebreda.domain.Report;
@@ -40,6 +41,7 @@ public class  NewReportDescriptionFragment extends Fragment{
             public void onClick(View v) {
                 String description = descriptionView.getText().toString();
                 mListener.setDescription(description);
+                Toast.makeText(getActivity().getApplicationContext(), "Beschrijving is toegevoegd", Toast.LENGTH_SHORT).show();
             }
         });
 
