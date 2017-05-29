@@ -2,6 +2,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/newReport_categoryFragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:paddingTop="32dp"
@@ -26,6 +27,7 @@
     <ListView
         android:id="@+id/category_LV_categories"
         android:layout_width="0dp"
+        android:listSelector="@color/colorPrimaryLight"
         android:layout_height="0dp"
         android:layout_marginBottom="0dp"
         android:layout_marginLeft="0dp"

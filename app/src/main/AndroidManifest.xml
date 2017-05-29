@@ -52,8 +52,13 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.svenwesterlaken.gemeentebreda.presentation.activities.ReportActivity" />
         </activity>
-        <activity android:name=".presentation.activities.DetailedReportActivity" />
-        <activity android:name=".presentation.activities.ConfirmationActivity"></activity>
+        <activity
+            android:name=".presentation.activities.DetailedReportActivity"
+            android:label="Melding"/>
+        <activity android:name=".presentation.activities.ConfirmationActivity"/>
+        <service
+            android:enabled="true"
+            android:name="com.svenwesterlaken.gemeentebreda.logic.services.FetchAddressIntentService"/>
     </application>
 
 </manifest>

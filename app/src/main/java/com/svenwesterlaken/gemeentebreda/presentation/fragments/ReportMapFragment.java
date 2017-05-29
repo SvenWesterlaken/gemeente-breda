@@ -1,6 +1,7 @@
 package com.svenwesterlaken.gemeentebreda.presentation.fragments;
 
 
+import android.content.Intent;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 
@@ -37,6 +38,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.svenwesterlaken.gemeentebreda.R;
 import com.svenwesterlaken.gemeentebreda.data.database.DatabaseHandler;
 import com.svenwesterlaken.gemeentebreda.domain.Report;
+import com.svenwesterlaken.gemeentebreda.presentation.activities.DetailedReportActivity;
 
 import java.util.ArrayList;
 
@@ -168,7 +170,9 @@ public class ReportMapFragment extends Fragment {
             if (report.getLocation() != null) {
                 com.svenwesterlaken.gemeentebreda.domain.Location location = report.getLocation();
                 LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
-                map.addMarker(new MarkerOptions().position(latLng).title(report.getCategory().getCategoryName()).snippet(report.getDescription()));
+                MarkerOptions markerOptions = new MarkerOptions().position(latLng).title(report.getCategory().getCategoryName()).snippet(report.getDescription());
+                map.addMarker(markerOptions);
+
             }
         }
 

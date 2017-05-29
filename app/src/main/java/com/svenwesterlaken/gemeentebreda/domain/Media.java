@@ -1,5 +1,7 @@
 package com.svenwesterlaken.gemeentebreda.domain;
 
+import android.net.Uri;
+
 import java.io.Serializable;
 
 /**
@@ -7,6 +9,16 @@ import java.io.Serializable;
  */
 
 public class Media implements Serializable {
+
+    private Uri media;
+
+    public void setUri(Uri uri){
+        this.media = uri;
+    }
+
+    public Uri getUri(){
+        return media;
+    }
 
     public int getMediaID() {
         return mediaID;

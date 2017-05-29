@@ -2,40 +2,29 @@ package com.svenwesterlaken.gemeentebreda.presentation.activities;
 
 import android.content.Intent;
 import android.support.design.widget.BottomNavigationView;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.svenwesterlaken.gemeentebreda.R;
 import com.svenwesterlaken.gemeentebreda.domain.Report;
 import com.svenwesterlaken.gemeentebreda.logic.adapters.DetailedCommentAdapter;
-import com.svenwesterlaken.gemeentebreda.logic.adapters.DetailedReportAdapter;
-import com.svenwesterlaken.gemeentebreda.logic.adapters.ReportAdapter;
 
-public class DetailedReportActivity extends MenuActivity  {
+public class DetailedReportActivity extends BaseActivity  {
 
     Report report;
-    BottomNavigationView mBottomNav;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detailed_report);
-
-
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-       getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-       getSupportActionBar().setHomeButtonEnabled(true);
-        getSupportActionBar().setTitle("Melding");
-
-
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         Bundle extras = getIntent().getExtras();
 
@@ -43,15 +32,19 @@ public class DetailedReportActivity extends MenuActivity  {
             report =  (Report) extras.getSerializable("REPORT");
         }
 
-        RecyclerView reportDetailed = (RecyclerView) findViewById(R.id.detailed_RV_reports);
+        TextView category =  (TextView) findViewById(R.id.report_TV_title);
+        TextView address = (TextView) findViewById(R.id.report_TV_address);
+        TextView description = (TextView) findViewById(R.id.report_TV_description);
+        ImageView icon = (ImageView) findViewById(R.id.report_IV_icon);
+        ImageView status = (ImageView) findViewById(R.id.report_IV_status);
+        ImageView upvotes = (ImageView) findViewById(R.id.report_IV_upvotes);
 
-        LinearLayoutManager layoutManager = new LinearLayoutManager(this.getApplicationContext());
-        layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-        reportDetailed.setLayoutManager(layoutManager);
-
-        DetailedReportAdapter adapter = new DetailedReportAdapter(this.getApplicationContext(), report);
-
-        reportDetailed.setAdapter(adapter);
+        category.setText(report.getCategory().getCategoryName());
+        address.setText(report.getLocation().getStreet() + " " + report.getLocation().getHouseNumber());
+        description.setText(report.getDescription());
+        icon.setImageResource( R.drawable.lightbulb);
+        status.setImageResource( R.drawable.eye_off);
+        upvotes.setImageResource(R.drawable.star);
 
         RecyclerView reportComments = (RecyclerView) findViewById(R.id.detailed_RV_comments);
         LinearLayoutManager layoutManager2 = new LinearLayoutManager(this.getApplicationContext());
@@ -62,10 +55,6 @@ public class DetailedReportActivity extends MenuActivity  {
         DetailedCommentAdapter adapter2 = new DetailedCommentAdapter(this.getApplicationContext());
 
         reportComments.setAdapter(adapter2);
-
-        reportDetailed.setHasFixedSize(true);
-
-        adapter.notifyDataSetChanged();
         adapter2.notifyDataSetChanged();
 
         ImageView button1 = (ImageView) findViewById(R.id.detailed_IV_button1);
@@ -80,11 +69,21 @@ public class DetailedReportActivity extends MenuActivity  {
     }
 
     @Override
-    public void onBackPressed() {
-
-        Intent intent = new Intent(getApplicationContext(), ReportActivity.class);
-        startActivity(intent);
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        switch(id) {
+            case android.R.id.home:
+                onBackPressed();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+    }
+
     @Override
     public boolean onSupportNavigateUp() {
         onBackPressed();
