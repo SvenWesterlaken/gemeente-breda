@@ -34,6 +34,7 @@ import com.drew.metadata.exif.GpsDirectory;
 import com.svenwesterlaken.gemeentebreda.R;
 import com.svenwesterlaken.gemeentebreda.domain.Location;
 import com.svenwesterlaken.gemeentebreda.domain.Media;
+import com.svenwesterlaken.gemeentebreda.logic.managers.NewMediaManager;
 import com.svenwesterlaken.gemeentebreda.logic.services.FetchAddressIntentService;
 import com.svenwesterlaken.gemeentebreda.presentation.activities.NewReportActivity;
 
@@ -47,20 +48,22 @@ import static android.app.Activity.RESULT_OK;
 
 public class NewReportMediaFragment extends Fragment {
     private MediaChangedListener mListener;
+    private NewMediaManager mManager;
 
-    private Button photoBTN, selectBTN, videoBTN;
+    static final int IMAGE_REQUEST_SUCCES = 1;
+    static final int VIDEO_REQUEST_SUCCES = 2;
+    static final int MEDIA_REQUEST_SUCCES = 3;
+
     private VideoView video;
     private ImageView image;
     private Bitmap bitmap;
     private Uri videoUri;
 
-    static final int REQUEST_IMAGE_CAPTURE = 1;
-    static final int REQUEST_LOAD_MEDIA = 2;
-    static final int REQUEST_VIDEO_CAPTURE = 3;
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        this.mManager = new NewMediaManager(this, mListener);
+
     }
 
     @Override
@@ -89,7 +92,7 @@ public class NewReportMediaFragment extends Fragment {
 
         @Override
         public void onClick(View v) {
-            dispatchTakePictureIntent();
+            mManager.dispatchTakePictureIntent();
         }
     }
 
@@ -97,7 +100,7 @@ public class NewReportMediaFragment extends Fragment {
 
         @Override
         public void onClick(View v) {
-            dispatchTakeVideoIntent();
+            mManager.dispatchTakeVideoIntent();
         }
     }
 
@@ -105,15 +108,7 @@ public class NewReportMediaFragment extends Fragment {
 
         @Override
         public void onClick(View v) {
-            Intent intent = new Intent(Intent.ACTION_PICK);
-            intent.setType("*/*");
-
-            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.KITKAT) {
-                String[] mimetypes = {"image/*", "video/*"};
-                intent.putExtra(Intent.EXTRA_MIME_TYPES, mimetypes);
-            }
-
-            startActivityForResult(intent, REQUEST_LOAD_MEDIA);
+            mManager.dispatchChooseMediaIntent();
         }
     }
 
@@ -126,84 +121,36 @@ public class NewReportMediaFragment extends Fragment {
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
-            Bundle extras = data.getExtras();
-            Uri imageUri = data.getData();
-            addMedia(imageUri);
-            bitmap = (Bitmap) extras.get("data");
-            image.setImageBitmap(bitmap);
-            MediaStore.Images.Media.insertImage(getContext().getContentResolver(), bitmap, "testTitle", "testDescription");
-        }
+        int status = mManager.getRequestStatus(requestCode, resultCode);
 
-        if (requestCode == REQUEST_VIDEO_CAPTURE && resultCode == RESULT_OK) {
-            videoUri = data.getData();
+        if (status == IMAGE_REQUEST_SUCCES) {
+
+            bitmap = mManager.processImage(data);
+            image.setImageBitmap(bitmap);
+
+        } else if (status == VIDEO_REQUEST_SUCCES) {
+
+            videoUri = mManager.processVideo(data);
             video.setVideoURI(videoUri);
 
-            addMedia(videoUri);
+        } else if (status == MEDIA_REQUEST_SUCCES) {
 
-            File file = new File(videoUri.getPath());
-            String filePath = file.getAbsolutePath();
-            ContentValues values = new ContentValues();
-            values.put(MediaStore.Video.Media.DATA, filePath);
-            getContext().getContentResolver().insert(MediaStore.Video.Media.EXTERNAL_CONTENT_URI, values);
-        }
+            if(mManager.isVideo(data)) {
 
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == REQUEST_LOAD_MEDIA && resultCode == RESULT_OK) {
+                videoUri = mManager.processMediaVideo(data);
+                video.setVideoURI(videoUri);
 
-            String mime = getContext().getContentResolver().getType(data.getData());
-            Log.d("DEBUG", mime);
+            } else if (mManager.isImage(data)) {
 
-            if (mime != null) {
-
-                if (mime.contains("video")) {
-                    final Uri videoUri = data.getData();
-                    video.setVideoURI(videoUri);
-
-                    addMedia(videoUri);
-
-                    Log.d("DEBUG", "video loaded");
-                } else if (mime.contains("image")) {
-                    try {
-                        final Uri imageUri = data.getData();
-                        final InputStream imageStream = getContext().getContentResolver().openInputStream(imageUri);
-                        final Bitmap selectedImage = BitmapFactory.decodeStream(imageStream);
-                        image.setImageBitmap(selectedImage);
-                        Log.d("DEBUG", "image loaded");
-
-                        addMedia(imageUri);
-
-                    } catch (FileNotFoundException e) {
-                        e.printStackTrace();
-
-                    }
-                }
+                bitmap = mManager.processMediaImage(data);
+                image.setImageBitmap(bitmap);
 
             }
-
         }
+        super.onActivityResult(requestCode, resultCode, data);
     }
 
-    public void addMedia(Uri uri){
-        //TODO: Correct media ID meegeven.
-        Media media = new Media(0);
-        media.setUri(uri);
-        mListener.setMedia(media);
-    }
 
-    private void dispatchTakePictureIntent() {
-        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        if (takePictureIntent.resolveActivity(getContext().getPackageManager()) != null) {
-            startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
-        }
-    }
-
-    private void dispatchTakeVideoIntent() {
-        Intent takeVideoIntent = new Intent(MediaStore.ACTION_VIDEO_CAPTURE);
-        if (takeVideoIntent.resolveActivity(getContext().getPackageManager()) != null) {
-            startActivityForResult(takeVideoIntent, REQUEST_VIDEO_CAPTURE);
-        }
-    }
 
     public void onAttach(Context context) {
         super.onAttach(context);
