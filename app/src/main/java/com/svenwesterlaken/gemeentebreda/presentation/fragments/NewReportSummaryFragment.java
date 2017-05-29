@@ -45,11 +45,9 @@ public class NewReportSummaryFragment extends Fragment implements NewReportActiv
         final DatabaseHandler handler = new DatabaseHandler(getActivity().getApplicationContext(), null, null, 1);
 
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
-        String name = preferences.getString("pref_name", null);
-        String email = preferences.getString("pref_email", null);
-        String phone = preferences.getString("pref_phone", null);
-
-
+        final String name = preferences.getString("pref_name", null);
+        final String email = preferences.getString("pref_email", null);
+        final String phone = preferences.getString("pref_phone", null);
 
         final TextView authorName = (TextView) rootView.findViewById(R.id.summary_TV_authorName);
         final TextView authorEmail = (TextView) rootView.findViewById(R.id.summary_TV_authorEmail);
@@ -73,11 +71,9 @@ public class NewReportSummaryFragment extends Fragment implements NewReportActiv
             public void onClick(View v) {
                 Intent i = new Intent(getActivity(), ConfirmationActivity.class);
 
-                //handle the sending of the report
-                Category testCategory = new Category(handler.getAllReports().size()+1, category.getCategoryName(), category.getCategorySummary());
-                handler.addCategory(testCategory);
-                User testUser = new User(handler.getAllReports().size(), "mobiel", "naam", "email");
-                handler.addUser(testUser);
+                Report report = ((NewReportActivity)getActivity()).getNewReport();
+                User user = new User(handler.getAllReports().size(), phone, name, email);
+                handler.addUser(user);
 
                 Random r = new Random();
                 double randomValue1 = 51.619139 + (51.560467 - 51.619139) * r.nextDouble();
@@ -86,9 +82,9 @@ public class NewReportSummaryFragment extends Fragment implements NewReportActiv
                 Location testLocation = new Location("straat", "city", 00, "postcode", handler.getAllReports().size()+1, randomValue1, randomValue2);
                 handler.addLocation(testLocation);
 
-                Report report = new Report(handler.getAllReports().size()+1, testUser, testLocation, description, testCategory, 2);
-                handler.addReport(report);
-                i.putExtra("REPORT", report);
+                Report reportNew = new Report(handler.getAllReports().size()+1, user, testLocation, report.getDescription(), report.getCategory(), 2);
+                handler.addReport(reportNew);
+                i.putExtra("REPORT", reportNew);
 
                 getActivity().finish();
                 startActivity(i);
