@@ -30,6 +30,7 @@ public class NewReportSummaryFragment extends Fragment implements NewReportActiv
 
     Category category;
     String description;
+    Location location;
 
     private View rootView;
 
@@ -73,21 +74,26 @@ public class NewReportSummaryFragment extends Fragment implements NewReportActiv
 
                 Report report = ((NewReportActivity)getActivity()).getNewReport();
                 User user = new User(handler.getAllReports().size(), phone, name, email);
-                handler.addUser(user);
 
-                Random r = new Random();
-                double randomValue1 = 51.619139 + (51.560467 - 51.619139) * r.nextDouble();
-                double randomValue2 = 4.730599 + (4.815561 - 4.730599) * r.nextDouble();
+                if (report.getLocation() == null ) {
+                    Random r = new Random();
+                    double randomValue1 = 51.619139 + (51.560467 - 51.619139) * r.nextDouble();
+                    double randomValue2 = 4.730599 + (4.815561 - 4.730599) * r.nextDouble();
 
-                Location testLocation = new Location("straat", "city", 00, "postcode", handler.getAllReports().size()+1, randomValue1, randomValue2);
-                handler.addLocation(testLocation);
+                    Location temp = new Location("Nietgesette Straat", "Breda", 1, "4818NS", handler.getAllReports().size()+1, randomValue1, randomValue2);
+                    report.setLocation(temp);
+
+                }
 
                 if(report.getCategory() == null) {
                     Category temp = new Category(handler.getAllCategories().size()+1, "Test Categorie", "Tijdelijke categorie");
                     report.setCategory(temp);
                 }
 
-                Report reportNew = new Report(handler.getAllReports().size()+1, user, testLocation, report.getDescription(), report.getCategory(), 2);
+                handler.addUser(user);
+                handler.addLocation(report.getLocation());
+
+                Report reportNew = new Report(handler.getAllReports().size()+1, user, report.getLocation(), report.getDescription(), report.getCategory(), report.getLocationID());
                 handler.addReport(reportNew);
                 i.putExtra("REPORT", reportNew);
 
@@ -110,12 +116,20 @@ public class NewReportSummaryFragment extends Fragment implements NewReportActiv
         Report report = ((NewReportActivity)getActivity()).getNewReport();
         description = report.getDescription();
         category = report.getCategory();
+        location = report.getLocation();
+
 
         final TextView descriptionTV = (TextView) rootView.findViewById(R.id.summary_TV_description);
         final TextView categoryTV = (TextView) rootView.findViewById(R.id.summary_TV_reportTitle);
+        final TextView locationTV = (TextView) rootView.findViewById(R.id.summary_TV_address);
+
         descriptionTV.setText(description);
         if (category != null) {
             categoryTV.setText(category.getCategoryName());
+        }
+
+        if (location != null) {
+            locationTV.setText(location.getStreet() + " " + location.getHouseNumber() + ", " + location.getCity());
         }
     }
 }

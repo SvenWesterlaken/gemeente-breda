@@ -53,11 +53,9 @@ public class NewLocationActivity extends BaseActivity {
                 Random r = new Random();
                 double randomValue1 = 51.619139 + (51.560467 - 51.619139) * r.nextDouble();
                 double randomValue2 = 4.730599 + (4.815561 - 4.730599) * r.nextDouble();
-
-                int randomValue3 = 100 * r.nextInt();
+                int randomValue3 = r.nextInt(6);
 
                 Location testLocation = new Location("Geselecteerde straat", "Breda", randomValue3, "4818RA", handler.getAllReports().size()+1, randomValue1, randomValue2);
-                handler.addLocation(testLocation);
 
                 Intent intent = new Intent();
                 intent.putExtra("location", testLocation);

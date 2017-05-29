@@ -227,7 +227,7 @@ public class NewReportLocationFragment extends Fragment {
                 Location location = (Location) extras.getSerializable("location");
 
                 if (location != null) {
-                    Log.i("LOCATION", location.getLatitude() +  ", " + location.getLongitude());
+                    mListener.setLocation(location);
                 }
 
             }
