@@ -54,12 +54,15 @@
         </activity>
         <activity
             android:name=".presentation.activities.DetailedReportActivity"
-            android:label="Melding"/>
-        <activity android:name=".presentation.activities.ConfirmationActivity"/>
-        <activity android:name=".presentation.activities.NewLocationActivity"/>
+            android:label="Melding" />
+        <activity android:name=".presentation.activities.ConfirmationActivity" />
+        <activity android:name=".presentation.activities.NewLocationActivity" />
+
         <service
-            android:enabled="true"
-            android:name="com.svenwesterlaken.gemeentebreda.logic.services.FetchAddressIntentService"/>
+            android:name=".logic.services.FetchAddressIntentService"
+            android:enabled="true" />
+
+        <activity android:name=".presentation.activities.MyReportActivity"></activity>
     </application>
 
 </manifest>
