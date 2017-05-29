@@ -36,6 +36,8 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Collection;
 
+import static android.app.Activity.RESULT_OK;
+
 
 public class NewReportLocationFragment extends Fragment {
     private LocationChangedListener mListener;
@@ -219,7 +221,19 @@ public class NewReportLocationFragment extends Fragment {
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if(requestCode == NEW_LOCATION_REQUEST && resultCode == RESULT_OK) {
+            Bundle extras = data.getExtras();
+            if (extras != null) {
+                Location location = (Location) extras.getSerializable("location");
 
+                if (location != null) {
+                    Log.i("LOCATION", location.getLatitude() +  ", " + location.getLongitude());
+                }
+
+            }
+        }
+
+        super.onActivityResult(requestCode, resultCode, data);
     }
 
     @Override
