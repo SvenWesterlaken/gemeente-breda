@@ -28,22 +28,24 @@ import com.drew.metadata.exif.GpsDirectory;
 import com.svenwesterlaken.gemeentebreda.R;
 import com.svenwesterlaken.gemeentebreda.domain.Location;
 import com.svenwesterlaken.gemeentebreda.domain.Media;
-import com.svenwesterlaken.gemeentebreda.domain.Report;
 import com.svenwesterlaken.gemeentebreda.logic.services.FetchAddressIntentService;
-import com.svenwesterlaken.gemeentebreda.presentation.activities.NewReportActivity;
+import com.svenwesterlaken.gemeentebreda.presentation.activities.NewLocationActivity;
 import com.svenwesterlaken.gemeentebreda.presentation.partials.NotImplementedListener;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.Collection;
 
+import static android.app.Activity.RESULT_OK;
+
 
 public class NewReportLocationFragment extends Fragment {
     private LocationChangedListener mListener;
-    private TextView mediaLocationTV;
     private AddressResultReceiver mResultReceiver;
     private Location locationFromMedia;
     private View rootView;
+
+    private static int NEW_LOCATION_REQUEST = 1;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -54,15 +56,21 @@ public class NewReportLocationFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.fragment_new_report_location, container, false);
 
-        mediaLocationTV = (TextView) rootView.findViewById(R.id.location_TV_metaMessage);
-
         ConstraintLayout chooseBTN = (ConstraintLayout) rootView.findViewById(R.id.location_BTN_choose);
         ConstraintLayout metaBTN = (ConstraintLayout) rootView.findViewById(R.id.location_BTN_meta);
         ConstraintLayout currentBTN = (ConstraintLayout) rootView.findViewById(R.id.location_BTN_current);
 
-        chooseBTN.setOnClickListener(new NotImplementedListener(getActivity().getApplicationContext()));
         metaBTN.setOnClickListener(new NotImplementedListener(getActivity().getApplicationContext()));
         currentBTN.setOnClickListener(new NotImplementedListener(getActivity().getApplicationContext()));
+        chooseBTN.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(getActivity(), NewLocationActivity.class);
+                startActivityForResult(i, NEW_LOCATION_REQUEST);
+            }
+
+
+        });
 
         return rootView;
     }
@@ -209,6 +217,23 @@ public class NewReportLocationFragment extends Fragment {
             Log.i("ADDRESS", mAddressOutput);
 
         }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if(requestCode == NEW_LOCATION_REQUEST && resultCode == RESULT_OK) {
+            Bundle extras = data.getExtras();
+            if (extras != null) {
+                Location location = (Location) extras.getSerializable("location");
+
+                if (location != null) {
+                    mListener.setLocation(location);
+                }
+
+            }
+        }
+
+        super.onActivityResult(requestCode, resultCode, data);
     }
 
     @Override
