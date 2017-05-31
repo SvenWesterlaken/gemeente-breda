@@ -57,12 +57,12 @@ public class  NewReportDescriptionFragment extends Fragment{
         Activity a = null;
 
         if (context instanceof Activity){
-            a=(Activity) context;
+            a = (Activity) context;
         }        
         try {
             mListener = (DescriptionChangedListener) a;
         } catch (ClassCastException e) {
-            throw new ClassCastException(a.toString() + " must implement DescriptionChangeddListener");
+            throw new ClassCastException(a.toString() + " must implement DescriptionChangedListener");
         }
     }
 

@@ -24,7 +24,6 @@ import java.util.ArrayList;
 
 public class NewReportCategoryFragment extends Fragment {
     private CategoryChangedListener mListener;
-    private  View selectedview ;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {

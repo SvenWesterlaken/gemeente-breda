@@ -1,50 +1,25 @@
 package com.svenwesterlaken.gemeentebreda.presentation.fragments;
 
 import android.app.Activity;
-import android.content.ContentResolver;
-import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
-import android.database.Cursor;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Handler;
-import android.provider.MediaStore;
 import android.support.constraint.ConstraintLayout;
+import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.app.Fragment;
-import android.support.v4.os.ResultReceiver;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.MediaController;
 import android.widget.VideoView;
 
-import com.drew.imaging.ImageMetadataReader;
-import com.drew.imaging.ImageProcessingException;
-import com.drew.lang.GeoLocation;
-import com.drew.metadata.Directory;
-import com.drew.metadata.Metadata;
-import com.drew.metadata.Tag;
-import com.drew.metadata.exif.GpsDirectory;
 import com.svenwesterlaken.gemeentebreda.R;
-import com.svenwesterlaken.gemeentebreda.domain.Location;
 import com.svenwesterlaken.gemeentebreda.domain.Media;
 import com.svenwesterlaken.gemeentebreda.logic.managers.NewMediaManager;
-import com.svenwesterlaken.gemeentebreda.logic.services.FetchAddressIntentService;
-import com.svenwesterlaken.gemeentebreda.presentation.activities.NewReportActivity;
-
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.Collection;
-
-import static android.app.Activity.RESULT_OK;
+import com.svenwesterlaken.gemeentebreda.presentation.activities.ImageActivity;
 
 public class NewReportMediaFragment extends Fragment {
     private MediaChangedListener mListener;
@@ -57,7 +32,7 @@ public class NewReportMediaFragment extends Fragment {
     private VideoView video;
     private ImageView image;
     private Bitmap bitmap;
-    private Uri videoUri;
+    //private Uri videoUri;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -79,11 +54,16 @@ public class NewReportMediaFragment extends Fragment {
         ConstraintLayout selectBTN = (ConstraintLayout) rootView.findViewById(R.id.media_BTN_mediaSelect);
         selectBTN.setOnClickListener(new SelectMediaClickListener());
 
-        MediaController mediaController = new MediaController(getContext());
-        video = (VideoView) rootView.findViewById(R.id.media_VV_video);
-        video.setMediaController(mediaController);
-
-        image = (ImageView) rootView.findViewById(R.id.media_IV_image);
+        image = (ImageView) rootView.findViewById(R.id.media_IV_thumbnail);
+        image.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), ImageActivity.class);
+                intent.putExtra("Image", bitmap);
+                ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(getActivity(), image, "media_preview");
+                startActivity(intent, options.toBundle());
+            }
+        });
 
         return rootView;
     }
@@ -116,7 +96,7 @@ public class NewReportMediaFragment extends Fragment {
     public void onResume() {
         super.onResume();
         image.setImageBitmap(bitmap);
-        video.setVideoURI(videoUri);
+        //video.setVideoURI(videoUri);
     }
 
     @Override
@@ -130,15 +110,15 @@ public class NewReportMediaFragment extends Fragment {
 
         } else if (status == VIDEO_REQUEST_SUCCES) {
 
-            videoUri = mManager.processVideo(data);
-            video.setVideoURI(videoUri);
+            //videoUri = mManager.processVideo(data);
+            //video.setVideoURI(videoUri);
 
         } else if (status == MEDIA_REQUEST_SUCCES) {
 
             if(mManager.isVideo(data)) {
 
-                videoUri = mManager.processMediaVideo(data);
-                video.setVideoURI(videoUri);
+                //videoUri = mManager.processMediaVideo(data);
+                //video.setVideoURI(videoUri);
 
             } else if (mManager.isImage(data)) {
 

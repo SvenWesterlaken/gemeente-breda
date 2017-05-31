@@ -57,6 +57,7 @@
             android:label="Melding"/>
         <activity android:name=".presentation.activities.ConfirmationActivity"/>
         <activity android:name=".presentation.activities.NewLocationActivity"/>
+        <activity android:name=".presentation.activities.ImageActivity"/>
         <service
             android:enabled="true"
             android:name="com.svenwesterlaken.gemeentebreda.logic.services.FetchAddressIntentService"/>
