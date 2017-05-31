@@ -73,9 +73,9 @@ public class MenuActivity extends BaseActivity implements NavigationView.OnNavig
             i.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(i);
         } else if (id == R.id.drawer_myreports) {
-//            Intent i = new Intent(getApplicationContext(), MyReportActivity.class);
-//            i.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-//            startActivity(i);
+            Intent i = new Intent(getApplicationContext(), MyReportActivity.class);
+            i.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(i);
         } else if (id == R.id.drawer_settings) {
             Intent i = new Intent(getApplicationContext(), SettingsActivity.class);
             i.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);

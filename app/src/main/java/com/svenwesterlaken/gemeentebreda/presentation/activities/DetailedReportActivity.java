@@ -7,16 +7,23 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.svenwesterlaken.gemeentebreda.R;
+import com.svenwesterlaken.gemeentebreda.data.database.DatabaseHandler;
 import com.svenwesterlaken.gemeentebreda.domain.Report;
+import com.svenwesterlaken.gemeentebreda.domain.User;
 import com.svenwesterlaken.gemeentebreda.logic.adapters.DetailedCommentAdapter;
+
+import java.util.ArrayList;
 
 public class DetailedReportActivity extends BaseActivity  {
 
     Report report;
+    DatabaseHandler handler;
+    User user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,12 +32,14 @@ public class DetailedReportActivity extends BaseActivity  {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        handler = new DatabaseHandler(getApplicationContext(),null, null, 1);
 
         Bundle extras = getIntent().getExtras();
 
         if (extras != null) {
             report =  (Report) extras.getSerializable("REPORT");
         }
+
 
         TextView category =  (TextView) findViewById(R.id.report_TV_title);
         TextView address = (TextView) findViewById(R.id.report_TV_address);
@@ -62,6 +71,17 @@ public class DetailedReportActivity extends BaseActivity  {
         ImageView button2 = (ImageView) findViewById(R.id.detailed_IV_button2);
         button2.setImageResource(R.drawable.comment_text_outline);
         ImageView button3 = (ImageView) findViewById(R.id.detailed_IV_button3);
+        button3.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                handler.addFavourite(  handler.getUser(1) , report);
+
+                ArrayList favourites =  handler.getFavourites(handler.getUser(1));
+
+                favourites.size();
+            }
+        });
         button3.setImageResource(R.drawable.star_outline);
         ImageView button4 = (ImageView) findViewById(R.id.detailed_IV_button4);
         button4.setImageResource(R.drawable.bookmark_outline);

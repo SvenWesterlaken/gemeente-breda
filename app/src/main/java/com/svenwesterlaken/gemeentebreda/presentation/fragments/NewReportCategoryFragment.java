@@ -48,7 +48,7 @@ public class NewReportCategoryFragment extends Fragment {
         reportList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Category categorySelected = handler.getCategory(position + 1);
+                Category categorySelected = categories.get(position);
                 categorySelected.getCategoryName();
                 mListener.setCategory(categorySelected);
                 Toast.makeText(getActivity().getApplicationContext(), "Categorie is toegevoegd", Toast.LENGTH_SHORT).show();
