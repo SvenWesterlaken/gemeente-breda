@@ -17,6 +17,8 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import com.svenwesterlaken.gemeentebreda.R;
+import com.svenwesterlaken.gemeentebreda.data.database.DatabaseHandler;
+import com.svenwesterlaken.gemeentebreda.domain.User;
 import com.svenwesterlaken.gemeentebreda.presentation.activities.ReportActivity;
 
 /**
@@ -123,6 +125,13 @@ public class LoginTwoFragment extends Fragment {
 
             editor.commit();
 
+
+            DatabaseHandler  handler = new DatabaseHandler(getContext().getApplicationContext(),null, null, 1);;
+            User user = new User();
+            user.setName(preferences.getString("pref_name", ""));
+            user.setEmailaddress(preferences.getString("pref_email", ""));
+            user.setUserID(1);
+            handler.addUser( user);
 
             Intent i = new Intent(getActivity().getApplicationContext(), ReportActivity.class);
             i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
