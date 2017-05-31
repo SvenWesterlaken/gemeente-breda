@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.constraint.ConstraintLayout;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.app.Fragment;
@@ -14,12 +15,18 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.MediaController;
+import android.widget.Toast;
 import android.widget.VideoView;
 
+import com.afollestad.materialcamera.MaterialCamera;
 import com.svenwesterlaken.gemeentebreda.R;
 import com.svenwesterlaken.gemeentebreda.domain.Media;
 import com.svenwesterlaken.gemeentebreda.logic.managers.NewMediaManager;
 import com.svenwesterlaken.gemeentebreda.presentation.activities.ImageActivity;
+
+import java.io.File;
+
+import static android.app.Activity.RESULT_OK;
 
 public class NewReportMediaFragment extends Fragment {
     private MediaChangedListener mListener;
@@ -28,6 +35,9 @@ public class NewReportMediaFragment extends Fragment {
     static final int IMAGE_REQUEST_SUCCES = 1;
     static final int VIDEO_REQUEST_SUCCES = 2;
     static final int MEDIA_REQUEST_SUCCES = 3;
+
+    private final static int CAMERA_RQ = 6969;
+    private File saveFolder;
 
     private VideoView video;
     private ImageView image;
@@ -39,6 +49,7 @@ public class NewReportMediaFragment extends Fragment {
         super.onCreate(savedInstanceState);
         this.mManager = new NewMediaManager(this, mListener);
 
+        saveFolder = new File(Environment.getExternalStorageDirectory(), "Gemmeld");
     }
 
     @Override
@@ -59,7 +70,6 @@ public class NewReportMediaFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getActivity(), ImageActivity.class);
-                intent.putExtra("Image", bitmap);
                 ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(getActivity(), image, "media_preview");
                 startActivity(intent, options.toBundle());
             }
@@ -68,11 +78,16 @@ public class NewReportMediaFragment extends Fragment {
         return rootView;
     }
 
+    private Fragment getFragment() {
+        return this;
+    }
+
     private class PhotoClickListener implements View.OnClickListener {
+
 
         @Override
         public void onClick(View v) {
-            mManager.dispatchTakePictureIntent();
+            new MaterialCamera(getFragment()).saveDir(saveFolder).stillShot().start(CAMERA_RQ);
         }
     }
 
@@ -101,33 +116,47 @@ public class NewReportMediaFragment extends Fragment {
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        int status = mManager.getRequestStatus(requestCode, resultCode);
+        super.onActivityResult(requestCode, resultCode, data);
 
-        if (status == IMAGE_REQUEST_SUCCES) {
+        // Received recording or error from MaterialCamera
+        if (requestCode == CAMERA_RQ) {
 
-            bitmap = mManager.processImage(data);
-            image.setImageBitmap(bitmap);
-
-        } else if (status == VIDEO_REQUEST_SUCCES) {
-
-            //videoUri = mManager.processVideo(data);
-            //video.setVideoURI(videoUri);
-
-        } else if (status == MEDIA_REQUEST_SUCCES) {
-
-            if(mManager.isVideo(data)) {
-
-                //videoUri = mManager.processMediaVideo(data);
-                //video.setVideoURI(videoUri);
-
-            } else if (mManager.isImage(data)) {
-
-                bitmap = mManager.processMediaImage(data);
-                image.setImageBitmap(bitmap);
-
+            if (resultCode == RESULT_OK) {
+                Toast.makeText(getActivity(), "Saved to: " + data.getDataString(), Toast.LENGTH_LONG).show();
+            } else if(data != null) {
+                Exception e = (Exception) data.getSerializableExtra(MaterialCamera.ERROR_EXTRA);
+                e.printStackTrace();
+                Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_LONG).show();
             }
         }
-        super.onActivityResult(requestCode, resultCode, data);
+
+//        int status = mManager.getRequestStatus(requestCode, resultCode);
+//
+//        if (status == IMAGE_REQUEST_SUCCES) {
+//
+//            bitmap = mManager.processImage(data);
+//            image.setImageBitmap(bitmap);
+//
+//        } else if (status == VIDEO_REQUEST_SUCCES) {
+//
+//            //videoUri = mManager.processVideo(data);
+//            //video.setVideoURI(videoUri);
+//
+//        } else if (status == MEDIA_REQUEST_SUCCES) {
+//
+//            if(mManager.isVideo(data)) {
+//
+//                //videoUri = mManager.processMediaVideo(data);
+//                //video.setVideoURI(videoUri);
+//
+//            } else if (mManager.isImage(data)) {
+//
+//                bitmap = mManager.processMediaImage(data);
+//                image.setImageBitmap(bitmap);
+//
+//            }
+//        }
+//        super.onActivityResult(requestCode, resultCode, data);
     }
 
 
