@@ -157,12 +157,12 @@ public class DatabaseHandler extends SQLiteOpenHelper{
                 "REFERENCES " + REPORT_TABLE_NAME +  "(" + REPORT_COLUMN_ID + ")" +
                 ");";
 
-        String CREATE_FAVOURITE_TABLE_NAME = "CREATE TABLE" + FAVOURITE_TABLE_NAME  + "(" +
+        String CREATE_FAVOURITE_TABLE = "CREATE TABLE " + FAVOURITE_TABLE_NAME  + "(" +
                 FAVOURITE_COLUMN_ID + " INTEGER, " +
                 FAVOURITE_COLUMN_REPORTID + " INTEGER, " +
                 FAVOURITE_COLUMN_USERID + " INTEGER, " +
 
-                "FOREIG KEY (" + FAVOURITE_COLUMN_REPORTID + ")" +
+                "FOREIGN KEY (" + FAVOURITE_COLUMN_REPORTID + ")" +
                 "REFERENCES " + REPORT_TABLE_NAME + "(" + REPORT_COLUMN_ID + ")," +
 
                 "FOREIGN KEY (" + FAVOURITE_COLUMN_USERID + ")" +
@@ -178,6 +178,7 @@ public class DatabaseHandler extends SQLiteOpenHelper{
         db.execSQL(CREATE_MEDIA_TABLE);
         db.execSQL(CREATE_VIDEO_TABLE);
         db.execSQL(CREATE_PHOTO_TABLE);
+        db.execSQL(CREATE_FAVOURITE_TABLE);
 
 
 
@@ -378,11 +379,11 @@ public class DatabaseHandler extends SQLiteOpenHelper{
 
 
             report.setReportID(cursor.getInt(cursor.getColumnIndex(REPORT_COLUMN_ID)));
-            report.setCategoryID(cursor.getInt(cursor.getColumnIndex(REPORT_COLUMN_CATEGORYID)));
             report.setDescription(cursor.getString(cursor.getColumnIndex(REPORT_COLUMN_DESCRIPTION)));
 //            report.setMediaId(cursor.getInt(cursor.getColumnIndex(REPORT_COLUMN_MEDIAID)));
-            report.setLocationID(cursor.getInt(cursor.getColumnIndex(REPORT_COLUMN_LOCATIONID)));
+            report.setLocation(getLocation(cursor.getInt(cursor.getColumnIndex(REPORT_COLUMN_LOCATIONID))));
 //            report.setUserID(cursor.getInt(cursor.getColumnIndex(REPORT_COLUMN_USERID)));
+            report.setCategory(getCategory(cursor.getInt(cursor.getColumnIndex(REPORT_COLUMN_CATEGORYID))));
 
         }
 
@@ -504,6 +505,35 @@ public class DatabaseHandler extends SQLiteOpenHelper{
         cursor.close();
         return reports;
 
+    }
+
+    public void deleteFavourite(Report report){
+
+        SQLiteDatabase db = this.getWritableDatabase();
+        String query = "DELETE FROM " + FAVOURITE_TABLE_NAME +  " WHERE " + FAVOURITE_COLUMN_REPORTID + " = " + report.getReportID();
+
+        db.execSQL(query);
+
+    }
+
+    public  Report searchFavourite(Report report, User user) {
+
+        SQLiteDatabase db = this.getReadableDatabase();
+        String query = "SELECT * FROM " + FAVOURITE_TABLE_NAME + " WHERE " + FAVOURITE_COLUMN_REPORTID+ " = " + report.getReportID() + " AND "
+                + FAVOURITE_COLUMN_USERID + " = " + user.getUserID();
+        Cursor cursor = db.rawQuery(query, null);
+        Report report1 = null;
+
+        while(cursor.moveToNext() ) {
+
+            int reportId = cursor.getInt(cursor.getColumnIndex(FAVOURITE_COLUMN_REPORTID));
+            int userId = cursor.getInt(cursor.getColumnIndex(FAVOURITE_COLUMN_USERID));
+            report1 = getReport(reportId);
+        }
+
+        cursor.close();
+
+        return  report1;
     }
 
 

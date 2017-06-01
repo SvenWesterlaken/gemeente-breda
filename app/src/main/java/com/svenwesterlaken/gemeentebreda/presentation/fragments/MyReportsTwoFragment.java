@@ -13,6 +13,7 @@ import com.baoyz.widget.PullRefreshLayout;
 import com.svenwesterlaken.gemeentebreda.R;
 import com.svenwesterlaken.gemeentebreda.data.database.DatabaseHandler;
 import com.svenwesterlaken.gemeentebreda.domain.Report;
+import com.svenwesterlaken.gemeentebreda.domain.User;
 import com.svenwesterlaken.gemeentebreda.logic.adapters.ReportAdapter;
 
 import java.util.ArrayList;
@@ -48,11 +49,16 @@ public class MyReportsTwoFragment extends Fragment implements PullRefreshLayout.
         handler = new DatabaseHandler(this.getContext(),null, null, 1);
         //  reports = handler.getAllReports(); --> get all added reports
 
-//    reportAdapter = new ReportAdapter(reports);
-//    reportList.setAdapter(reportAdapter);
+
+        User user = handler.getUser(1);
+
+        reports = handler.getFavourites( user);
+
+    reportAdapter = new ReportAdapter(reports);
+    reportList.setAdapter(reportAdapter);
 
         handler.close();
-//        reportAdapter.notifyDataSetChanged();
+        reportAdapter.notifyDataSetChanged();
 
         prf = (PullRefreshLayout) rootView.findViewById(R.id.swipeRefreshLayout);
         prf.setColorSchemeColors(Color.argb(255, 217, 29, 73));

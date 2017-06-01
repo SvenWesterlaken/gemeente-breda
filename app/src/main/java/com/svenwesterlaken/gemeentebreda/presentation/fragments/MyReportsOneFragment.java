@@ -13,6 +13,7 @@ import com.baoyz.widget.PullRefreshLayout;
 import com.svenwesterlaken.gemeentebreda.R;
 import com.svenwesterlaken.gemeentebreda.data.database.DatabaseHandler;
 import com.svenwesterlaken.gemeentebreda.domain.Report;
+import com.svenwesterlaken.gemeentebreda.domain.User;
 import com.svenwesterlaken.gemeentebreda.logic.adapters.ReportAdapter;
 
 import java.lang.reflect.Array;
@@ -48,6 +49,10 @@ public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle sa
 
     handler = new DatabaseHandler(this.getContext(),null, null, 1);
   //  reports = handler.getAllReports(); --> get all added reports
+
+        User user = handler.getUser(1);
+
+        reports = handler.getFavourites( user);
 
 //    reportAdapter = new ReportAdapter(reports);
 //    reportList.setAdapter(reportAdapter);
