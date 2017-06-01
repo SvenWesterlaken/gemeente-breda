@@ -37,7 +37,7 @@ public class NewReportCategoryFragment extends Fragment {
         final View rootView = inflater.inflate(R.layout.fragment_new_report_category, container, false);
         final ListView reportList = (ListView) rootView.findViewById(R.id.category_LV_categories);
 
-        final DatabaseHandler handler = new DatabaseHandler(this.getContext(),null, null, 1);
+        final DatabaseHandler handler = new DatabaseHandler(this.getContext());
 
         final ArrayList<Category> categories = handler.getAllCategories();
 

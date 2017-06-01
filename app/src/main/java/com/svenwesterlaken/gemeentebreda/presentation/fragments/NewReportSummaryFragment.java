@@ -43,7 +43,7 @@ public class NewReportSummaryFragment extends Fragment implements NewReportActiv
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.fragment_new_report_summary, container, false);
         final Button send = (Button) rootView.findViewById(R.id.summary_BTN_send);
-        final DatabaseHandler handler = new DatabaseHandler(getActivity().getApplicationContext(), null, null, 1);
+        final DatabaseHandler handler = new DatabaseHandler(getActivity().getApplicationContext());
 
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
         final String name = preferences.getString("pref_name", null);
@@ -73,7 +73,7 @@ public class NewReportSummaryFragment extends Fragment implements NewReportActiv
                 Intent i = new Intent(getActivity(), ConfirmationActivity.class);
 
                 Report report = ((NewReportActivity)getActivity()).getNewReport();
-                User user = new User(handler.getAllReports().size(), phone, name, email);
+                User user = handler.getUser(1);
 
                 if (report.getLocation() == null ) {
                     Random r = new Random();
@@ -81,6 +81,7 @@ public class NewReportSummaryFragment extends Fragment implements NewReportActiv
                     double randomValue2 = 4.730599 + (4.815561 - 4.730599) * r.nextDouble();
 
                     Location temp = new Location("Nietgesette Straat", "Breda", 1, "4818NS", handler.getAllReports().size()+1, randomValue1, randomValue2);
+                    handler.addLocation(temp);
                     report.setLocation(temp);
 
                 }
@@ -90,11 +91,11 @@ public class NewReportSummaryFragment extends Fragment implements NewReportActiv
                     report.setCategory(temp);
                 }
 
-                handler.addUser(user);
-                handler.addLocation(report.getLocation());
+
 
                 Report reportNew = new Report(handler.getAllReports().size()+1, user, report.getLocation(), report.getDescription(), report.getCategory(), report.getLocationID());
                 handler.addReport(reportNew);
+                handler.addReportUser(reportNew, user);
                 i.putExtra("REPORT", reportNew);
 
                 getActivity().finish();

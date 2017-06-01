@@ -126,7 +126,7 @@ public class LoginTwoFragment extends Fragment {
             editor.commit();
 
 
-            DatabaseHandler  handler = new DatabaseHandler(getContext().getApplicationContext(),null, null, 1);;
+            DatabaseHandler  handler = new DatabaseHandler(getContext());;
             User user = new User();
             user.setName(preferences.getString("pref_name", ""));
             user.setEmailaddress(preferences.getString("pref_email", ""));

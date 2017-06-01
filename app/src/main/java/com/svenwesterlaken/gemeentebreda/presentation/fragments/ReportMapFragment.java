@@ -151,7 +151,7 @@ public class ReportMapFragment extends Fragment {
     }
 
     public ArrayList<Report> getAllReports() {
-        DatabaseHandler handler = new DatabaseHandler(getContext(),null, null, 1);
+        DatabaseHandler handler = new DatabaseHandler(getContext());
         ArrayList<Report> reports;
         reports = handler.getAllReports();
 

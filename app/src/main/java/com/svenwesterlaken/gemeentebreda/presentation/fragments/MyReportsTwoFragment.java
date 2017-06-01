@@ -46,7 +46,7 @@ public class MyReportsTwoFragment extends Fragment implements PullRefreshLayout.
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         reportList.setLayoutManager(layoutManager);
 
-        handler = new DatabaseHandler(this.getContext(),null, null, 1);
+        handler = new DatabaseHandler(this.getContext());
         //  reports = handler.getAllReports(); --> get all added reports
 
 

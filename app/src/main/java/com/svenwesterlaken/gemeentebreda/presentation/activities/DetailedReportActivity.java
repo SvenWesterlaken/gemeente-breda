@@ -33,7 +33,7 @@ public class DetailedReportActivity extends BaseActivity  {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        handler = new DatabaseHandler(getApplicationContext(),null, null, 1);
+        handler = new DatabaseHandler(getApplicationContext());
 
 
         Bundle extras = getIntent().getExtras();

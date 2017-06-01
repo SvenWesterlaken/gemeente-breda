@@ -51,7 +51,7 @@ public class ReportListFragment extends Fragment implements PullRefreshLayout.On
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         reportList.setLayoutManager(layoutManager);
 
-        handler = new DatabaseHandler(this.getContext(),null, null, 1);
+        handler = new DatabaseHandler(this.getContext());
         reports = handler.getAllReports();
 
         reportAdapter = new ReportAdapter(reports);
