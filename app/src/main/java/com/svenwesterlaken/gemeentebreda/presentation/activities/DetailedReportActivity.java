@@ -39,7 +39,7 @@ public class DetailedReportActivity extends BaseActivity  {
         Bundle extras = getIntent().getExtras();
 
         if (extras != null) {
-            report =  (Report) extras.getSerializable("REPORT");
+            report =  extras.getParcelable("REPORT");
         }
 
 

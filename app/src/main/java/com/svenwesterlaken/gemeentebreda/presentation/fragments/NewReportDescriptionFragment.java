@@ -18,8 +18,10 @@ import com.svenwesterlaken.gemeentebreda.domain.Report;
 import com.svenwesterlaken.gemeentebreda.presentation.activities.NewReportActivity;
 
 
-public class  NewReportDescriptionFragment extends Fragment{
-    DescriptionChangedListener mListener;
+public class  NewReportDescriptionFragment extends Fragment implements View.OnClickListener{
+    private DescriptionChangedListener mListener;
+    private EditText descriptionView;
+    private Button confirmBTN, skipBTN;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -31,23 +33,31 @@ public class  NewReportDescriptionFragment extends Fragment{
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         final View rootView = inflater.inflate(R.layout.fragment_new_report_description, container, false);
 
-        final EditText descriptionView = (EditText) rootView.findViewById(R.id.description_ET_description);
-        Button descriptionBtn = (Button) rootView.findViewById(R.id.description_BTN_submit);
+        descriptionView = (EditText) rootView.findViewById(R.id.description_ET_description);
+        confirmBTN = (Button) rootView.findViewById(R.id.description_BTN_submit);
+        skipBTN = (Button) rootView.findViewById(R.id.description_BTN_skip);
 
-
-
-        descriptionBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String description = descriptionView.getText().toString();
-                mListener.setDescription(description);
-                Toast.makeText(getActivity().getApplicationContext(), "Beschrijving is toegevoegd", Toast.LENGTH_SHORT).show();
-            }
-        });
-
-
+        confirmBTN.setOnClickListener(this);
+        skipBTN.setOnClickListener(this);
 
         return rootView;
+    }
+
+    @Override
+    public void onClick(View v) {
+
+        NewReportActivity activity = (NewReportActivity) getActivity();
+
+        if(v.getId() == R.id.description_BTN_submit) {
+            String description = descriptionView.getText().toString();
+            mListener.setDescription(description);
+        }
+
+        if(activity.swipingIsEnabled()) {
+            Toast.makeText(getActivity().getApplicationContext(), R.string.new_report_enable_swiping, Toast.LENGTH_SHORT).show();
+            activity.scrollToNext();
+            activity.enableSwiping();
+        }
     }
 
     @Override

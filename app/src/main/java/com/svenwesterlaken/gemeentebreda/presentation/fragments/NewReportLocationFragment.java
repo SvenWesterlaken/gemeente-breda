@@ -10,12 +10,15 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.provider.MediaStore;
 import android.support.constraint.ConstraintLayout;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.os.ResultReceiver;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.TextView;
 
 import com.drew.imaging.ImageMetadataReader;
@@ -30,6 +33,7 @@ import com.svenwesterlaken.gemeentebreda.domain.Location;
 import com.svenwesterlaken.gemeentebreda.domain.Media;
 import com.svenwesterlaken.gemeentebreda.logic.services.FetchAddressIntentService;
 import com.svenwesterlaken.gemeentebreda.presentation.activities.NewLocationActivity;
+import com.svenwesterlaken.gemeentebreda.presentation.activities.NewReportActivity;
 import com.svenwesterlaken.gemeentebreda.presentation.partials.NotImplementedListener;
 
 import java.io.File;
@@ -42,23 +46,38 @@ import static android.app.Activity.RESULT_OK;
 public class NewReportLocationFragment extends Fragment {
     private LocationChangedListener mListener;
     private AddressResultReceiver mResultReceiver;
+
+    private Location location;
+
+    private ConstraintLayout chooseBTN, metaBTN, currentBTN;
     private Location locationFromMedia;
     private View rootView;
+    private TextView locationTV;
+    private FloatingActionButton confirmFAB;
+    private Animation popupAnimation, popoutAnimation;
 
+    private float alpha;
     private static int NEW_LOCATION_REQUEST = 1;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        popupAnimation = AnimationUtils.loadAnimation(getContext(), R.anim.popup_animation);
+        popoutAnimation = AnimationUtils.loadAnimation(getContext(), R.anim.popout_animation);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.fragment_new_report_location, container, false);
 
-        ConstraintLayout chooseBTN = (ConstraintLayout) rootView.findViewById(R.id.location_BTN_choose);
-        ConstraintLayout metaBTN = (ConstraintLayout) rootView.findViewById(R.id.location_BTN_meta);
-        ConstraintLayout currentBTN = (ConstraintLayout) rootView.findViewById(R.id.location_BTN_current);
+        alpha = rootView.findViewById(R.id.location_BTN_delete).getAlpha();
+
+        chooseBTN = (ConstraintLayout) rootView.findViewById(R.id.location_BTN_choose);
+        metaBTN = (ConstraintLayout) rootView.findViewById(R.id.location_BTN_meta);
+        currentBTN = (ConstraintLayout) rootView.findViewById(R.id.location_BTN_current);
+
+        locationTV = (TextView) rootView.findViewById(R.id.location_TV_location);
 
         metaBTN.setOnClickListener(new NotImplementedListener(getActivity().getApplicationContext()));
         currentBTN.setOnClickListener(new NotImplementedListener(getActivity().getApplicationContext()));
@@ -70,6 +89,17 @@ public class NewReportLocationFragment extends Fragment {
             }
 
 
+        });
+
+        confirmFAB = (FloatingActionButton) rootView.findViewById(R.id.location_FAB_confirm);
+        confirmFAB.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mListener.setLocation(location);
+                confirmFAB.setAnimation(popoutAnimation);
+                confirmFAB.setVisibility(View.INVISIBLE);
+                ((NewReportActivity) getActivity()).scrollToNext();
+            }
         });
 
         return rootView;
@@ -158,23 +188,6 @@ public class NewReportLocationFragment extends Fragment {
 
     }
 
-    private void printMetadata(Uri imageUri) {
-
-        try {
-            File file = new File(getRealPathFromURI(getContext(), imageUri));
-            Metadata metadata = ImageMetadataReader.readMetadata(file);
-
-            for (Directory directory : metadata.getDirectories()) {
-                for (Tag tag : directory.getTags()) {
-                    System.out.println(tag);
-                }
-            }
-
-        } catch (ImageProcessingException | IOException e) {
-            e.printStackTrace();
-        }
-    }
-
     public String getRealPathFromURI(Context context, Uri contentUri) {
         Cursor cursor = null;
         try {
@@ -224,10 +237,11 @@ public class NewReportLocationFragment extends Fragment {
         if(requestCode == NEW_LOCATION_REQUEST && resultCode == RESULT_OK) {
             Bundle extras = data.getExtras();
             if (extras != null) {
-                Location location = (Location) extras.getSerializable("location");
+                Location location = extras.getParcelable("location");
 
                 if (location != null) {
-                    mListener.setLocation(location);
+                    setAddress(location);
+                    enableConfirmButton();
                 }
 
             }
@@ -235,6 +249,17 @@ public class NewReportLocationFragment extends Fragment {
 
         super.onActivityResult(requestCode, resultCode, data);
     }
+
+    private void enableConfirmButton() {
+        confirmFAB.setVisibility(View.VISIBLE);
+        confirmFAB.startAnimation(popupAnimation);
+    }
+
+    private void setAddress(Location l) {
+        this.location = l;
+        locationTV.setText(l.getStreet() + " " + l.getHouseNumber() + ", " + l.getCity());
+    }
+
 
     @Override
     public void onAttach(Context context) {
@@ -262,8 +287,24 @@ public class NewReportLocationFragment extends Fragment {
         Double lat = locationFromMedia.getLatitude();
         Double lon = locationFromMedia.getLongitude();
 
+        if (lat != null) {
+            if (lat == 0.0) {
+                lat = null;
+                lon = null;
+            }
+        }
 
-        text.setText(lat + ", " + lon);
+
+        if (lat == null) {
+            text.setText(R.string.location_error);
+            metaBTN.setEnabled(false);
+            metaBTN.setAlpha(alpha);
+
+        } else {
+
+            text.setText(lat + ", " + lon);
+        }
+
     }
 
 

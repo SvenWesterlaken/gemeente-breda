@@ -2,6 +2,8 @@ package com.svenwesterlaken.gemeentebreda.presentation.fragments;
 
 
 import android.content.Intent;
+import android.content.res.Resources;
+import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 
@@ -23,6 +25,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 
+import com.google.android.gms.maps.model.MapStyleOptions;
 import com.svenwesterlaken.gemeentebreda.R;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -56,8 +59,6 @@ public class ReportMapFragment extends Fragment {
     private GoogleMap map;
     private Marker placedMarker;
 
-    public ReportMapFragment(){}
-
     @Override
     public View onCreateView(LayoutInflater layoutInflater, ViewGroup viewGroup, Bundle bundle) {
         View v = layoutInflater.inflate(R.layout.fragment_reportmap, viewGroup, false);
@@ -76,6 +77,23 @@ public class ReportMapFragment extends Fragment {
             @Override
             public void onMapReady(GoogleMap mMap) {
                 map = mMap;
+
+                try {
+                    boolean success;
+
+                    if (PreferenceManager.getDefaultSharedPreferences(getActivity()).getString(SettingsFragment.KEY_PREF_THEME, "").equals("light")) {
+                        success = map.setMapStyle(MapStyleOptions.loadRawResourceStyle(getActivity(), R.raw.map_light));
+                    } else {
+                        success = map.setMapStyle(MapStyleOptions.loadRawResourceStyle(getActivity(), R.raw.map_dark));
+                    }
+
+
+                    if (!success) {
+                        Log.e("GOOGLE MAP", "Style parsing failed.");
+                    }
+                } catch (Resources.NotFoundException e) {
+                    Log.e("GOOGLE MAP", "Can't find style. Error: ", e);
+                }
 
                 // Enable MyLocation Layer of Google Map
                 enableMyLocation();

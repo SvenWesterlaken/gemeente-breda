@@ -2,6 +2,8 @@ package com.svenwesterlaken.gemeentebreda.domain;
 
 import android.graphics.Bitmap;
 import android.net.Uri;
+import android.os.Parcel;
+import android.os.Parcelable;
 
 import java.io.Serializable;
 
@@ -9,29 +11,31 @@ import java.io.Serializable;
  * Created by lukab on 9-5-2017.
  */
 
-public class Media implements Serializable {
+public class Media implements Parcelable {
 
+    private int id;
     private String filePath;
-    private Bitmap image;
-    private Uri uri;
     private int type;
+    private Uri uri;
 
     private static int IMAGE = 1;
     private static int VIDEO = 2;
 
-    public Media(String filePath, Bitmap image) {
-        this.filePath = filePath;
-        this.image = image;
-        this.type = 1;
-    }
-
-    public Media(String filePath, Uri uri) {
+    public Media(String filePath, Uri uri, int type) {
         this.filePath = filePath;
         this.uri = uri;
-        this.type = 2;
+        this.type = type;
     }
 
     public Media() {}
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
 
     public String getFilePath() {
         return filePath;
@@ -41,12 +45,12 @@ public class Media implements Serializable {
         this.filePath = filePath;
     }
 
-    public Bitmap getImage() {
-        return image;
+    public int getType() {
+        return type;
     }
 
-    public void setImage(Bitmap image) {
-        this.image = image;
+    public void setType(int type) {
+        this.type = type;
     }
 
     public Uri getUri() {
@@ -57,11 +61,35 @@ public class Media implements Serializable {
         this.uri = uri;
     }
 
-    public int getType() {
-        return type;
+    @Override
+    public int describeContents() {
+        return 0;
     }
 
-    public void setType(int type) {
-        this.type = type;
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(this.id);
+        dest.writeString(this.filePath);
+        dest.writeInt(this.type);
+        dest.writeParcelable(this.uri, flags);
     }
+
+    protected Media(Parcel in) {
+        this.id = in.readInt();
+        this.filePath = in.readString();
+        this.type = in.readInt();
+        this.uri = in.readParcelable(Uri.class.getClassLoader());
+    }
+
+    public static final Parcelable.Creator<Media> CREATOR = new Parcelable.Creator<Media>() {
+        @Override
+        public Media createFromParcel(Parcel source) {
+            return new Media(source);
+        }
+
+        @Override
+        public Media[] newArray(int size) {
+            return new Media[size];
+        }
+    };
 }

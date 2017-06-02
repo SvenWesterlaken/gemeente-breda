@@ -17,6 +17,8 @@ import com.svenwesterlaken.gemeentebreda.R;
 import com.svenwesterlaken.gemeentebreda.domain.Report;
 import com.svenwesterlaken.gemeentebreda.presentation.activities.DetailedReportActivity;
 
+import org.parceler.Parcels;
+
 import java.util.List;
 
 import static com.svenwesterlaken.gemeentebreda.R.id.constraintLayout;
@@ -47,13 +49,7 @@ public class ReportAdapter extends RecyclerView.Adapter<ReportAdapter.ReportView
     public ReportViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.row_report, parent, false);
 
-
-
-
         return new ReportViewHolder(itemView, reports);
-
-
-
     }
 
     @Override

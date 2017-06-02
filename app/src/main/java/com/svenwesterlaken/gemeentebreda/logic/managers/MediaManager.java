@@ -4,12 +4,8 @@ import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.media.ThumbnailUtils;
 import android.net.Uri;
 import android.os.Environment;
-import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 
@@ -19,8 +15,6 @@ import com.svenwesterlaken.gemeentebreda.domain.Media;
 import com.svenwesterlaken.gemeentebreda.presentation.fragments.NewReportMediaFragment;
 
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.InputStream;
 
 /**
  * Created by Sven Westerlaken on 1-6-2017.
@@ -28,16 +22,11 @@ import java.io.InputStream;
 
 public class MediaManager {
     private Fragment fragment;
-    private NewReportMediaFragment.MediaChangedListener mListener;
     private Activity activity;
 
-    static final int REQUEST_LOAD_MEDIA = 2;
-
-
-    public MediaManager(Fragment f, NewReportMediaFragment.MediaChangedListener mListener, Activity activity) {
+    public MediaManager(Fragment f, Activity activity) {
         this.activity = activity;
         this.fragment = f;
-        this.mListener = mListener;
     }
 
     public File getSaveDir() {
@@ -52,17 +41,12 @@ public class MediaManager {
         return saveDir;
     }
 
-    public File getFile(String path) {
-        return new File(path);
-    }
-
     public MaterialCamera createCamera() {
 
         return new MaterialCamera(fragment)
                 .saveDir(getSaveDir())
                 .showPortraitWarning(true)
                 .allowRetry(true)
-                .defaultToFrontFacing(true)
                 .allowRetry(true)
                 .autoSubmit(false)
                 .labelRetry(R.string.camera_retry);
@@ -88,15 +72,21 @@ public class MediaManager {
         fragment.startActivityForResult(intent, requestStatus);
     }
 
-    public void addMedia(Uri uri, String path){
-        Media media = new Media(path, uri);
-        media.setImage(ThumbnailUtils.createVideoThumbnail(path, MediaStore.Video.Thumbnails.FULL_SCREEN_KIND));
-        mListener.setMedia(media);
+    public boolean isVideo(Intent data) {
+        boolean result = false;
+        String mime = fragment.getContext().getContentResolver().getType(data.getData());
+        if (mime != null) { if (mime.contains("video")) { result = true; } }
+        return result;
     }
 
-    public void addMedia(String path) {
-        Media media = new Media();
-        media.setFilePath(path);
-        mListener.setMedia(media);
+    public boolean isImage(Intent data) {
+        boolean result = false;
+        String mime = fragment.getContext().getContentResolver().getType(data.getData());
+        if (mime != null) { if (mime.contains("image")) { result = true; } }
+        return result;
+    }
+
+    public Uri processMedia(Intent data) {
+        return data.getData();
     }
 }

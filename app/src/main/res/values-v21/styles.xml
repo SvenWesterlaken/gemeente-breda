@@ -8,6 +8,7 @@
         <item name="colorDivider">@color/colorPrimaryDivider</item>
         <item name="colorIcons">@color/colorPrimaryIcon</item>
         <item name="colorPrimaryLight">@color/colorPrimaryLight</item>
+        <item name="colorText">@color/colorPrimaryText</item>
         <item name="actionBarTheme">@style/ThemeOverlay.AppCompat.Dark.ActionBar</item>
         <item name="android:colorBackground">@color/colorPrimaryBackground</item>
         <item name="android:windowBackground">@color/colorPrimaryBackground</item>
@@ -31,6 +32,7 @@
     <style name="AppTheme.Light" parent="Theme.AppCompat.Light">
         <item name="colorPrimary">@color/colorLightPrimary</item>
         <item name="colorPrimaryDark">@color/colorLightPrimaryDark</item>
+        <item name="colorText">@color/colorLightPrimaryText</item>
         <item name="colorAccent">@color/colorLightAccent</item>
         <item name="colorDivider">@color/colorLightPrimaryDivider</item>
         <item name="colorIcons">@color/colorLightPrimaryIcon</item>

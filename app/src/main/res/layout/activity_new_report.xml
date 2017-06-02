@@ -36,7 +36,7 @@
         android:layout_marginTop="64dp"
         android:id="@+id/viewpager_content">
 
-        <android.support.v4.view.ViewPager
+        <com.svenwesterlaken.gemeentebreda.presentation.partials.ChangableViewPager
             android:id="@+id/container"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -50,6 +50,12 @@
             app:ci_margin="3dp"
             app:ci_drawable="@drawable/indicator_selected"
             app:ci_drawable_unselected="@drawable/indicator_nonselected" />
+
+        <ImageView
+            android:id="@+id/contrast_shadow"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            app:srcCompat="@drawable/contrast_gradient" />
 
     </FrameLayout>
 

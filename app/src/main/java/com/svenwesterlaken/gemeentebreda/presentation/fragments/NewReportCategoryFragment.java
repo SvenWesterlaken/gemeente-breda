@@ -19,6 +19,7 @@ import com.svenwesterlaken.gemeentebreda.data.database.DatabaseHandler;
 import com.svenwesterlaken.gemeentebreda.domain.Category;
 import com.svenwesterlaken.gemeentebreda.domain.Media;
 import com.svenwesterlaken.gemeentebreda.logic.adapters.NewCategoryAdapter;
+import com.svenwesterlaken.gemeentebreda.presentation.activities.NewReportActivity;
 
 import java.util.ArrayList;
 
@@ -52,8 +53,7 @@ public class NewReportCategoryFragment extends Fragment {
                 categorySelected.getCategoryName();
                 mListener.setCategory(categorySelected);
                 Toast.makeText(getActivity().getApplicationContext(), "Categorie is toegevoegd", Toast.LENGTH_SHORT).show();
-
-
+                ((NewReportActivity) getActivity()).scrollToNext();
             }
 
         });
