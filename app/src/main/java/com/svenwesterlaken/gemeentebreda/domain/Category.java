@@ -10,6 +10,7 @@ public class Category implements Serializable {
     int categoryID;
     String categoryName, categorySummary;
 
+
     public Category(int categoryID, String categoryName, String categorySummary) {
         this.categoryID = categoryID;
         this.categoryName = categoryName;
