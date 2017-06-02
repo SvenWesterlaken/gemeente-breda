@@ -13,6 +13,7 @@ public class Category implements Parcelable {
     int categoryID;
     String categoryName, categorySummary;
 
+
     public Category(int categoryID, String categoryName, String categorySummary) {
         this.categoryID = categoryID;
         this.categoryName = categoryName;

@@ -56,7 +56,7 @@ public class ReportAdapter extends RecyclerView.Adapter<ReportAdapter.ReportView
     public void onBindViewHolder(final ReportViewHolder contactViewHolder, final int i) {
          report = reports.get(i);
         contactViewHolder.title.setText(report.getCategory().getCategoryName());
-        contactViewHolder.address.setText(report.getLocation().getStreet() + " " + report.getLocation().getHouseNumber());
+        contactViewHolder.address.setText(report.getLocation().getStreet() );
         contactViewHolder.description.setText(report.getDescription());
 
 

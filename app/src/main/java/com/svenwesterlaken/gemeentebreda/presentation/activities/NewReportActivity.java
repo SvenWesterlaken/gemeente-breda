@@ -246,4 +246,6 @@ public class NewReportActivity extends BaseActivity implements ViewPager.OnPageC
     public interface SummaryFragmentListener {
         void fragmentBecameVisible();
     }
+
+
 }

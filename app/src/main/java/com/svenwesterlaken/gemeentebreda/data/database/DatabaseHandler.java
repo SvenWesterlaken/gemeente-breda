@@ -131,7 +131,7 @@ public class DatabaseHandler extends SQLiteAssetHelper {
     public void addCategory(Category category){
 
         SQLiteDatabase db = this.getWritableDatabase();
-        String query = "INSERT INTO category(name, summary) VALUES ('" + category.getCategoryName() +
+        String query = "INSERT INTO category(categoryId, categoryName, summary) VALUES (" + category.getCategoryID() + ", '" + category.getCategoryName() +
                 "' , '" + category.getCategorySummary() +  "');";
         db.execSQL(query);
         db.close();
@@ -359,6 +359,14 @@ public class DatabaseHandler extends SQLiteAssetHelper {
         cursor.close();
         return reports;
 
+    }
+
+    public void deleteCategory(){
+        SQLiteDatabase db = this.getWritableDatabase();
+        String query = "DELETE FROM category";
+
+        db.execSQL(query);
+        db.close();
     }
 
     public void deleteFavourite(Report report){
