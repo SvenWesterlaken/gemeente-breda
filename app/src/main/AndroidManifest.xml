@@ -68,6 +68,7 @@
             android:name="com.afollestad.materialcamera.CaptureActivity2"
             android:theme="@style/MaterialCamera.CaptureActivity" />
         <activity android:name=".presentation.activities.MyReportActivity"/>
+        <activity android:name=".presentation.activities.ImageActivity"/>
     </application>
 
 </manifest>

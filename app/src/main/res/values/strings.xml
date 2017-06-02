@@ -94,4 +94,8 @@
 
     <string name="detailed_comments_title">Opmerkingen</string>
 
+    <string name="camera_stillshot_confirm">GEBRUIK FOTO</string>
+    <string name="camera_video_confirm">GEBRUIK VIDEO</string>
+    <string name="camera_retry">OPNIEUW</string>
+
 </resources>
