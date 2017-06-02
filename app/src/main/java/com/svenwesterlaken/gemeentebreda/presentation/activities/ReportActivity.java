@@ -76,11 +76,8 @@ public class ReportActivity extends MenuActivity {
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
         mSectionsPagerAdapter = new ReportPagerAdapter(getSupportFragmentManager(), 2, getApplicationContext(), mapFragment, listFragment);
-        handler = new DatabaseHandler(getApplicationContext(),null, null, 1);
+        handler = new DatabaseHandler(getApplicationContext());
 
-        if(handler.getAllCategories().size() == 0) {
-            handler.testData();
-        }
 
         // Set up the ViewPager with the sections adapter.
         mViewPager = (ViewPager) findViewById(R.id.container);

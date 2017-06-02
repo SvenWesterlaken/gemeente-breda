@@ -26,7 +26,7 @@ public class NewLocationActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_location);
 
-        final DatabaseHandler handler = new DatabaseHandler(getApplicationContext(), null, null, 1);
+        final DatabaseHandler handler = new DatabaseHandler(getApplicationContext());
 
         final FloatingSearchView mSearchView = (FloatingSearchView) findViewById(R.id.newLocation_FSV_searchbar);
         final FloatingActionButton confirmBTN = (FloatingActionButton) findViewById(R.id.newLocation_FAB_confirm);
