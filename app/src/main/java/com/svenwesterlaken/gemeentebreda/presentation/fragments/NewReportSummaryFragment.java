@@ -130,7 +130,7 @@ public class NewReportSummaryFragment extends Fragment implements NewReportActiv
         }
 
         if (location != null) {
-            locationTV.setText(location.getStreet() + " " + location.getHouseNumber() + ", " + location.getCity());
+            locationTV.setText(location.getStreet() + " " );
         }
     }
 }
