@@ -7,6 +7,11 @@
     android:layout_height="match_parent"
     android:fitsSystemWindows="true">
 
+    <com.google.android.gms.maps.MapView
+        android:id="@+id/newLocation_MV_map"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
     <com.arlib.floatingsearchview.FloatingSearchView
         android:id="@+id/newLocation_FSV_searchbar"
         android:layout_width="match_parent"

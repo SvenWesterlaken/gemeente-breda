@@ -53,7 +53,7 @@ public class  NewReportDescriptionFragment extends Fragment implements View.OnCl
             mListener.setDescription(description);
         }
 
-        if(activity.swipingIsEnabled()) {
+        if(!activity.swipingIsEnabled()) {
             Toast.makeText(getActivity().getApplicationContext(), R.string.new_report_enable_swiping, Toast.LENGTH_SHORT).show();
             activity.scrollToNext();
             activity.enableSwiping();

@@ -76,9 +76,16 @@ public class NewReportSummaryFragment extends Fragment implements NewReportActiv
                 Report report = ((NewReportActivity)getActivity()).getNewReport();
 
                 User user = handler.getUser(1);
-                Location location = report.getLocation();
 
-                Report reportNew = new Report(handler.getAllReports().size()+1, user, report.getLocation(), report.getDescription(), report.getCategory(), report.getLocationID());
+                if (user == null) {
+                    user = new User(1, name, email, phone);
+                    handler.addUser(user);
+                }
+
+                Location location = report.getLocation();
+                Category category = report.getCategory();
+
+                Report reportNew = new Report(handler.getAllReports().size()+1, user, location, report.getDescription(), category, report.getLocationID());
 
                 handler.addLocation(location);
                 handler.addReport(reportNew);

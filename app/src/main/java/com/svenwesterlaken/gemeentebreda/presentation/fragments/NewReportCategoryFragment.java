@@ -37,11 +37,11 @@ public class NewReportCategoryFragment extends Fragment {
         final View rootView = inflater.inflate(R.layout.fragment_new_report_category, container, false);
         final ListView reportList = (ListView) rootView.findViewById(R.id.category_LV_categories);
 
-        final DatabaseHandler handler = new DatabaseHandler(this.getContext());
+        final DatabaseHandler handler = new DatabaseHandler(getContext());
 
         final ArrayList<Category> categories = handler.getAllCategories();
 
-        final NewCategoryAdapter categoryAdapter = new NewCategoryAdapter(this.getContext(), categories);
+        final NewCategoryAdapter categoryAdapter = new NewCategoryAdapter(getContext(), categories);
         reportList.setAdapter(categoryAdapter);
 
         categoryAdapter.notifyDataSetChanged();
@@ -50,7 +50,6 @@ public class NewReportCategoryFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Category categorySelected = categories.get(position);
-                categorySelected.getCategoryName();
                 mListener.setCategory(categorySelected);
                 Toast.makeText(getActivity().getApplicationContext(), "Categorie is toegevoegd", Toast.LENGTH_SHORT).show();
                 ((NewReportActivity) getActivity()).scrollToNext();

@@ -1,16 +1,21 @@
 package com.svenwesterlaken.gemeentebreda.presentation.fragments;
 
+import android.Manifest;
 import android.app.Activity;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.provider.MediaStore;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.os.ResultReceiver;
 import android.util.Log;
@@ -28,7 +33,11 @@ import com.drew.metadata.Directory;
 import com.drew.metadata.Metadata;
 import com.drew.metadata.Tag;
 import com.drew.metadata.exif.GpsDirectory;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.LocationServices;
 import com.svenwesterlaken.gemeentebreda.R;
+import com.svenwesterlaken.gemeentebreda.data.database.DatabaseHandler;
 import com.svenwesterlaken.gemeentebreda.domain.Location;
 import com.svenwesterlaken.gemeentebreda.domain.Media;
 import com.svenwesterlaken.gemeentebreda.logic.services.FetchAddressIntentService;
@@ -39,15 +48,21 @@ import com.svenwesterlaken.gemeentebreda.presentation.partials.NotImplementedLis
 import java.io.File;
 import java.io.IOException;
 import java.util.Collection;
+import java.util.Random;
 
 import static android.app.Activity.RESULT_OK;
 
 
-public class NewReportLocationFragment extends Fragment {
+public class NewReportLocationFragment extends Fragment implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
     private LocationChangedListener mListener;
     private AddressResultReceiver mResultReceiver;
+    private GoogleApiClient mGoogleApiClient;
 
     private Location location;
+    private android.location.Location mLastLocation;
+
+    private Double lat, lon;
+    private DatabaseHandler handler;
 
     private ConstraintLayout chooseBTN, metaBTN, currentBTN;
     private Location locationFromMedia;
@@ -65,6 +80,14 @@ public class NewReportLocationFragment extends Fragment {
 
         popupAnimation = AnimationUtils.loadAnimation(getContext(), R.anim.popup_animation);
         popoutAnimation = AnimationUtils.loadAnimation(getContext(), R.anim.popout_animation);
+
+        if (mGoogleApiClient == null) {
+            mGoogleApiClient = new GoogleApiClient.Builder(getContext()).addConnectionCallbacks(this).addOnConnectionFailedListener(this).addApi(LocationServices.API).build();
+        }
+
+        handler = new DatabaseHandler(getContext());
+
+
     }
 
     @Override
@@ -79,8 +102,30 @@ public class NewReportLocationFragment extends Fragment {
 
         locationTV = (TextView) rootView.findViewById(R.id.location_TV_location);
 
-        metaBTN.setOnClickListener(new NotImplementedListener(getActivity().getApplicationContext()));
-        currentBTN.setOnClickListener(new NotImplementedListener(getActivity().getApplicationContext()));
+
+        metaBTN.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                location = new Location("Metadata straat", "Breda", new Random().nextInt(6), "4818MD", handler.getAllReports().size()+1, lat, lon);
+                setAddress(location);
+                enableConfirmButton();
+            }
+        });
+        currentBTN.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                    onConnectionSuspended(1);
+                } else {
+                    mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
+                    if (mLastLocation != null) {
+                        location = new Location("Huidige straat", "Breda", new Random().nextInt(6), "4818CS", handler.getAllReports().size()+1, mLastLocation.getLatitude(), mLastLocation.getLongitude());
+                        setAddress(location);
+                        enableConfirmButton();
+                    }
+                }
+            }
+        });
         chooseBTN.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -216,6 +261,31 @@ public class NewReportLocationFragment extends Fragment {
         getActivity().startService(intent);
     }
 
+    @Override
+    public void onConnected(@Nullable Bundle bundle) {
+        if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            onConnectionSuspended(1);
+        } else {
+            mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
+            if (mLastLocation != null) {
+                TextView text = (TextView) rootView.findViewById(R.id.location_TV_currentMessage);
+                text.setText(String.valueOf(mLastLocation.getLatitude()) + ", " + String.valueOf(mLastLocation.getLongitude()));
+            }
+        }
+    }
+
+    @Override
+    public void onConnectionSuspended(int i) {
+        currentBTN.setEnabled(false);
+        currentBTN.setAlpha(alpha);
+    }
+
+    @Override
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+        currentBTN.setEnabled(false);
+        currentBTN.setAlpha(alpha);
+    }
+
     private class AddressResultReceiver extends ResultReceiver {
         public AddressResultReceiver(Handler handler) {
             super(handler);
@@ -284,8 +354,8 @@ public class NewReportLocationFragment extends Fragment {
     public void setImageLocationTag(Media m) {
         TextView text = (TextView) rootView.findViewById(R.id.location_TV_metaMessage);
         createLocationFromMedia(m.getUri());
-        Double lat = locationFromMedia.getLatitude();
-        Double lon = locationFromMedia.getLongitude();
+        lat = locationFromMedia.getLatitude();
+        lon = locationFromMedia.getLongitude();
 
         if (lat != null) {
             if (lat == 0.0) {
@@ -306,6 +376,27 @@ public class NewReportLocationFragment extends Fragment {
         }
 
     }
+
+    @Override
+    public void onStart() {
+        mGoogleApiClient.connect();
+        super.onStart();
+    }
+
+    @Override
+    public void onStop() {
+        mGoogleApiClient.disconnect();
+        super.onStop();
+    }
+
+    @Override
+    public void onResume() {
+        if(location != null) {
+            setAddress(location);
+        }
+        super.onResume();
+    }
+
 
 
 }
