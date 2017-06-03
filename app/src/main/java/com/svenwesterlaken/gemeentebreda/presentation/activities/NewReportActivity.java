@@ -25,6 +25,7 @@ import com.svenwesterlaken.gemeentebreda.presentation.fragments.NewReportCategor
 import com.svenwesterlaken.gemeentebreda.presentation.fragments.NewReportDescriptionFragment;
 import com.svenwesterlaken.gemeentebreda.presentation.fragments.NewReportLocationFragment;
 import com.svenwesterlaken.gemeentebreda.presentation.fragments.NewReportMediaFragment;
+import com.svenwesterlaken.gemeentebreda.presentation.partials.ChangableViewPager;
 
 import me.relex.circleindicator.CircleIndicator;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
@@ -32,7 +33,7 @@ import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 public class NewReportActivity extends BaseActivity implements ViewPager.OnPageChangeListener, NewReportDescriptionFragment.DescriptionChangedListener, NewReportMediaFragment.MediaChangedListener, NewReportLocationFragment.LocationChangedListener, NewReportCategoryFragment.CategoryChangedListener{
 
     private NewReportPagerAdapter mSectionsPagerAdapter;
-    private ViewPager mViewPager;
+    private ChangableViewPager mViewPager;
     private Report newReport;
     protected View view;
 
@@ -49,11 +50,11 @@ public class NewReportActivity extends BaseActivity implements ViewPager.OnPageC
 
         Bundle bundle = new Bundle();
         newReport = new Report();
-        bundle.putSerializable("report", newReport);
+        bundle.putParcelable("report", newReport);
 
         mSectionsPagerAdapter = new NewReportPagerAdapter(getSupportFragmentManager(), bundle);
 
-        mViewPager = (ViewPager) findViewById(R.id.container);
+        mViewPager = (ChangableViewPager) findViewById(R.id.container);
         mViewPager.addOnPageChangeListener(this);
         CircleIndicator page_indicator = (CircleIndicator) findViewById(R.id.pageIndicator);
         mViewPager.setAdapter(mSectionsPagerAdapter);
@@ -64,6 +65,18 @@ public class NewReportActivity extends BaseActivity implements ViewPager.OnPageC
 
     public Report getNewReport() {
         return this.newReport;
+    }
+
+    public void setCurrentItem (int item) {
+        mViewPager.setCurrentItem(item, true);
+    }
+
+    public void scrollToNext() {mViewPager.setCurrentItem(mViewPager.getCurrentItem()+1, true);}
+
+    public void enableSwiping() { mViewPager.enableSwiping(); }
+
+    public boolean swipingIsEnabled() {
+        return mViewPager.isSwipeable();
     }
 
     public void requestPermissions() {
@@ -213,9 +226,7 @@ public class NewReportActivity extends BaseActivity implements ViewPager.OnPageC
     }
 
     @Override
-    public void onPageScrollStateChanged(int state) {
-
-    }
+    public void onPageScrollStateChanged(int state) {}
 
     @Override
     public void setLocation(Location t) {

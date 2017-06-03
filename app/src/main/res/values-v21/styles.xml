@@ -7,8 +7,8 @@
         <item name="colorAccent">@color/colorAccent</item>
         <item name="colorDivider">@color/colorPrimaryDivider</item>
         <item name="colorIcons">@color/colorPrimaryIcon</item>
-        <item name="colorText">@color/colorPrimaryText</item>
         <item name="colorPrimaryLight">@color/colorPrimaryLight</item>
+        <item name="colorText">@color/colorPrimaryText</item>
         <item name="actionBarTheme">@style/ThemeOverlay.AppCompat.Dark.ActionBar</item>
         <item name="android:colorBackground">@color/colorPrimaryBackground</item>
         <item name="android:windowBackground">@color/colorPrimaryBackground</item>
@@ -25,15 +25,16 @@
         <item name="disabledAlpha">0.38</item>
         <item name="android:windowTitleStyle">@style/ToolBarTitle</item>
         <item name="android:backgroundDimAmount">0.9</item>
+        <item name="android:windowContentTransitions">true</item>
         <item name="android:windowTranslucentStatus">true</item>
     </style>
 
     <style name="AppTheme.Light" parent="Theme.AppCompat.Light">
         <item name="colorPrimary">@color/colorLightPrimary</item>
         <item name="colorPrimaryDark">@color/colorLightPrimaryDark</item>
+        <item name="colorText">@color/colorLightPrimaryText</item>
         <item name="colorAccent">@color/colorLightAccent</item>
         <item name="colorDivider">@color/colorLightPrimaryDivider</item>
-        <item name="colorText">@color/colorLightPrimaryText</item>
         <item name="colorIcons">@color/colorLightPrimaryIcon</item>
         <item name="colorPrimaryLight">@color/colorLightPrimaryLight</item>
         <item name="actionBarTheme">@style/ThemeOverlay.AppCompat.Light</item>
@@ -51,6 +52,7 @@
         <item name="android:textAppearanceSmall">@style/CustomtextAppearanceSmall</item>
         <item name="android:windowTitleStyle">@style/ToolBarTitle</item>
         <item name="android:backgroundDimAmount">0.9</item>
+        <item name="android:windowContentTransitions">true</item>
     </style>
 
     <style name="AppTheme.Login" parent="Theme.AppCompat">
@@ -73,6 +75,7 @@
         <item name="windowNoTitle">true</item>
         <item name="android:windowTitleStyle">@style/ToolBarTitle</item>
         <item name="android:backgroundDimAmount">0.9</item>
+        <item name="android:windowContentTransitions">true</item>
         <item name="android:windowTranslucentStatus">true</item>
     </style>
 </resources>

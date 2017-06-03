@@ -1,6 +1,9 @@
 package com.svenwesterlaken.gemeentebreda.domain;
 
 import android.icu.util.ULocale;
+import android.os.Parcelable;
+
+import org.parceler.Parcel;
 
 import java.io.Serializable;
 
@@ -8,7 +11,7 @@ import java.io.Serializable;
  * Created by lukab on 9-5-2017.
  */
 
-public class Report implements Serializable {
+public class Report implements Parcelable {
 
     int reportID, locationID, categoryID, userID;
     User user;
@@ -110,4 +113,45 @@ public class Report implements Serializable {
         this.category = category;
     }
 
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(android.os.Parcel dest, int flags) {
+        dest.writeInt(this.reportID);
+        dest.writeInt(this.locationID);
+        dest.writeInt(this.categoryID);
+        dest.writeInt(this.userID);
+        dest.writeParcelable(this.user, flags);
+        dest.writeParcelable(this.location, flags);
+        dest.writeString(this.description);
+        dest.writeParcelable(this.media, flags);
+        dest.writeParcelable(this.category, flags);
+    }
+
+    protected Report(android.os.Parcel in) {
+        this.reportID = in.readInt();
+        this.locationID = in.readInt();
+        this.categoryID = in.readInt();
+        this.userID = in.readInt();
+        this.user = in.readParcelable(User.class.getClassLoader());
+        this.location = in.readParcelable(Location.class.getClassLoader());
+        this.description = in.readString();
+        this.media = in.readParcelable(Media.class.getClassLoader());
+        this.category = in.readParcelable(Category.class.getClassLoader());
+    }
+
+    public static final Parcelable.Creator<Report> CREATOR = new Parcelable.Creator<Report>() {
+        @Override
+        public Report createFromParcel(android.os.Parcel source) {
+            return new Report(source);
+        }
+
+        @Override
+        public Report[] newArray(int size) {
+            return new Report[size];
+        }
+    };
 }
