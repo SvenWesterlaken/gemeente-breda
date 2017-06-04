@@ -8,5 +8,7 @@
         android:orderInCategory="100"
         android:icon="@drawable/filter_outline"
         android:title="filter"
-        app:showAsAction="ifRoom" />
+        app:showAsAction="ifRoom"
+
+        />
 </menu>

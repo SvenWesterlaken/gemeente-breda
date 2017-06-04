@@ -94,4 +94,13 @@
 
     <string name="detailed_comments_title">Opmerkingen</string>
 
+    <string-array name="report_filter_array">
+        <item>ID</item>
+        <item>Upvotes</item>
+        <item>Recent</item>
+        <item>ABC</item>
+        <item>XYZ</item>
+        <item>Categorie</item>
+    </string-array>
+
 </resources>

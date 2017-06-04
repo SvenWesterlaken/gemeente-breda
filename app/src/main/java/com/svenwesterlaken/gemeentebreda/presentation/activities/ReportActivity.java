@@ -30,6 +30,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -186,7 +189,44 @@ public class ReportActivity extends MenuActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_report, menu);
-        menu.findItem(R.id.action_filter).setOnMenuItemClickListener(new NotImplementedListener(getApplicationContext()));
+        final Spinner spinner = (Spinner) findViewById(R.id.spinner);
+//        spinner.setVisibility(View.GONE);
+        menu.findItem(R.id.action_filter);
+
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getSupportActionBar().getThemedContext(), R.array.report_filter_array, android.R.layout.simple_spinner_item);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner.setAdapter(adapter);
+
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+//                String filter = parent.getItemAtPosition(position).toString();
+//                String sPopular = getResources().getString(R.string.popular);
+//                String sRecent = getResources().getString(R.string.recent);
+//                String sAdult = getResources().getString(R.string.adult);
+//                String sRating = getResources().getString(R.string.rating);
+//                String sTitle = getResources().getString(R.string.title);
+//
+//                if (filter.equals(sPopular)) {
+//                    fManager.findPopularMovies();
+//                } else if (filter.equals(sRecent)) {
+//                    fManager.findRecentMovies();
+//                } else if (filter.equals(sAdult)) {
+//                    fManager.findAdultMovies();
+//                } else if (filter.equals(sRating)) {
+//                    fManager.findRatedMovies();
+//                } else if (filter.equals(sTitle)) {
+//                    fManager.findMoviesByTitle();
+//                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
         return true;
     }
 

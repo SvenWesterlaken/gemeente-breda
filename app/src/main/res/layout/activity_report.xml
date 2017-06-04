@@ -29,7 +29,17 @@
                 app:itemTextColor="?android:attr/textColorPrimary"
                 android:theme="?attr/actionBarTheme"
                 app:popupTheme="@style/AppTheme.PopupOverlay">
+
+                <Spinner
+                android:id="@+id/spinner"
+                android:title="ActionBar Spinner"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/colorPrimaryLight"
+                    android:pointerIcon= "@drawable/filter_outline"/>
             </android.support.v7.widget.Toolbar>
+
+
 
             <android.support.design.widget.TabLayout
                 android:id="@+id/tabs"
