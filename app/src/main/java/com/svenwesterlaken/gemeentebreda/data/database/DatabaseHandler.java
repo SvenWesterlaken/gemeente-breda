@@ -269,6 +269,7 @@ public class DatabaseHandler extends SQLiteAssetHelper {
         }
 
         cursor.close();
+        db.close();
 
         return category;
     }
@@ -303,6 +304,8 @@ public class DatabaseHandler extends SQLiteAssetHelper {
         }
 
         cursor.close();
+        db.close();
+
         return reports;
 
     }
@@ -332,6 +335,8 @@ public class DatabaseHandler extends SQLiteAssetHelper {
         }
 
         cursor.close();
+        db.close();
+
         return categories;
 
     }
@@ -357,6 +362,8 @@ public class DatabaseHandler extends SQLiteAssetHelper {
         }
 
         cursor.close();
+        db.close();
+
         return reports;
 
     }
@@ -375,6 +382,7 @@ public class DatabaseHandler extends SQLiteAssetHelper {
         String query = "DELETE FROM favourite WHERE reportId  = " + report.getReportID();
 
         db.execSQL(query);
+        db.close();
 
     }
 
@@ -393,6 +401,7 @@ public class DatabaseHandler extends SQLiteAssetHelper {
         }
 
         cursor.close();
+        db.close();
 
         return  report1;
     }
