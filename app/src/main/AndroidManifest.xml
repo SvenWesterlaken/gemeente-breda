@@ -8,6 +8,10 @@
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+
+    <uses-feature android:name="android.hardware.camera" />
 
     <application
         android:allowBackup="true"
@@ -46,6 +50,7 @@
         <activity
             android:name=".presentation.activities.NewReportActivity"
             android:label="@string/title_activity_new_report"
+            android:screenOrientation="portrait"
             android:parentActivityName=".presentation.activities.ReportActivity"
             tools:targetApi="jelly_bean">
             <meta-data
@@ -57,9 +62,19 @@
             android:label="Melding"/>
         <activity android:name=".presentation.activities.ConfirmationActivity"/>
         <activity android:name=".presentation.activities.NewLocationActivity"/>
+        <activity
+            android:name="com.afollestad.materialcamera.CaptureActivity"
+            android:theme="@style/MaterialCamera.CaptureActivity" />
+        <activity
+            android:name="com.afollestad.materialcamera.CaptureActivity2"
+            android:theme="@style/MaterialCamera.CaptureActivity" />
+        <activity android:name=".presentation.activities.MyReportActivity"/>
+        <activity android:name=".presentation.activities.ImageActivity"/>
+        <activity android:name=".presentation.activities.VideoActivity"/>
+
         <service
-            android:enabled="true"
-            android:name="com.svenwesterlaken.gemeentebreda.logic.services.FetchAddressIntentService"/>
+            android:name=".logic.services.FetchAddressIntentService">
+        </service>
     </application>
 
 </manifest>

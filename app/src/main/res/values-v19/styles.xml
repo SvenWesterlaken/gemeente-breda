@@ -7,6 +7,7 @@
         <item name="colorAccent">@color/colorAccent</item>
         <item name="colorDivider">@color/colorPrimaryDivider</item>
         <item name="colorIcons">@color/colorPrimaryIcon</item>
+        <item name="colorText">@color/colorPrimaryText</item>
         <item name="colorPrimaryLight">@color/colorPrimaryLight</item>
         <item name="actionBarTheme">@style/ThemeOverlay.AppCompat.Dark.ActionBar</item>
         <item name="android:colorBackground">@color/colorPrimaryBackground</item>
@@ -32,6 +33,7 @@
         <item name="colorPrimaryDark">@color/colorLightPrimaryDark</item>
         <item name="colorAccent">@color/colorLightAccent</item>
         <item name="colorDivider">@color/colorLightPrimaryDivider</item>
+        <item name="colorText">@color/colorLightPrimaryText</item>
         <item name="colorIcons">@color/colorLightPrimaryIcon</item>
         <item name="colorPrimaryLight">@color/colorLightPrimaryLight</item>
         <item name="actionBarTheme">@style/ThemeOverlay.AppCompat.Light</item>

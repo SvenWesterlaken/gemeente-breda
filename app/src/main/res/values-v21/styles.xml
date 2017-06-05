@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="AppTheme" parent="Theme.AppCompat">
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="colorDivider">@color/colorPrimaryDivider</item>
+        <item name="colorIcons">@color/colorPrimaryIcon</item>
+        <item name="colorPrimaryLight">@color/colorPrimaryLight</item>
+        <item name="colorText">@color/colorPrimaryText</item>
+        <item name="actionBarTheme">@style/ThemeOverlay.AppCompat.Dark.ActionBar</item>
+        <item name="android:colorBackground">@color/colorPrimaryBackground</item>
+        <item name="android:windowBackground">@color/colorPrimaryBackground</item>
+        <item name="android:textColorPrimary">@color/colorPrimaryText</item>
+        <item name="android:textColorPrimaryDisableOnly">@color/colorPrimaryDisabled</item>
+        <item name="android:textColorPrimaryNoDisable">@color/colorPrimaryText</item>
+        <item name="android:textColorSecondary">@color/colorPrimaryTextSecondary</item>
+        <item name="android:textColorSecondaryNoDisable">@color/colorPrimaryTextSecondary</item>
+        <item name="android:textAppearanceMedium">@style/CustomtextAppearanceMedium</item>
+        <item name="android:textAppearanceSmall">@style/CustomtextAppearanceSmall</item>
+        <item name="android:listDivider">@null</item>
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+        <item name="disabledAlpha">0.38</item>
+        <item name="android:windowTitleStyle">@style/ToolBarTitle</item>
+        <item name="android:backgroundDimAmount">0.9</item>
+        <item name="android:windowContentTransitions">true</item>
+        <item name="android:windowTranslucentStatus">true</item>
+    </style>
+
+    <style name="AppTheme.Light" parent="Theme.AppCompat.Light">
+        <item name="colorPrimary">@color/colorLightPrimary</item>
+        <item name="colorPrimaryDark">@color/colorLightPrimaryDark</item>
+        <item name="colorText">@color/colorLightPrimaryText</item>
+        <item name="colorAccent">@color/colorLightAccent</item>
+        <item name="colorDivider">@color/colorLightPrimaryDivider</item>
+        <item name="colorIcons">@color/colorLightPrimaryIcon</item>
+        <item name="colorPrimaryLight">@color/colorLightPrimaryLight</item>
+        <item name="actionBarTheme">@style/ThemeOverlay.AppCompat.Light</item>
+        <item name="android:windowBackground">@color/colorLightPrimaryBackground</item>
+        <item name="android:listDivider">@null</item>
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+        <item name="disabledAlpha">0.5</item>
+        <item name="android:textColorPrimary">@color/colorLightPrimaryText</item>
+        <item name="android:textColorPrimaryDisableOnly">@color/colorLightPrimaryDisabled</item>
+        <item name="android:textColorPrimaryNoDisable">@color/colorLightPrimaryText</item>
+        <item name="android:textColorSecondary">@color/colorLightPrimaryTextSecondary</item>
+        <item name="android:textColorSecondaryNoDisable">@color/colorLightPrimaryTextSecondary</item>
+        <item name="android:textAppearanceMedium">@style/CustomtextAppearanceMedium</item>
+        <item name="android:textAppearanceSmall">@style/CustomtextAppearanceSmall</item>
+        <item name="android:windowTitleStyle">@style/ToolBarTitle</item>
+        <item name="android:backgroundDimAmount">0.9</item>
+        <item name="android:windowContentTransitions">true</item>
+    </style>
+
+    <style name="AppTheme.Login" parent="Theme.AppCompat">
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorPrimaryText</item>
+        <item name="android:windowBackground">@color/colorBackgroundLogin</item>
+        <item name="colorDivider">@color/colorPrimaryDivider</item>
+        <item name="colorIcons">@color/colorPrimaryText</item>
+        <item name="actionBarTheme">@style/ThemeOverlay.AppCompat.Dark.ActionBar</item>
+        <item name="android:textColorPrimary">@color/colorPrimaryText</item>
+        <item name="android:textColorPrimaryDisableOnly">@color/colorPrimaryDisabled</item>
+        <item name="android:textColorPrimaryNoDisable">@color/colorPrimaryText</item>
+        <item name="android:textColorSecondary">@color/colorPrimaryTextSecondary</item>
+        <item name="android:textColorSecondaryNoDisable">@color/colorPrimaryTextSecondary</item>
+        <item name="android:textAppearanceMedium">@style/CustomtextAppearanceMedium</item>
+        <item name="android:textAppearanceSmall">@style/CustomtextAppearanceSmall</item>
+        <item name="android:listDivider">@null</item>
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+        <item name="android:windowTitleStyle">@style/ToolBarTitle</item>
+        <item name="android:backgroundDimAmount">0.9</item>
+        <item name="android:windowContentTransitions">true</item>
+        <item name="android:windowTranslucentStatus">true</item>
+    </style>
+</resources>

@@ -1,36 +1,46 @@
 package com.svenwesterlaken.gemeentebreda.presentation.fragments;
 
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.app.Fragment;
-import android.util.Log;
+import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.svenwesterlaken.gemeentebreda.R;
 import com.svenwesterlaken.gemeentebreda.data.database.DatabaseHandler;
 import com.svenwesterlaken.gemeentebreda.domain.Category;
 import com.svenwesterlaken.gemeentebreda.domain.Location;
+import com.svenwesterlaken.gemeentebreda.domain.Media;
 import com.svenwesterlaken.gemeentebreda.domain.Report;
 import com.svenwesterlaken.gemeentebreda.domain.User;
 import com.svenwesterlaken.gemeentebreda.presentation.activities.ConfirmationActivity;
+import com.svenwesterlaken.gemeentebreda.presentation.activities.ImageActivity;
 import com.svenwesterlaken.gemeentebreda.presentation.activities.NewReportActivity;
-
-import java.util.Random;
+import com.svenwesterlaken.gemeentebreda.presentation.activities.VideoActivity;
 
 public class NewReportSummaryFragment extends Fragment implements NewReportActivity.SummaryFragmentListener {
 
-    Category category;
-    String description;
-    Location location;
+    private Category category;
+    private String description;
+    private Location location;
+    private Media media;
+    private Button sendBTN;
+    private String name, email, phone;
+    private TextView authorName, authorEmail, authorPhone, descriptionTV, categoryTV, locationTV;
+    private ImageView thumbnail;
+
+    private final static int MEDIA_PICTURE = 1;
+    private final static int MEDIA_VIDEO = 2;
 
     private View rootView;
 
@@ -42,63 +52,69 @@ public class NewReportSummaryFragment extends Fragment implements NewReportActiv
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.fragment_new_report_summary, container, false);
-        final Button send = (Button) rootView.findViewById(R.id.summary_BTN_send);
-        final DatabaseHandler handler = new DatabaseHandler(getActivity().getApplicationContext(), null, null, 1);
+        sendBTN = (Button) rootView.findViewById(R.id.summary_BTN_send);
+        final DatabaseHandler handler = new DatabaseHandler(getActivity().getApplicationContext());
 
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
-        final String name = preferences.getString("pref_name", null);
-        final String email = preferences.getString("pref_email", null);
-        final String phone = preferences.getString("pref_phone", null);
+        name = preferences.getString("pref_name", null);
+        email = preferences.getString("pref_email", null);
+        phone = preferences.getString("pref_phone", null);
 
-        final TextView authorName = (TextView) rootView.findViewById(R.id.summary_TV_authorName);
-        final TextView authorEmail = (TextView) rootView.findViewById(R.id.summary_TV_authorEmail);
-        final TextView authorPhone = (TextView) rootView.findViewById(R.id.summary_TV_authorPhone);
+        authorName = (TextView) rootView.findViewById(R.id.summary_TV_authorName);
+        authorEmail = (TextView) rootView.findViewById(R.id.summary_TV_authorEmail);
+        authorPhone = (TextView) rootView.findViewById(R.id.summary_TV_authorPhone);
+        descriptionTV = (TextView) rootView.findViewById(R.id.summary_TV_description);
+        categoryTV = (TextView) rootView.findViewById(R.id.summary_TV_reportTitle);
+        locationTV = (TextView) rootView.findViewById(R.id.summary_TV_address);
+        thumbnail = (ImageView) rootView.findViewById(R.id.summary_IV_image);
 
-        authorName.setText(name);
-        authorEmail.setText(email);
-
-        if(phone != null) {
-            if (phone.equals("Onbekend")) {
-                authorPhone.setVisibility(View.GONE);
-            } else {
-                authorPhone.setText(phone);
-            }
-        } else {
-            authorPhone.setVisibility(View.GONE);
-        }
-
-        send.setOnClickListener(new View.OnClickListener() {
+        sendBTN.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent i = new Intent(getActivity(), ConfirmationActivity.class);
 
                 Report report = ((NewReportActivity)getActivity()).getNewReport();
-                User user = new User(handler.getAllReports().size(), phone, name, email);
 
-                if (report.getLocation() == null ) {
-                    Random r = new Random();
-                    double randomValue1 = 51.619139 + (51.560467 - 51.619139) * r.nextDouble();
-                    double randomValue2 = 4.730599 + (4.815561 - 4.730599) * r.nextDouble();
+                User user = handler.getUser(1);
 
-                    Location temp = new Location("Nietgesette Straat", "Breda", 1, "4818NS", handler.getAllReports().size()+1, randomValue1, randomValue2);
-                    report.setLocation(temp);
-
+                if (user == null) {
+                    user = new User(1, name, email, phone);
+                    handler.addUser(user);
                 }
 
-                if(report.getCategory() == null) {
-                    Category temp = new Category(handler.getAllCategories().size()+1, "Test Categorie", "Tijdelijke categorie");
-                    report.setCategory(temp);
-                }
+                Location location = report.getLocation();
+                Category category = report.getCategory();
 
-                handler.addUser(user);
-                handler.addLocation(report.getLocation());
+                Report reportNew = new Report(handler.getAllReports().size()+1, user, location, report.getDescription(), category, report.getLocationID());
 
-                Report reportNew = new Report(handler.getAllReports().size()+1, user, report.getLocation(), report.getDescription(), report.getCategory(), report.getLocationID());
+                handler.addLocation(location);
                 handler.addReport(reportNew);
+                handler.addReportUser(reportNew, user);
+
                 i.putExtra("REPORT", reportNew);
 
                 getActivity().finish();
                 startActivity(i);
+            }
+        });
+
+        thumbnail.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(media != null) {
+                    if(media.getType() == MEDIA_PICTURE) {
+                        Intent intent = new Intent(getActivity(), ImageActivity.class);
+                        intent.putExtra("filepath", media.getFilePath());
+                        ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(getActivity(), thumbnail, "media_preview");
+                        startActivity(intent, options.toBundle());
+                    } else if (media.getType() == MEDIA_VIDEO) {
+                        Intent intent = new Intent(getActivity(), VideoActivity.class);
+                        intent.putExtra("uri", media.getUri());
+                        startActivity(intent);
+                    }
+                } else {
+                    Toast.makeText(getContext(), "Nog geen media toegevoegd", Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
@@ -113,23 +129,66 @@ public class NewReportSummaryFragment extends Fragment implements NewReportActiv
 
     @Override
     public void fragmentBecameVisible() {
-        Report report = ((NewReportActivity)getActivity()).getNewReport();
+        NewReportActivity activity = ((NewReportActivity)getActivity());
+
+        Report report = activity.getNewReport();
         description = report.getDescription();
         category = report.getCategory();
         location = report.getLocation();
+        media = report.getMedia();
 
+        authorName.setText(name);
+        authorEmail.setText(email);
 
-        final TextView descriptionTV = (TextView) rootView.findViewById(R.id.summary_TV_description);
-        final TextView categoryTV = (TextView) rootView.findViewById(R.id.summary_TV_reportTitle);
-        final TextView locationTV = (TextView) rootView.findViewById(R.id.summary_TV_address);
+        if(phone != null) {
+            if (phone.equals("Onbekend")) {
+                authorPhone.setVisibility(View.GONE);
+            } else {
+                authorPhone.setText(phone);
+            }
+        } else {
+            authorPhone.setVisibility(View.GONE);
+        }
 
-        descriptionTV.setText(description);
+        if (description != null) {
+            if(!description.isEmpty()) {
+                descriptionTV.setText(description);
+            } else {
+                descriptionTV.setText(R.string.summary_missing_description);
+            }
+        } else {
+            descriptionTV.setText(R.string.summary_missing_description);
+        }
+
         if (category != null) {
             categoryTV.setText(category.getCategoryName());
+            categoryTV.setTextColor(descriptionTV.getTextColors().getDefaultColor());
+
+        } else {
+            categoryTV.setText(R.string.summary_missing_category);
+            categoryTV.setTextColor(ContextCompat.getColor(activity, R.color.md_edittext_error));
         }
 
         if (location != null) {
             locationTV.setText(location.getStreet() + " " + location.getHouseNumber() + ", " + location.getCity());
+            locationTV.setTextColor(descriptionTV.getTextColors().getDefaultColor());
+        } else {
+            locationTV.setText(R.string.summary_missing_location);
+            locationTV.setTextColor(ContextCompat.getColor(activity, R.color.md_edittext_error));
+        }
+
+        if(media != null) {
+            if(media.getType() == MEDIA_PICTURE) {
+                Glide.with(getContext()).load(media.getFilePath()).into(thumbnail);
+            } else if (media.getType() == MEDIA_VIDEO) {
+                Glide.with(getContext()).load(media.getUri()).into(thumbnail);
+            }
+        }
+
+        if (media != null && category != null && location != null && !name.equalsIgnoreCase("Onbekend") && !email.equalsIgnoreCase("Onbekend")) {
+            sendBTN.setEnabled(true);
+        } else {
+            sendBTN.setEnabled(false);
         }
     }
 }
