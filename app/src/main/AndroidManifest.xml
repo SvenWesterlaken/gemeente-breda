@@ -71,6 +71,10 @@
         <activity android:name=".presentation.activities.MyReportActivity"/>
         <activity android:name=".presentation.activities.ImageActivity"/>
         <activity android:name=".presentation.activities.VideoActivity"/>
+
+        <service
+            android:name=".logic.services.FetchAddressIntentService">
+        </service>
     </application>
 
 </manifest>

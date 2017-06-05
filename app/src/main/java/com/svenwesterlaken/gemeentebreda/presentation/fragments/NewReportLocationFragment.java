@@ -90,6 +90,7 @@ public class NewReportLocationFragment extends Fragment implements GoogleApiClie
 
         handler = new DatabaseHandler(getContext());
 
+        mResultReceiver = new AddressResultReceiver(new Handler());
 
     }
 
@@ -165,8 +166,7 @@ public class NewReportLocationFragment extends Fragment implements GoogleApiClie
             }
         }
 
-        if (locationFromMedia.getLongitude() != null && locationFromMedia.getLatitude() != null) {
-            //TODO: Geocoder doesn't return any addresses, should use Google API (not actually an option)
+        if (locationFromMedia.getLongitude() != null && locationFromMedia.getLatitude() != null) {``
             startGeoIntentService(locationFromMedia);
             Log.i("SERVICE", "GeoService has started");
         }
@@ -258,7 +258,7 @@ public class NewReportLocationFragment extends Fragment implements GoogleApiClie
 
     protected void startGeoIntentService(Location location) {
         Intent intent = new Intent(getContext(), FetchAddressIntentService.class);
-        intent.putExtra(FetchAddressIntentService.Constants.RECEIVER, mResultReceiver);
+        intent.putExtra("RECEIVER", mResultReceiver);
         intent.putExtra(FetchAddressIntentService.Constants.LATITUDE_DATA_EXTRA, location.getLatitude());
         intent.putExtra(FetchAddressIntentService.Constants.LONGITUDE_DATA_EXTRA, location.getLongitude());
         getActivity().startService(intent);

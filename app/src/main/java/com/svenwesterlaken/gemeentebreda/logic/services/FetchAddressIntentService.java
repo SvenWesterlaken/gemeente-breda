@@ -31,7 +31,7 @@ public class FetchAddressIntentService extends IntentService {
         public static final int FAILURE_RESULT = 1;
         public static final String PACKAGE_NAME =
                 "com.svenwesterlaken.gemeentebreda.logic.services";
-        public static final String RECEIVER = PACKAGE_NAME + ".RECEIVER";
+        //public static final String RECEIVER = PACKAGE_NAME + ".RECEIVER";
         public static final String RESULT_DATA_KEY = PACKAGE_NAME +
                 ".RESULT_DATA_KEY";
         public static final String LATITUDE_DATA_EXTRA = PACKAGE_NAME + ".LATITUDE_DATA_EXTRA";
@@ -45,6 +45,8 @@ public class FetchAddressIntentService extends IntentService {
         geocoder = new Geocoder(this, Locale.getDefault());
 
         Location location = new Location();
+
+        mReceiver = intent.getParcelableExtra("RECEIVER");
 
         double latitude = intent.getDoubleExtra(Constants.LATITUDE_DATA_EXTRA, 0);
         double longitude = intent.getDoubleExtra(Constants.LONGITUDE_DATA_EXTRA, 0);
@@ -64,8 +66,12 @@ public class FetchAddressIntentService extends IntentService {
                 String knownName = addresses.get(0).getFeatureName();
 
                 location.setCity(city);
+                location.setStreet(address);
+                location.setPostalCode(postalCode);
 
-                //deliverResultToReceiver(Constants.SUCCESS_RESULT, city);
+                deliverResultToReceiver(Constants.SUCCESS_RESULT, city);
+                deliverResultToReceiver(Constants.SUCCESS_RESULT, address);
+                deliverResultToReceiver(Constants.SUCCESS_RESULT, postalCode);
             } else {
                 Log.e("ADDRESSES", "No addresses were returned by the geocoder.");
             }
