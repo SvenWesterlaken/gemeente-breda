@@ -119,6 +119,7 @@ public class NewReportLocationFragment extends Fragment implements GoogleApiClie
                     mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
                     if (mLastLocation != null) {
                         location = new Location("Huidige straat", "Breda", new Random().nextInt(6), "4818CS", handler.getAllReports().size()+1, mLastLocation.getLatitude(), mLastLocation.getLongitude());
+
                         setAddress(location);
                         enableConfirmButton();
                     }
@@ -294,8 +295,13 @@ public class NewReportLocationFragment extends Fragment implements GoogleApiClie
 
             // Display the address string
             // or an error message sent from the intent service.
-            String mAddressOutput = resultData.getString(FetchAddressIntentService.Constants.RESULT_DATA_KEY);
-            Log.i("ADDRESS", mAddressOutput);
+            Location mAddressOutput = resultData.getParcelable(FetchAddressIntentService.Constants.RESULT_DATA_KEY);
+            locationFromMedia.setStreet(mAddressOutput.getStreet());
+            locationFromMedia.setPostalCode(mAddressOutput.getPostalCode());
+            locationFromMedia.setCity(mAddressOutput.getCity());
+
+            TextView text = (TextView) rootView.findViewById(R.id.location_TV_metaMessage);
+            text.setText(locationFromMedia.getCity() + " " + locationFromMedia.getStreet() + " " + locationFromMedia.getPostalCode());
 
         }
     }

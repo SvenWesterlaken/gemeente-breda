@@ -69,9 +69,7 @@ public class FetchAddressIntentService extends IntentService {
                 location.setStreet(address);
                 location.setPostalCode(postalCode);
 
-                deliverResultToReceiver(Constants.SUCCESS_RESULT, city);
-                deliverResultToReceiver(Constants.SUCCESS_RESULT, address);
-                deliverResultToReceiver(Constants.SUCCESS_RESULT, postalCode);
+                deliverResultToReceiver(Constants.SUCCESS_RESULT, location);
             } else {
                 Log.e("ADDRESSES", "No addresses were returned by the geocoder.");
             }
@@ -82,9 +80,9 @@ public class FetchAddressIntentService extends IntentService {
 
     }
 
-    private void deliverResultToReceiver(int resultCode, String message) {
+    private void deliverResultToReceiver(int resultCode, Location location) {
         Bundle bundle = new Bundle();
-        bundle.putString(Constants.RESULT_DATA_KEY, message);
+        bundle.putParcelable(Constants.RESULT_DATA_KEY, location);
         mReceiver.send(resultCode, bundle);
     }
 
