@@ -38,18 +38,21 @@ public class LoadingActivity extends AppCompatActivity {
                 String name = preferences.getString("pref_name", null);
                 String email = preferences.getString("pref_email", null);
                 String phone = preferences.getString("pref_phone", null);
-                Intent i;
+                Intent i = null;
 
                 //Start login activity when no name, email and phonenumber is specified (First time using the app)
                 //Otherwise start ReportActivity
                 if (name == null && email == null && phone == null) {
                     i = new Intent(getApplicationContext(), LoginActivity.class);
-                } else if (name.equals("Onbekend") && email.equals("Onbekend") && phone.equals("Onbekend")){
-                    i = new Intent(getApplicationContext(), LoginActivity.class);
-                } else {
-                    i = new Intent(getApplicationContext(), ReportActivity.class);
+                } else if (name != null && email != null && phone != null){
+                    if (name.equals("Onbekend") && email.equals("Onbekend") && phone.equals("Onbekend")){
+                        i = new Intent(getApplicationContext(), LoginActivity.class);
+                    } else {
+                        i = new Intent(getApplicationContext(), ReportActivity.class);
+                    }
                 }
 
+                assert i != null;
                 i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(i);
                 finish();

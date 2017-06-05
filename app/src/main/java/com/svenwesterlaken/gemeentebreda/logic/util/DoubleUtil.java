@@ -5,4 +5,8 @@ package com.svenwesterlaken.gemeentebreda.logic.util;
  */
 
 public class DoubleUtil {
+
+    public static boolean isZero(double value, double threshold){
+        return value >= -threshold && value <= threshold;
+    }
 }

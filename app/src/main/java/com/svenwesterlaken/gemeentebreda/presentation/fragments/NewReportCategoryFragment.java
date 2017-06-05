@@ -68,11 +68,12 @@ public class NewReportCategoryFragment extends Fragment {
         Activity a = null;
 
         if (context instanceof Activity){
-            a=(Activity) context;
+            a= (Activity) context;
         }
         try {
             mListener = (CategoryChangedListener) a;
         } catch (ClassCastException e) {
+            assert a != null;
             throw new ClassCastException(a.toString() + " must implement CategoryChangedListener");
         }
     }

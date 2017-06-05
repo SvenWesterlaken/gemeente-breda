@@ -72,6 +72,7 @@ public class  NewReportDescriptionFragment extends Fragment implements View.OnCl
         try {
             mListener = (DescriptionChangedListener) a;
         } catch (ClassCastException e) {
+            assert a != null;
             throw new ClassCastException(a.toString() + " must implement DescriptionChangedListener");
         }
     }

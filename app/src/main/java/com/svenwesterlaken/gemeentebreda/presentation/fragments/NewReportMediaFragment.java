@@ -181,11 +181,12 @@ public class NewReportMediaFragment extends Fragment implements View.OnClickList
             Glide.with(getContext()).load(uri).into(image);
         }
 
-        media.setFilePath(path);
-        media.setUri(uri);
-        media.setType(type);
-        enableConfirmButton();
-
+        if (resultCode == RESULT_OK) {
+            media.setFilePath(path);
+            media.setUri(uri);
+            media.setType(type);
+            enableConfirmButton();
+        }
     }
 
     private void enableConfirmButton() {

@@ -41,12 +41,15 @@ import com.svenwesterlaken.gemeentebreda.data.database.DatabaseHandler;
 import com.svenwesterlaken.gemeentebreda.domain.Location;
 import com.svenwesterlaken.gemeentebreda.domain.Media;
 import com.svenwesterlaken.gemeentebreda.logic.services.FetchAddressIntentService;
+import com.svenwesterlaken.gemeentebreda.logic.util.DoubleUtil;
 import com.svenwesterlaken.gemeentebreda.presentation.activities.NewLocationActivity;
 import com.svenwesterlaken.gemeentebreda.presentation.activities.NewReportActivity;
 import com.svenwesterlaken.gemeentebreda.presentation.partials.NotImplementedListener;
 
 import java.io.File;
 import java.io.IOException;
+import java.math.BigDecimal;
+import java.math.MathContext;
 import java.util.Collection;
 import java.util.Random;
 
@@ -343,6 +346,7 @@ public class NewReportLocationFragment extends Fragment implements GoogleApiClie
         try {
             mListener = (LocationChangedListener) a;
         } catch (ClassCastException e) {
+            assert a != null;
             throw new ClassCastException(a.toString() + " must implement LocationChangedListener");
         }
     }
@@ -358,7 +362,7 @@ public class NewReportLocationFragment extends Fragment implements GoogleApiClie
         lon = locationFromMedia.getLongitude();
 
         if (lat != null) {
-            if (lat == 0.0) {
+            if (DoubleUtil.isZero(lat, 0.00000001)) {
                 lat = null;
                 lon = null;
             }
