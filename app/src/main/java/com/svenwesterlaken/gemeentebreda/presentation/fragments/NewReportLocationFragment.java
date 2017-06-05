@@ -29,9 +29,7 @@ import android.widget.TextView;
 import com.drew.imaging.ImageMetadataReader;
 import com.drew.imaging.ImageProcessingException;
 import com.drew.lang.GeoLocation;
-import com.drew.metadata.Directory;
 import com.drew.metadata.Metadata;
-import com.drew.metadata.Tag;
 import com.drew.metadata.exif.GpsDirectory;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -44,12 +42,9 @@ import com.svenwesterlaken.gemeentebreda.logic.services.FetchAddressIntentServic
 import com.svenwesterlaken.gemeentebreda.logic.util.DoubleUtil;
 import com.svenwesterlaken.gemeentebreda.presentation.activities.NewLocationActivity;
 import com.svenwesterlaken.gemeentebreda.presentation.activities.NewReportActivity;
-import com.svenwesterlaken.gemeentebreda.presentation.partials.NotImplementedListener;
 
 import java.io.File;
 import java.io.IOException;
-import java.math.BigDecimal;
-import java.math.MathContext;
 import java.util.Collection;
 import java.util.Random;
 

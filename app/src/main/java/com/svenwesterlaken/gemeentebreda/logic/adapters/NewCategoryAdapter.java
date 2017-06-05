@@ -1,6 +1,7 @@
 package com.svenwesterlaken.gemeentebreda.logic.adapters;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,15 +26,27 @@ public class NewCategoryAdapter extends ArrayAdapter<Category> {
 
     }
 
-    public View getView(int position, View convertView, ViewGroup parent){
+    @NonNull
+    @Override
+    public View getView(int position, View convertView, @NonNull ViewGroup parent){
         Category category = getItem(position);
 
         if (convertView == null) {
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.row_new_category, parent, false);
         }
 
-        String name = category.getCategoryName();
-        String summary = category.getCategorySummary();
+        String name = null;
+        String summary = null;
+
+        if (category != null) {
+            name = category.getCategoryName();
+            summary = category.getCategorySummary();
+        }
+
+        if (summary == null || summary.isEmpty()) {
+            summary = getContext().getString(R.string.summary_missing_description);
+        }
+
 
         TextView nameTxt = (TextView) convertView.findViewById(R.id.newCategory_TV_name);
         TextView summaryTxt = (TextView) convertView.findViewById(R.id.newCategory_TV_summary);
@@ -41,7 +54,7 @@ public class NewCategoryAdapter extends ArrayAdapter<Category> {
 
         nameTxt.setText(name);
         summaryTxt.setText(summary);
-        categoryIcon.setImageResource(R.drawable.lightbulb); //verandert later per category type
+        categoryIcon.setImageResource(R.drawable.lightbulb);
 
         return convertView;
     }
