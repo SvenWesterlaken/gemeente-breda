@@ -55,9 +55,10 @@ public class NewReportLocationFragment extends Fragment implements GoogleApiClie
     private LocationChangedListener mListener;
     private MediaAddressResultReceiver mediaResultReceiver;
     private CurLocAddressResultReceiver curLocResultReceiver;
+    private SelectLocAddressResultReceiver selLocResultReceiver;
     private GoogleApiClient mGoogleApiClient;
 
-    private Location location, curLoc;
+    private Location location, curLoc, selLoc;
     private android.location.Location mLastLocation;
 
     private Double lat, lon;
@@ -88,6 +89,7 @@ public class NewReportLocationFragment extends Fragment implements GoogleApiClie
 
         mediaResultReceiver = new MediaAddressResultReceiver(new Handler());
         curLocResultReceiver = new CurLocAddressResultReceiver(new Handler());
+        selLocResultReceiver = new SelectLocAddressResultReceiver(new Handler());
 
     }
 
@@ -109,6 +111,9 @@ public class NewReportLocationFragment extends Fragment implements GoogleApiClie
             public void onClick(View v) {
                 location = new Location("Metadata straat", "Breda", new Random().nextInt(6), "4818MD", handler.getAllReports().size() + 1, lat, lon);
                 setAddress(location);
+                if (locationFromMedia != null){
+                    setAddress(locationFromMedia);
+                }
                 enableConfirmButton();
             }
         });
@@ -122,7 +127,14 @@ public class NewReportLocationFragment extends Fragment implements GoogleApiClie
                     if (mLastLocation != null) {
                         location = new Location("Huidige straat", "Breda", new Random().nextInt(6), "4818CS", handler.getAllReports().size() + 1, mLastLocation.getLatitude(), mLastLocation.getLongitude());
 
-                        setAddress(location);
+                        if (location.getLongitude() != null && location.getLatitude() != null) {
+                            startCurLocGeoIntentService(location);
+                            Log.i("SERVICE", "GeoService has started");
+                        }
+
+                        if (curLoc != null){
+                            setAddress(curLoc);
+                        }
                         enableConfirmButton();
                     }
                 }
@@ -270,6 +282,14 @@ public class NewReportLocationFragment extends Fragment implements GoogleApiClie
         getActivity().startService(intent);
     }
 
+    protected void startSelLocGeoIntentService(Location location) {
+        Intent intent = new Intent(getContext(), FetchAddressIntentService.class);
+        intent.putExtra("RECEIVER", selLocResultReceiver);
+        intent.putExtra(FetchAddressIntentService.Constants.LATITUDE_DATA_EXTRA, location.getLatitude());
+        intent.putExtra(FetchAddressIntentService.Constants.LONGITUDE_DATA_EXTRA, location.getLongitude());
+        getActivity().startService(intent);
+    }
+
     @Override
     public void onConnected(@Nullable Bundle bundle) {
         if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
@@ -316,6 +336,8 @@ public class NewReportLocationFragment extends Fragment implements GoogleApiClie
             TextView text = (TextView) rootView.findViewById(R.id.location_TV_metaMessage);
             text.setText(locationFromMedia.getCity() + " " + locationFromMedia.getStreet() + " " + locationFromMedia.getPostalCode());
 
+            //setAddress(locationFromMedia);
+
         }
     }
 
@@ -339,6 +361,33 @@ public class NewReportLocationFragment extends Fragment implements GoogleApiClie
             TextView text = (TextView) rootView.findViewById(R.id.location_TV_currentMessage);
             text.setText(curLoc.getCity() + " " + curLoc.getStreet() + " " + curLoc.getPostalCode());
 
+            //setAddress(curLoc);
+
+        }
+    }
+
+    private class SelectLocAddressResultReceiver extends ResultReceiver {
+        public SelectLocAddressResultReceiver(Handler handler) {
+            super(handler);
+        }
+
+        @Override
+        protected void onReceiveResult(int resultCode, Bundle resultData) {
+
+            // Set address from service
+            Location mAddressOutput = resultData.getParcelable(FetchAddressIntentService.Constants.RESULT_DATA_KEY);
+            selLoc = new Location();
+            selLoc.setLatitude(mAddressOutput.getLatitude());
+            selLoc.setLongitude(mAddressOutput.getLongitude());
+            selLoc.setStreet(mAddressOutput.getStreet());
+            selLoc.setPostalCode(mAddressOutput.getPostalCode());
+            selLoc.setCity(mAddressOutput.getCity());
+
+            setAddress(selLoc);
+
+            TextView text = (TextView) rootView.findViewById(R.id.location_TV_chooseTitle);
+            text.setText(selLoc.getCity() + " " + selLoc.getStreet() + " " + selLoc.getPostalCode());
+
         }
     }
 
@@ -352,6 +401,11 @@ public class NewReportLocationFragment extends Fragment implements GoogleApiClie
                 if (location != null) {
                     setAddress(location);
                     enableConfirmButton();
+
+                    if (location.getLongitude() != null && location.getLatitude() != null) {
+                        startSelLocGeoIntentService(location);
+                        Log.i("SERVICE", "GeoService has started");
+                    }
                 }
 
             }
@@ -367,7 +421,8 @@ public class NewReportLocationFragment extends Fragment implements GoogleApiClie
 
     private void setAddress(Location l) {
         this.location = l;
-        locationTV.setText(l.getStreet() + " " + l.getHouseNumber() + ", " + l.getCity());
+        //locationTV.setText(l.getStreet() + " " + l.getHouseNumber() + ", " + l.getCity());
+        locationTV.setText(l.getStreet() + " " + l.getCity() + ", " + l.getPostalCode());
     }
 
 
