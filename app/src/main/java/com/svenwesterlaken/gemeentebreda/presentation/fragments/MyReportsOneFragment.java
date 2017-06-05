@@ -16,7 +16,6 @@ import com.svenwesterlaken.gemeentebreda.domain.Report;
 import com.svenwesterlaken.gemeentebreda.domain.User;
 import com.svenwesterlaken.gemeentebreda.logic.adapters.ReportAdapter;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 import jp.wasabeef.recyclerview.animators.FadeInUpAnimator;
@@ -54,7 +53,7 @@ public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle sa
 
         reports = handler.getReportUser(user);
 
-    reportAdapter = new ReportAdapter(reports);
+    reportAdapter = new ReportAdapter(reports, getContext());
     reportList.setAdapter(reportAdapter);
 
     handler.close();
