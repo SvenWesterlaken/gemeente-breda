@@ -161,7 +161,7 @@ public class NewReportLocationFragment extends Fragment implements GoogleApiClie
             }
         }
 
-        if (locationFromMedia.getLongitude() != null && locationFromMedia.getLatitude() != null) {``
+        if (locationFromMedia.getLongitude() != null && locationFromMedia.getLatitude() != null) {
             startGeoIntentService(locationFromMedia);
             Log.i("SERVICE", "GeoService has started");
         }
