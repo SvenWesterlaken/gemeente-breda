@@ -38,6 +38,7 @@ import com.svenwesterlaken.gemeentebreda.R;
 import com.svenwesterlaken.gemeentebreda.data.database.DatabaseHandler;
 import com.svenwesterlaken.gemeentebreda.domain.Location;
 import com.svenwesterlaken.gemeentebreda.domain.Media;
+import com.svenwesterlaken.gemeentebreda.logic.managers.LocationManager;
 import com.svenwesterlaken.gemeentebreda.logic.services.FetchAddressIntentService;
 import com.svenwesterlaken.gemeentebreda.logic.util.DoubleUtil;
 import com.svenwesterlaken.gemeentebreda.presentation.activities.NewLocationActivity;
@@ -51,14 +52,12 @@ import java.util.Random;
 import static android.app.Activity.RESULT_OK;
 
 
-public class NewReportLocationFragment extends Fragment implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
+public class NewReportLocationFragment extends Fragment implements LocationManager.LocationManagerListener {
     private LocationChangedListener mListener;
-    private MediaAddressResultReceiver mediaResultReceiver;
-    private CurLocAddressResultReceiver curLocResultReceiver;
-    private SelectLocAddressResultReceiver selLocResultReceiver;
+    private LocationManager lManager;
     private GoogleApiClient mGoogleApiClient;
 
-    private Location location, curLoc, selLoc;
+    private Location location, mediaLocation, currentLocation, chosenLocation;
     private android.location.Location mLastLocation;
 
     private Double lat, lon;
@@ -80,23 +79,13 @@ public class NewReportLocationFragment extends Fragment implements GoogleApiClie
 
         popupAnimation = AnimationUtils.loadAnimation(getContext(), R.anim.popup_animation);
         popoutAnimation = AnimationUtils.loadAnimation(getContext(), R.anim.popout_animation);
-
-        if (mGoogleApiClient == null) {
-            mGoogleApiClient = new GoogleApiClient.Builder(getContext()).addConnectionCallbacks(this).addOnConnectionFailedListener(this).addApi(LocationServices.API).build();
-        }
-
         handler = new DatabaseHandler(getContext());
-
-        mediaResultReceiver = new MediaAddressResultReceiver(new Handler());
-        curLocResultReceiver = new CurLocAddressResultReceiver(new Handler());
-        selLocResultReceiver = new SelectLocAddressResultReceiver(new Handler());
-
+        lManager = new LocationManager(getActivity(), getContext(), handler, this);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.fragment_new_report_location, container, false);
-
         alpha = rootView.findViewById(R.id.location_BTN_delete).getAlpha();
 
         chooseBTN = (ConstraintLayout) rootView.findViewById(R.id.location_BTN_choose);
@@ -164,230 +153,26 @@ public class NewReportLocationFragment extends Fragment implements GoogleApiClie
         return rootView;
     }
 
-    public void createLocationFromMedia(Uri uri) {
-        String mime = getContext().getContentResolver().getType(uri);
-        locationFromMedia = new Location();
+    @Override
+    public void setReceivedLocation(Location l, int type) {
+        TextView text = null;
 
-        if (mime != null) {
-            if (mime.contains("video")) {
-                getVideoLocationMetadata(uri);
-            } else if (mime.contains("image")) {
-                getImageLocationMetadata(uri);
-            }
+        if(type == FetchAddressIntentService.CURRENT_LOCATION) {
+            text = (TextView) rootView.findViewById(R.id.location_TV_currentMessage);
         }
 
-        if (locationFromMedia.getLongitude() != null && locationFromMedia.getLatitude() != null) {
-            startMediaGeoIntentService(locationFromMedia);
-            Log.i("SERVICE", "GeoService has started");
+
+        if(text != null && l != null) {
+            text.setText(l.getCity() + " " + l.getStreet() + " " + l.getPostalCode());
         }
 
-    }
-
-    private void getImageLocationMetadata(Uri imageUri) {
-
-        try {
-            File file = new File(getRealPathFromURI(getContext(), imageUri));
-            // Read all metadata from the image
-            Metadata metadata = ImageMetadataReader.readMetadata(file);
-            // See whether it has GPS data
-            Collection<GpsDirectory> gpsDirectories = metadata.getDirectoriesOfType(GpsDirectory.class);
-            if (gpsDirectories.isEmpty()) {
-                Log.i("GEOLOCATION", "Geolocation is not available for this image: " + file.getAbsolutePath());
-            }
-            for (GpsDirectory gpsDirectory : gpsDirectories) {
-                // Try to read out the location, making sure it's non-zero
-                GeoLocation geoLocation = gpsDirectory.getGeoLocation();
-                if (geoLocation != null && !geoLocation.isZero()) {
-                    Log.i("Photo Latitude", "Latitude: " + geoLocation.getLatitude());
-                    Log.i("Photo Longitude", "Longitude: " + geoLocation.getLongitude());
-                    locationFromMedia.setLatitude(geoLocation.getLatitude());
-                    locationFromMedia.setLongitude(geoLocation.getLongitude());
-                } else {
-                    Log.i("GEOLOCATION", "Geolocation is not available for this image: " + file.getAbsolutePath());
-                }
-            }
-        } catch (IOException | ImageProcessingException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public void getVideoLocationMetadata(Uri videoUri) {
-        ContentResolver videoResolver = getContext().getContentResolver();
-        Cursor videoCursor = videoResolver.query(videoUri, null, null, null, null);
-
-        if (videoCursor != null && videoCursor.moveToFirst()) {
-            //get columns
-            int latColumn = videoCursor.getColumnIndex
-                    (MediaStore.Video.Media.LATITUDE);
-            int lonColumn = videoCursor.getColumnIndex
-                    (MediaStore.Video.Media.LONGITUDE);
-            int resColumn = videoCursor.getColumnIndex
-                    (MediaStore.Video.Media.RESOLUTION);
-            int durationColumn = videoCursor.getColumnIndex
-                    (MediaStore.Video.Media.DURATION);
-
-            do {
-                String thisLat = Double.toString(videoCursor.getDouble(latColumn));
-                String thisLon = Double.toString(videoCursor.getDouble(lonColumn));
-
-                Log.d("video", "------------------");
-                Log.d("video Latitude", thisLat);
-                Log.d("video Longitude", thisLon);
-
-                locationFromMedia.setLatitude(videoCursor.getDouble(latColumn));
-                locationFromMedia.setLongitude(videoCursor.getDouble(lonColumn));
-            }
-            while (videoCursor.moveToNext());
-        }
-
-        if (videoCursor != null) {
-            videoCursor.close();
-        }
-
-    }
-
-    public String getRealPathFromURI(Context context, Uri contentUri) {
-        Cursor cursor = null;
-        try {
-            String[] proj = {MediaStore.Images.Media.DATA};
-            cursor = context.getContentResolver().query(contentUri, proj, null, null, null);
-            int column_index = 0;
-            if (cursor != null) {
-                column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
-                cursor.moveToFirst();
-                return cursor.getString(column_index);
-            } else {
-                return null;
-            }
-        } finally {
-            if (cursor != null) {
-                cursor.close();
-            }
-        }
-    }
-
-    protected void startMediaGeoIntentService(Location location) {
-        Intent intent = new Intent(getContext(), FetchAddressIntentService.class);
-        intent.putExtra("RECEIVER", mediaResultReceiver);
-        intent.putExtra(FetchAddressIntentService.Constants.LATITUDE_DATA_EXTRA, location.getLatitude());
-        intent.putExtra(FetchAddressIntentService.Constants.LONGITUDE_DATA_EXTRA, location.getLongitude());
-        getActivity().startService(intent);
-    }
-
-    protected void startCurLocGeoIntentService(Location location) {
-        Intent intent = new Intent(getContext(), FetchAddressIntentService.class);
-        intent.putExtra("RECEIVER", curLocResultReceiver);
-        intent.putExtra(FetchAddressIntentService.Constants.LATITUDE_DATA_EXTRA, location.getLatitude());
-        intent.putExtra(FetchAddressIntentService.Constants.LONGITUDE_DATA_EXTRA, location.getLongitude());
-        getActivity().startService(intent);
-    }
-
-    protected void startSelLocGeoIntentService(Location location) {
-        Intent intent = new Intent(getContext(), FetchAddressIntentService.class);
-        intent.putExtra("RECEIVER", selLocResultReceiver);
-        intent.putExtra(FetchAddressIntentService.Constants.LATITUDE_DATA_EXTRA, location.getLatitude());
-        intent.putExtra(FetchAddressIntentService.Constants.LONGITUDE_DATA_EXTRA, location.getLongitude());
-        getActivity().startService(intent);
     }
 
     @Override
-    public void onConnected(@Nullable Bundle bundle) {
-        if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            onConnectionSuspended(1);
-        } else {
-            mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
-            if (mLastLocation != null) {
-                TextView text = (TextView) rootView.findViewById(R.id.location_TV_currentMessage);
-                text.setText(String.valueOf(mLastLocation.getLatitude()) + ", " + String.valueOf(mLastLocation.getLongitude()));
-
-                location = new Location("Huidige straat", "Breda", new Random().nextInt(6), "4818CS", handler.getAllReports().size() + 1, mLastLocation.getLatitude(), mLastLocation.getLongitude());
-                startCurLocGeoIntentService(location);
-                Log.i("SERVICE", "GeoService has started");
-            }
-        }
-    }
-
-    @Override
-    public void onConnectionSuspended(int i) {
-        currentBTN.setEnabled(false);
-        currentBTN.setAlpha(alpha);
-    }
-
-    @Override
-    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-        currentBTN.setEnabled(false);
-        currentBTN.setAlpha(alpha);
-    }
-
-    private class MediaAddressResultReceiver extends ResultReceiver {
-        public MediaAddressResultReceiver(Handler handler) {
-            super(handler);
-        }
-
-        @Override
-        protected void onReceiveResult(int resultCode, Bundle resultData) {
-
-            // Set address from service
-            Location mAddressOutput = resultData.getParcelable(FetchAddressIntentService.Constants.RESULT_DATA_KEY);
-            locationFromMedia.setStreet(mAddressOutput.getStreet());
-            locationFromMedia.setPostalCode(mAddressOutput.getPostalCode());
-            locationFromMedia.setCity(mAddressOutput.getCity());
-
-            TextView text = (TextView) rootView.findViewById(R.id.location_TV_metaMessage);
-            text.setText(locationFromMedia.getCity() + " " + locationFromMedia.getStreet() + " " + locationFromMedia.getPostalCode());
-
-            //setAddress(locationFromMedia);
-
-        }
-    }
-
-    private class CurLocAddressResultReceiver extends ResultReceiver {
-        public CurLocAddressResultReceiver(Handler handler) {
-            super(handler);
-        }
-
-        @Override
-        protected void onReceiveResult(int resultCode, Bundle resultData) {
-
-            // Set address from service
-            Location mAddressOutput = resultData.getParcelable(FetchAddressIntentService.Constants.RESULT_DATA_KEY);
-            curLoc = new Location();
-            curLoc.setLatitude(mAddressOutput.getLatitude());
-            curLoc.setLongitude(mAddressOutput.getLongitude());
-            curLoc.setStreet(mAddressOutput.getStreet());
-            curLoc.setPostalCode(mAddressOutput.getPostalCode());
-            curLoc.setCity(mAddressOutput.getCity());
-
-            TextView text = (TextView) rootView.findViewById(R.id.location_TV_currentMessage);
-            text.setText(curLoc.getCity() + " " + curLoc.getStreet() + " " + curLoc.getPostalCode());
-
-            //setAddress(curLoc);
-
-        }
-    }
-
-    private class SelectLocAddressResultReceiver extends ResultReceiver {
-        public SelectLocAddressResultReceiver(Handler handler) {
-            super(handler);
-        }
-
-        @Override
-        protected void onReceiveResult(int resultCode, Bundle resultData) {
-
-            // Set address from service
-            Location mAddressOutput = resultData.getParcelable(FetchAddressIntentService.Constants.RESULT_DATA_KEY);
-            selLoc = new Location();
-            selLoc.setLatitude(mAddressOutput.getLatitude());
-            selLoc.setLongitude(mAddressOutput.getLongitude());
-            selLoc.setStreet(mAddressOutput.getStreet());
-            selLoc.setPostalCode(mAddressOutput.getPostalCode());
-            selLoc.setCity(mAddressOutput.getCity());
-
-            setAddress(selLoc);
-
-            TextView text = (TextView) rootView.findViewById(R.id.location_TV_chooseTitle);
-            text.setText(selLoc.getCity() + " " + selLoc.getStreet() + " " + selLoc.getPostalCode());
-
+    public void disableButton(int type) {
+        if(type == FetchAddressIntentService.CURRENT_LOCATION) {
+            currentBTN.setEnabled(false);
+            currentBTN.setAlpha(alpha);
         }
     }
 
@@ -401,11 +186,6 @@ public class NewReportLocationFragment extends Fragment implements GoogleApiClie
                 if (location != null) {
                     setAddress(location);
                     enableConfirmButton();
-
-                    if (location.getLongitude() != null && location.getLatitude() != null) {
-                        startSelLocGeoIntentService(location);
-                        Log.i("SERVICE", "GeoService has started");
-                    }
                 }
 
             }
@@ -421,7 +201,6 @@ public class NewReportLocationFragment extends Fragment implements GoogleApiClie
 
     private void setAddress(Location l) {
         this.location = l;
-        //locationTV.setText(l.getStreet() + " " + l.getHouseNumber() + ", " + l.getCity());
         locationTV.setText(l.getStreet() + " " + l.getCity() + ", " + l.getPostalCode());
     }
 
@@ -447,31 +226,30 @@ public class NewReportLocationFragment extends Fragment implements GoogleApiClie
         void setLocation(Location t);
     }
 
-    public void setImageLocationTag(Media m) {
-        TextView text = (TextView) rootView.findViewById(R.id.location_TV_metaMessage);
-        createLocationFromMedia(m.getUri());
-        lat = locationFromMedia.getLatitude();
-        lon = locationFromMedia.getLongitude();
-
-        if (lat != null) {
-            if (DoubleUtil.isZero(lat, 0.00000001)) {
-                lat = null;
-                lon = null;
-            }
-        }
-
-
-        if (lat == null) {
-            text.setText(R.string.location_error);
-            metaBTN.setEnabled(false);
-            metaBTN.setAlpha(alpha);
-
-        } else {
-
-            text.setText(lat + ", " + lon);
-        }
-
-    }
+//    public void setImageLocationTag(Media m) {
+//        TextView text = (TextView) rootView.findViewById(R.id.location_TV_metaMessage);
+//        lat = locationFromMedia.getLatitude();
+//        lon = locationFromMedia.getLongitude();
+//
+//        if (lat != null) {
+//            if (DoubleUtil.isZero(lat, 0.00000001)) {
+//                lat = null;
+//                lon = null;
+//            }
+//        }
+//
+//
+//        if (lat == null) {
+//            text.setText(R.string.location_error);
+//            metaBTN.setEnabled(false);
+//            metaBTN.setAlpha(alpha);
+//
+//        } else {
+//
+//            text.setText(lat + ", " + lon);
+//        }
+//
+//    }
 
     @Override
     public void onStart() {

@@ -219,10 +219,7 @@ public class NewReportMediaFragment extends Fragment implements View.OnClickList
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
 
-        if (grantResults[0] != PackageManager.PERMISSION_GRANTED) {
-            // Sample was denied WRITE_EXTERNAL_STORAGE permission
-            Toast.makeText(getActivity(), "Videos will be saved in a cache directory instead of an external storage directory since permission was denied.", Toast.LENGTH_LONG).show();
-        }
+//        if (grantResults[0] != PackageManager.PERMISSION_GRANTED) {}
     }
 
 }

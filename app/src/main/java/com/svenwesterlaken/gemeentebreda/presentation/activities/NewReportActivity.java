@@ -67,10 +67,6 @@ public class NewReportActivity extends BaseActivity implements ViewPager.OnPageC
         return this.newReport;
     }
 
-    public void setCurrentItem (int item) {
-        mViewPager.setCurrentItem(item, true);
-    }
-
     public void scrollToNext() {mViewPager.setCurrentItem(mViewPager.getCurrentItem()+1, true);}
 
     public void enableSwiping() { mViewPager.enableSwiping(); }
