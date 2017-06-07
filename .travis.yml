@@ -1,4 +1,5 @@
 language: android
+dist: trusty
 android:
   components:
     # Uncomment the lines below if you want to
@@ -19,3 +20,15 @@ android:
     # if you need to run emulator(s) during your tests
     - sys-img-armeabi-v7a-android-22
     - sys-img-armeabi-v7a-android-17
+addons:
+    sonarqube:
+        organization: "zandkorrel-github"
+        token:
+            secure: f65271edd211baa9bce0aedb96573c4217b82401
+        branches:
+            - master
+            - develop
+            
+script:
+    - sonar-scanner
+        
