@@ -5,8 +5,8 @@ import android.content.Intent;
 import android.location.Address;
 import android.location.Geocoder;
 import android.os.Bundle;
+import android.os.ResultReceiver;
 import android.support.annotation.Nullable;
-import android.support.v4.os.ResultReceiver;
 import android.util.Log;
 
 import com.svenwesterlaken.gemeentebreda.domain.Location;
