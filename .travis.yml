@@ -37,5 +37,5 @@ branches:
         - develop
             
 script:
-    - sonar-scanner
+    - sonarqube -Dsonar.host.url=https://sonarcloud.io -Dsonar.organization=zandkorrel-github -Dsonar.login=f65271edd211baa9bce0aedb96573c4217b82401
         
