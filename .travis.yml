@@ -1,9 +1,9 @@
 language: android
-jdk: oraclejdk8
 cache: false
 dist: trusty
 sudo: required
 group: edge
+jdk: oraclejdk8
 
 before_install:
   - mkdir "$ANDROID_HOME/licenses" || true
