@@ -71,6 +71,8 @@ public class FetchAddressIntentService extends IntentService {
                 location.setStreet(address);
                 location.setLatitude(latitude);
                 location.setLongitude(longitude);
+                location.setCity(city);
+                location.setPostalCode(postalCode);
 
            
                 deliverResultToReceiver(SUCCESS_RESULT, location);
