@@ -15,6 +15,9 @@ import android.widget.TextView;
 import com.svenwesterlaken.gemeentebreda.R;
 import com.svenwesterlaken.gemeentebreda.domain.Report;
 
+import org.parceler.Parcel;
+import org.parceler.Parcels;
+
 public class ConfirmationActivity extends BaseActivity {
 
     @Override
@@ -70,6 +73,7 @@ public class ConfirmationActivity extends BaseActivity {
             @Override
             public void onClick(View v) {
                 Intent i = new Intent(getApplicationContext(), ReportActivity.class);
+                finish();
                 startActivity(i);
             }
         });
@@ -81,7 +85,7 @@ public class ConfirmationActivity extends BaseActivity {
                 Report report;
 
                 Bundle extras = getIntent().getExtras();
-                report = (Report) extras.getSerializable("REPORT");
+                report = extras.getParcelable("REPORT");
 
                 Intent intent = new Intent(getApplicationContext(), DetailedReportActivity.class);
                 intent.putExtra("REPORT", report);

@@ -54,7 +54,7 @@ public class MyReportsTwoFragment extends Fragment implements PullRefreshLayout.
 
         reports = handler.getFavourites( user);
 
-    reportAdapter = new ReportAdapter(reports);
+    reportAdapter = new ReportAdapter(reports, getContext());
     reportList.setAdapter(reportAdapter);
 
         handler.close();

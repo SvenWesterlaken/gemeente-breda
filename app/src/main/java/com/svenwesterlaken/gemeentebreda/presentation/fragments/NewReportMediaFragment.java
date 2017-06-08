@@ -1,157 +1,192 @@
 package com.svenwesterlaken.gemeentebreda.presentation.fragments;
 
 import android.app.Activity;
-import android.content.ContentResolver;
-import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
-import android.database.Cursor;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Handler;
-import android.provider.MediaStore;
+import android.support.annotation.NonNull;
 import android.support.constraint.ConstraintLayout;
+import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.app.Fragment;
-import android.support.v4.os.ResultReceiver;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
-import android.widget.MediaController;
-import android.widget.VideoView;
+import android.widget.Toast;
 
-import com.drew.imaging.ImageMetadataReader;
-import com.drew.imaging.ImageProcessingException;
-import com.drew.lang.GeoLocation;
-import com.drew.metadata.Directory;
-import com.drew.metadata.Metadata;
-import com.drew.metadata.Tag;
-import com.drew.metadata.exif.GpsDirectory;
+import com.bumptech.glide.Glide;
 import com.svenwesterlaken.gemeentebreda.R;
-import com.svenwesterlaken.gemeentebreda.domain.Location;
 import com.svenwesterlaken.gemeentebreda.domain.Media;
-import com.svenwesterlaken.gemeentebreda.logic.managers.NewMediaManager;
-import com.svenwesterlaken.gemeentebreda.logic.services.FetchAddressIntentService;
+import com.svenwesterlaken.gemeentebreda.logic.managers.MediaManager;
+import com.svenwesterlaken.gemeentebreda.presentation.activities.ImageActivity;
 import com.svenwesterlaken.gemeentebreda.presentation.activities.NewReportActivity;
+import com.svenwesterlaken.gemeentebreda.presentation.activities.VideoActivity;
 
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.Collection;
 
 import static android.app.Activity.RESULT_OK;
 
-public class NewReportMediaFragment extends Fragment {
+public class NewReportMediaFragment extends Fragment implements View.OnClickListener {
     private MediaChangedListener mListener;
-    private NewMediaManager mManager;
+    private MediaManager mManager;
 
-    static final int IMAGE_REQUEST_SUCCES = 1;
-    static final int VIDEO_REQUEST_SUCCES = 2;
-    static final int MEDIA_REQUEST_SUCCES = 3;
+    private Media media;
 
-    private VideoView video;
     private ImageView image;
-    private Bitmap bitmap;
-    private Uri videoUri;
+    private FloatingActionButton confirmFAB;
+    private ConstraintLayout photoBTN, videoBTN, selectBTN, removeBTN;
+
+    private Animation popupAnimation, popoutAnimation;
+
+
+    private final static int CAMERA_REQUEST = 1;
+    private final static int VIDEOCAMERA_REQUEST = 2;
+    private final static int MEDIA_REQUEST = 3;
+
+    private final static int MEDIA_PICTURE = 1;
+    private final static int MEDIA_VIDEO = 2;
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        this.mManager = new NewMediaManager(this, mListener);
+        this.mManager = new MediaManager(this, getActivity());
 
+        popupAnimation = AnimationUtils.loadAnimation(getContext(), R.anim.popup_animation);
+        popoutAnimation = AnimationUtils.loadAnimation(getContext(), R.anim.popout_animation);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_new_report_media, container, false);
 
-        ConstraintLayout photoBTN = (ConstraintLayout) rootView.findViewById(R.id.media_BTN_photo);
-        photoBTN.setOnClickListener(new PhotoClickListener());
+        photoBTN = (ConstraintLayout) rootView.findViewById(R.id.media_BTN_photo);
+        photoBTN.setOnClickListener(this);
 
-        ConstraintLayout videoBTN = (ConstraintLayout) rootView.findViewById(R.id.media_BTN_video);
-        videoBTN.setOnClickListener(new VideoClickListener());
+        videoBTN = (ConstraintLayout) rootView.findViewById(R.id.media_BTN_video);
+        videoBTN.setOnClickListener(this);
 
-        ConstraintLayout selectBTN = (ConstraintLayout) rootView.findViewById(R.id.media_BTN_mediaSelect);
-        selectBTN.setOnClickListener(new SelectMediaClickListener());
+        selectBTN = (ConstraintLayout) rootView.findViewById(R.id.media_BTN_mediaSelect);
+        selectBTN.setOnClickListener(this);
 
-        MediaController mediaController = new MediaController(getContext());
-        video = (VideoView) rootView.findViewById(R.id.media_VV_video);
-        video.setMediaController(mediaController);
+        removeBTN = (ConstraintLayout) rootView.findViewById(R.id.media_BTN_delete);
+        removeBTN.setOnClickListener(this);
 
-        image = (ImageView) rootView.findViewById(R.id.media_IV_image);
+        confirmFAB = (FloatingActionButton) rootView.findViewById(R.id.media_FAB_confirm);
+        confirmFAB.setOnClickListener(this);
+
+        image = (ImageView) rootView.findViewById(R.id.media_IV_thumbnail);
+        image.setOnClickListener(this);
 
         return rootView;
     }
 
-    private class PhotoClickListener implements View.OnClickListener {
+    @Override
+    public void onClick(View v) {
+        if (v.getId() == R.id.media_BTN_photo) {
+            mManager.createStillShotCamera().start(CAMERA_REQUEST);
+        } else if (v.getId() == R.id.media_BTN_video){
+            mManager.createVideoCamera().start(VIDEOCAMERA_REQUEST);
+        } else if (v.getId() == R.id.media_BTN_mediaSelect) {
+            mManager.dispatchChooseMediaIntent(MEDIA_REQUEST);
+        } else if (v.getId() == R.id.media_BTN_delete) {
 
-        @Override
-        public void onClick(View v) {
-            mManager.dispatchTakePictureIntent();
-        }
-    }
+        } else if (v.getId() == R.id.media_IV_thumbnail) {
+            if(media != null) {
+                if(media.getType() == MEDIA_PICTURE) {
+                    Intent intent = new Intent(getActivity(), ImageActivity.class);
+                    intent.putExtra("filepath", media.getFilePath());
+                    ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(getActivity(), image, "media_preview");
+                    startActivity(intent, options.toBundle());
+                } else if (media.getType() == MEDIA_VIDEO) {
+                    Intent intent = new Intent(getActivity(), VideoActivity.class);
+                    intent.putExtra("uri", media.getUri());
+                    startActivity(intent);
+                }
+            } else {
+                Toast.makeText(getContext(), "Nog geen media toegevoegd", Toast.LENGTH_SHORT).show();
+            }
 
-    private class VideoClickListener implements View.OnClickListener {
+        } else if (v.getId() == R.id.media_FAB_confirm) {
+            mListener.setMedia(media);
+            confirmFAB.setAnimation(popoutAnimation);
+            confirmFAB.setVisibility(View.INVISIBLE);
+            ((NewReportActivity) getActivity()).scrollToNext();
 
-        @Override
-        public void onClick(View v) {
-            mManager.dispatchTakeVideoIntent();
-        }
-    }
 
-    private class SelectMediaClickListener implements View.OnClickListener {
-
-        @Override
-        public void onClick(View v) {
-            mManager.dispatchChooseMediaIntent();
         }
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        image.setImageBitmap(bitmap);
-        video.setVideoURI(videoUri);
+        if(media != null) {
+            if(media.getType() == MEDIA_PICTURE) {
+                Glide.with(getContext()).load(media.getFilePath()).into(image);
+            } else if (media.getType() == MEDIA_VIDEO) {
+                Glide.with(getContext()).load(media.getUri()).into(image);
+            }
+        }
     }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        int status = mManager.getRequestStatus(requestCode, resultCode);
+        super.onActivityResult(requestCode, resultCode, data);
 
-        if (status == IMAGE_REQUEST_SUCCES) {
+        media = new Media();
+        Uri uri = null;
+        int type = 0;
+        String path = null;
 
-            bitmap = mManager.processImage(data);
-            image.setImageBitmap(bitmap);
+        if (requestCode == CAMERA_REQUEST && resultCode == RESULT_OK) {
+            path = data.getDataString();
+            type = MEDIA_PICTURE;
+            uri = Uri.fromFile( new File( path ));
 
-        } else if (status == VIDEO_REQUEST_SUCCES) {
+        } else if (requestCode == VIDEOCAMERA_REQUEST && resultCode == RESULT_OK) {
+            path = data.getDataString().substring(7);
+            uri = Uri.fromFile( new File( path ));
+            type = MEDIA_VIDEO;
 
-            videoUri = mManager.processVideo(data);
-            video.setVideoURI(videoUri);
-
-        } else if (status == MEDIA_REQUEST_SUCCES) {
+        } else if (requestCode == MEDIA_REQUEST && resultCode == RESULT_OK) {
 
             if(mManager.isVideo(data)) {
-
-                videoUri = mManager.processMediaVideo(data);
-                video.setVideoURI(videoUri);
+                uri = mManager.processMedia(data);
+                path = data.getDataString().substring(7);
+                type = MEDIA_VIDEO;
 
             } else if (mManager.isImage(data)) {
-
-                bitmap = mManager.processMediaImage(data);
-                image.setImageBitmap(bitmap);
-
+                uri = mManager.processMedia(data);
+                path = data.getDataString();
+                type = MEDIA_PICTURE;
             }
         }
-        super.onActivityResult(requestCode, resultCode, data);
+
+        if (type == MEDIA_PICTURE) {
+            Glide.with(getContext()).load(path).into(image);
+        } else if (type == MEDIA_VIDEO) {
+            Glide.with(getContext()).load(uri).into(image);
+        }
+
+        if (resultCode == RESULT_OK) {
+            media.setFilePath(path);
+            media.setUri(uri);
+            media.setType(type);
+            enableConfirmButton();
+        }
+    }
+
+    private void enableConfirmButton() {
+        confirmFAB.setVisibility(View.VISIBLE);
+        confirmFAB.startAnimation(popupAnimation);
     }
 
 
-
+    @Override
     public void onAttach(Context context) {
         super.onAttach(context);
 
@@ -161,6 +196,7 @@ public class NewReportMediaFragment extends Fragment {
             a = (Activity) context;
         }
         try {
+            assert a != null;
             mListener = (MediaChangedListener) a;
         } catch (ClassCastException e) {
             throw new ClassCastException(a.toString() + " must implement MediaChangedListener");
@@ -169,6 +205,13 @@ public class NewReportMediaFragment extends Fragment {
 
     public interface MediaChangedListener {
         void setMedia(Media m);
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
+//        if (grantResults[0] != PackageManager.PERMISSION_GRANTED) {}
     }
 
 }

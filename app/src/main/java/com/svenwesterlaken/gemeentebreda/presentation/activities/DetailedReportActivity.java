@@ -1,7 +1,5 @@
 package com.svenwesterlaken.gemeentebreda.presentation.activities;
 
-import android.content.Intent;
-import android.support.design.widget.BottomNavigationView;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
@@ -17,8 +15,6 @@ import com.svenwesterlaken.gemeentebreda.data.database.DatabaseHandler;
 import com.svenwesterlaken.gemeentebreda.domain.Report;
 import com.svenwesterlaken.gemeentebreda.domain.User;
 import com.svenwesterlaken.gemeentebreda.logic.adapters.DetailedCommentAdapter;
-
-import java.util.ArrayList;
 
 public class DetailedReportActivity extends BaseActivity  {
 
@@ -39,22 +35,39 @@ public class DetailedReportActivity extends BaseActivity  {
         Bundle extras = getIntent().getExtras();
 
         if (extras != null) {
-            report =  (Report) extras.getSerializable("REPORT");
+            report =  extras.getParcelable("REPORT");
         }
 
 
         TextView category =  (TextView) findViewById(R.id.report_TV_title);
         TextView address = (TextView) findViewById(R.id.report_TV_address);
-        TextView description = (TextView) findViewById(R.id.report_TV_description);
+        TextView descriptionTV = (TextView) findViewById(R.id.report_TV_description);
         ImageView icon = (ImageView) findViewById(R.id.report_IV_icon);
         ImageView status = (ImageView) findViewById(R.id.report_IV_status);
         ImageView upvotes = (ImageView) findViewById(R.id.report_IV_upvotes);
 
         category.setText(report.getCategory().getCategoryName());
-        address.setText(report.getLocation().getStreet() + " " + report.getLocation().getHouseNumber());
-        description.setText(report.getDescription());
+
+        address.setText(report.getLocation().getStreet());
+
+        String description = report.getDescription();
+
+        if(description == null || description.equals("null") || description.isEmpty() ) {
+            description = getString(R.string.summary_missing_description);
+        }
+
+        descriptionTV.setText(description);
+
         icon.setImageResource( R.drawable.lightbulb);
-        status.setImageResource( R.drawable.eye_off);
+        
+        if (report.getStatus() == "open") {
+           status.setImageResource(R.drawable.eye_off);
+        }
+        
+        else {
+            status.setImageResource(R.drawable.check);
+        }
+        
         upvotes.setImageResource(R.drawable.star);
 
         RecyclerView reportComments = (RecyclerView) findViewById(R.id.detailed_RV_comments);
@@ -63,7 +76,7 @@ public class DetailedReportActivity extends BaseActivity  {
         reportComments.setLayoutManager(layoutManager2);
 
 
-        final DetailedCommentAdapter adapter2 = new DetailedCommentAdapter(this.getApplicationContext());
+        final DetailedCommentAdapter adapter2 = new DetailedCommentAdapter();
 
         reportComments.setAdapter(adapter2);
         adapter2.notifyDataSetChanged();

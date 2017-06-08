@@ -1,29 +1,24 @@
 package com.svenwesterlaken.gemeentebreda.presentation.fragments;
 
 
-import android.content.Intent;
-import android.support.v4.app.Fragment;
 import android.graphics.Color;
-
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.graphics.ColorUtils;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import android.widget.AdapterView;
-import android.widget.ListView;
-
 import com.baoyz.widget.PullRefreshLayout;
 import com.svenwesterlaken.gemeentebreda.R;
+import com.svenwesterlaken.gemeentebreda.data.api.CategoryRequest;
+import com.svenwesterlaken.gemeentebreda.data.api.ReportRequest;
 import com.svenwesterlaken.gemeentebreda.data.database.DatabaseHandler;
 import com.svenwesterlaken.gemeentebreda.domain.Report;
 import com.svenwesterlaken.gemeentebreda.logic.adapters.ReportAdapter;
-import com.svenwesterlaken.gemeentebreda.presentation.activities.DetailedReportActivity;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 import jp.wasabeef.recyclerview.animators.FadeInUpAnimator;
@@ -50,11 +45,12 @@ public class ReportListFragment extends Fragment implements PullRefreshLayout.On
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         reportList.setLayoutManager(layoutManager);
+        
 
         handler = new DatabaseHandler(this.getContext());
         reports = handler.getAllReports();
 
-        reportAdapter = new ReportAdapter(reports);
+        reportAdapter = new ReportAdapter(reports, getContext());
         reportList.setAdapter(reportAdapter);
 
         handler.close();
@@ -69,8 +65,10 @@ public class ReportListFragment extends Fragment implements PullRefreshLayout.On
 
     @Override
     public void onRefresh() {
+        getReports();
         reportAdapter.notifyItemRangeRemoved(0, reports.size() );
         updateList(handler.getAllReports());
+        
     }
 
 
@@ -79,5 +77,12 @@ public class ReportListFragment extends Fragment implements PullRefreshLayout.On
         prf.setRefreshing(false);
 
     }
+    
+    private void getReports(){
+        
+        ReportRequest request = new ReportRequest(getActivity().getApplicationContext());
+        request.handleGetAllReports();
+    }
+    
 
 }

@@ -5,12 +5,12 @@
     android:id="@+id/swipeRefreshLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    app:refreshType="material"
     tools:context="com.svenwesterlaken.gemeentebreda.presentation.fragments.ReportListFragment">
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/report_RV_reports"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:refreshType="material"/>
+        android:layout_height="match_parent"/>
 
 </com.baoyz.widget.PullRefreshLayout>

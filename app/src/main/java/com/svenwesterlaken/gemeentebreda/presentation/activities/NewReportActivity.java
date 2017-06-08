@@ -2,17 +2,15 @@ package com.svenwesterlaken.gemeentebreda.presentation.activities;
 
 
 import android.Manifest;
-
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.pm.PackageManager;
+import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
-import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.View;
 
 import com.svenwesterlaken.gemeentebreda.R;
@@ -25,6 +23,7 @@ import com.svenwesterlaken.gemeentebreda.presentation.fragments.NewReportCategor
 import com.svenwesterlaken.gemeentebreda.presentation.fragments.NewReportDescriptionFragment;
 import com.svenwesterlaken.gemeentebreda.presentation.fragments.NewReportLocationFragment;
 import com.svenwesterlaken.gemeentebreda.presentation.fragments.NewReportMediaFragment;
+import com.svenwesterlaken.gemeentebreda.presentation.partials.ChangableViewPager;
 
 import me.relex.circleindicator.CircleIndicator;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
@@ -32,7 +31,7 @@ import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 public class NewReportActivity extends BaseActivity implements ViewPager.OnPageChangeListener, NewReportDescriptionFragment.DescriptionChangedListener, NewReportMediaFragment.MediaChangedListener, NewReportLocationFragment.LocationChangedListener, NewReportCategoryFragment.CategoryChangedListener{
 
     private NewReportPagerAdapter mSectionsPagerAdapter;
-    private ViewPager mViewPager;
+    private ChangableViewPager mViewPager;
     private Report newReport;
     protected View view;
 
@@ -49,11 +48,11 @@ public class NewReportActivity extends BaseActivity implements ViewPager.OnPageC
 
         Bundle bundle = new Bundle();
         newReport = new Report();
-        bundle.putSerializable("report", newReport);
+        bundle.putParcelable("report", newReport);
 
         mSectionsPagerAdapter = new NewReportPagerAdapter(getSupportFragmentManager(), bundle);
 
-        mViewPager = (ViewPager) findViewById(R.id.container);
+        mViewPager = (ChangableViewPager) findViewById(R.id.container);
         mViewPager.addOnPageChangeListener(this);
         CircleIndicator page_indicator = (CircleIndicator) findViewById(R.id.pageIndicator);
         mViewPager.setAdapter(mSectionsPagerAdapter);
@@ -64,6 +63,14 @@ public class NewReportActivity extends BaseActivity implements ViewPager.OnPageC
 
     public Report getNewReport() {
         return this.newReport;
+    }
+
+    public void scrollToNext() {mViewPager.setCurrentItem(mViewPager.getCurrentItem()+1, true);}
+
+    public void enableSwiping() { mViewPager.enableSwiping(); }
+
+    public boolean swipingIsEnabled() {
+        return mViewPager.isSwipeable();
     }
 
     public void requestPermissions() {
@@ -195,7 +202,7 @@ public class NewReportActivity extends BaseActivity implements ViewPager.OnPageC
             }
 
             if (lf != null && newReport.getMedia() != null) {
-                lf.setImageLocationTag(newReport.getMedia());
+                lf.getImageLocation(newReport.getMedia());
             }
         }
 
@@ -213,9 +220,7 @@ public class NewReportActivity extends BaseActivity implements ViewPager.OnPageC
     }
 
     @Override
-    public void onPageScrollStateChanged(int state) {
-
-    }
+    public void onPageScrollStateChanged(int state) {}
 
     @Override
     public void setLocation(Location t) {
@@ -235,4 +240,6 @@ public class NewReportActivity extends BaseActivity implements ViewPager.OnPageC
     public interface SummaryFragmentListener {
         void fragmentBecameVisible();
     }
+
+
 }

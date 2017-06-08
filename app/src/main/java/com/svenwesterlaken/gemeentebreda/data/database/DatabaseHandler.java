@@ -1,22 +1,17 @@
 package com.svenwesterlaken.gemeentebreda.data.database;
 
-import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
 import com.readystatesoftware.sqliteasset.SQLiteAssetHelper;
 import com.svenwesterlaken.gemeentebreda.domain.Category;
 import com.svenwesterlaken.gemeentebreda.domain.Location;
-import com.svenwesterlaken.gemeentebreda.domain.Media;
 import com.svenwesterlaken.gemeentebreda.domain.Report;
 import com.svenwesterlaken.gemeentebreda.domain.User;
 
 import java.util.ArrayList;
-
-import static android.R.attr.id;
 
 /**
  * Created by Luka Brinkman
@@ -30,8 +25,6 @@ public class DatabaseHandler extends SQLiteAssetHelper {
 
     public DatabaseHandler (Context context){
         super(context, DB_NAME, null, DB_VERSION);
-
-
     }
 
 
@@ -39,13 +32,15 @@ public class DatabaseHandler extends SQLiteAssetHelper {
     public void addUser(User user){
 
         String name = user.getName();
-//        String phone = user.getMobileNumber();
+        String phone = user.getMobileNumber();
         String email = user.getEmailaddress();
         int userId = user.getUserID();
 
         SQLiteDatabase db = this.getWritableDatabase();
 
-        String query = "INSERT INTO user VALUES (" + userId +  " , '" + name + "' , " + 0 + " , '" + email + "' );";
+
+        String query = "INSERT INTO user VALUES (" + userId +  " , '" + name + "' ,  '" + phone + "', '" + email + "');";
+
         db.execSQL(query);
 
         Log.i("TAG", "added user");
@@ -85,20 +80,19 @@ public class DatabaseHandler extends SQLiteAssetHelper {
 
         SQLiteDatabase db = this.getWritableDatabase();
 
-        String query = "INSERT INTO location(locationId, latitude, longitude, street, streetnr, postalcode, city) VALUES (" +
+        String query = "INSERT INTO location(locationId, latitude, longitude, street) VALUES (" +
                 location.getLocationID() + " , " + location.getLatitude() + " , " + location.getLongitude() + " , '" +
-                location.getStreet() +  "' , '"+ location.getHouseNumber() + "' , '" + location.getPostalCode() + "' , '" +
-                location.getCity() + "');";
+                location.getStreet() + "');";
         db.execSQL(query);
         Log.i("TAG", "added location");
         db.close();
     }
 
 
-    public void addReportUser(Report report, User user){
+    public void addReportUser(Report report){
 
         SQLiteDatabase db = this.getWritableDatabase();
-        String query = "INSERT INTO user_report VALUES (" + user.getUserID() + " , " + report.getReportID() + ");";
+        String query = "INSERT INTO user_report VALUES (" + 1 + " , " + report.getReportID() + ");";
         db.execSQL(query);
         db.close();
     }
@@ -110,7 +104,7 @@ public class DatabaseHandler extends SQLiteAssetHelper {
 
         //cursor.moveToFirst();
         Log.i("TAG", "before while");
-        ArrayList<Report> reports = new ArrayList<Report>();
+        ArrayList<Report> reports = new ArrayList<>();
 
         while(cursor.moveToNext() ) {
             Report report = new Report();
@@ -131,7 +125,7 @@ public class DatabaseHandler extends SQLiteAssetHelper {
     public void addCategory(Category category){
 
         SQLiteDatabase db = this.getWritableDatabase();
-        String query = "INSERT INTO category(name, summary) VALUES ('" + category.getCategoryName() +
+        String query = "INSERT INTO category(categoryId, categoryName, summary) VALUES (" + category.getCategoryID() + ", '" + category.getCategoryName() +
                 "' , '" + category.getCategorySummary() +  "');";
         db.execSQL(query);
         db.close();
@@ -171,7 +165,7 @@ public class DatabaseHandler extends SQLiteAssetHelper {
     public User getUser(int userID){
         User user = null;
 
-        String query = "SELECT name" + " FROM user WHERE userId = " + userID;
+        String query = "SELECT *" + " FROM user WHERE userId = " + userID;
 
         SQLiteDatabase db = this.getReadableDatabase();
 
@@ -183,7 +177,9 @@ public class DatabaseHandler extends SQLiteAssetHelper {
         while(cursor.moveToNext() ) {
             user = new User();
             user.setName(cursor.getString(cursor.getColumnIndex("name")));
-            Log.i("TAG", "got user");
+            user.setUserID(1);
+            user.setEmailaddress(cursor.getString(cursor.getColumnIndex("email")));
+            user.setMobileNumber(cursor.getString(cursor.getColumnIndex("phone")));
         };
 
         cursor.close();
@@ -207,9 +203,8 @@ public class DatabaseHandler extends SQLiteAssetHelper {
 
         while(cursor.moveToNext() ) {
             location = new Location();
-            location.setCity(cursor.getString(cursor.getColumnIndex("city")));
+            location.setLocationID(locationID);
             location.setStreet(cursor.getString(cursor.getColumnIndex("street")));
-            location.setHouseNumber(cursor.getInt(cursor.getColumnIndex("streetnr")));
             location.setLatitude(cursor.getDouble(cursor.getColumnIndex("latitude")));
             location.setLongitude(cursor.getDouble(cursor.getColumnIndex("longitude")));
             Log.i("TAG", "got location " + cursor.getDouble(cursor.getColumnIndex("longitude")) + " " + cursor.getDouble(cursor.getColumnIndex("latitude")));
@@ -269,6 +264,7 @@ public class DatabaseHandler extends SQLiteAssetHelper {
         }
 
         cursor.close();
+        db.close();
 
         return category;
     }
@@ -303,6 +299,8 @@ public class DatabaseHandler extends SQLiteAssetHelper {
         }
 
         cursor.close();
+        db.close();
+
         return reports;
 
     }
@@ -332,6 +330,8 @@ public class DatabaseHandler extends SQLiteAssetHelper {
         }
 
         cursor.close();
+        db.close();
+
         return categories;
 
     }
@@ -357,8 +357,18 @@ public class DatabaseHandler extends SQLiteAssetHelper {
         }
 
         cursor.close();
+        db.close();
+
         return reports;
 
+    }
+
+    public void deleteCategory(){
+        SQLiteDatabase db = this.getWritableDatabase();
+        String query = "DELETE FROM category";
+
+        db.execSQL(query);
+        db.close();
     }
 
     public void deleteFavourite(Report report){
@@ -367,6 +377,7 @@ public class DatabaseHandler extends SQLiteAssetHelper {
         String query = "DELETE FROM favourite WHERE reportId  = " + report.getReportID();
 
         db.execSQL(query);
+        db.close();
 
     }
 
@@ -380,13 +391,30 @@ public class DatabaseHandler extends SQLiteAssetHelper {
         while(cursor.moveToNext() ) {
 
             int reportId = cursor.getInt(cursor.getColumnIndex("reportId"));
-            int userId = cursor.getInt(cursor.getColumnIndex("userId"));
+            //int userId = cursor.getInt(cursor.getColumnIndex("userId"));
             report1 = getReport(reportId);
         }
 
         cursor.close();
+        db.close();
 
         return  report1;
+    }
+    
+    public void deleteAllReports(){
+        SQLiteDatabase db = this.getWritableDatabase();
+        String query = "DELETE FROM Report";
+        db.execSQL(query);
+        
+        db.close();
+        
+    }
+    public void removeAllLocations(){
+        SQLiteDatabase db = this.getWritableDatabase();
+        String query = "DELETE FROM location";
+        db.execSQL(query);
+        
+        db.close();
     }
 
 

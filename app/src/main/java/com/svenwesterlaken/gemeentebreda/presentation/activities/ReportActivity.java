@@ -8,6 +8,7 @@ import android.support.design.widget.TabLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 
+import android.support.v4.app.ListFragment;
 import android.support.v4.view.PagerAdapter;
 
 import android.support.v4.app.ActivityCompat;
@@ -30,14 +31,29 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.svenwesterlaken.gemeentebreda.R;
+import com.svenwesterlaken.gemeentebreda.data.api.CategoryRequest;
+import com.svenwesterlaken.gemeentebreda.data.api.ReportRequest;
 import com.svenwesterlaken.gemeentebreda.data.database.DatabaseHandler;
 import com.svenwesterlaken.gemeentebreda.domain.Category;
 import com.svenwesterlaken.gemeentebreda.domain.Location;
 import com.svenwesterlaken.gemeentebreda.domain.Report;
+import com.svenwesterlaken.gemeentebreda.domain.ServiceCategory;
+import com.svenwesterlaken.gemeentebreda.domain.ServiceReport;
 import com.svenwesterlaken.gemeentebreda.domain.User;
 import com.svenwesterlaken.gemeentebreda.logic.adapters.ReportPagerAdapter;
 import com.svenwesterlaken.gemeentebreda.presentation.fragments.ReportListFragment;
@@ -45,17 +61,18 @@ import com.svenwesterlaken.gemeentebreda.presentation.fragments.ReportMapFragmen
 import com.svenwesterlaken.gemeentebreda.presentation.partials.NotImplementedListener;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Random;
 
 
-public class ReportActivity extends MenuActivity {
+public class ReportActivity extends MenuActivity  {
 
     private PagerAdapter mSectionsPagerAdapter;
+    private ArrayList<Report> reports ;
     private ViewPager mViewPager;
     private ReportMapFragment mapFragment;
     private ReportListFragment listFragment;
-
-
 
     private static final int MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 1;
     DatabaseHandler handler;
@@ -67,17 +84,17 @@ public class ReportActivity extends MenuActivity {
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
+        
+        
+        
         super.onCreateDrawer(toolbar, this);
-
+        handler = new DatabaseHandler(getApplicationContext());
+    
+    
         mapFragment = new ReportMapFragment();
         listFragment = new ReportListFragment();
-
-        // Create the adapter that will return a fragment for each of the three
-        // primary sections of the activity.
         mSectionsPagerAdapter = new ReportPagerAdapter(getSupportFragmentManager(), 2, getApplicationContext(), mapFragment, listFragment);
-        handler = new DatabaseHandler(getApplicationContext());
-
+        
 
         // Set up the ViewPager with the sections adapter.
         mViewPager = (ViewPager) findViewById(R.id.container);
@@ -93,16 +110,12 @@ public class ReportActivity extends MenuActivity {
 
                 Intent i = new Intent(getApplicationContext(), NewReportActivity.class);
                 startActivity(i);
-//
-//                Intent intent = getIntent();
-//                finish();
-//                startActivity(intent);
+
 
             }
         });
 
         requestPermissions();
-
 
 
     }
@@ -167,7 +180,9 @@ public class ReportActivity extends MenuActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_report, menu);
-        menu.findItem(R.id.action_filter).setOnMenuItemClickListener(new NotImplementedListener(getApplicationContext()));
+
+        menu.findItem(R.id.action_filter);
+
         return true;
     }
 
@@ -202,5 +217,18 @@ public class ReportActivity extends MenuActivity {
             // permissions this app might request
         }
     }
+    
+
+        public void onRestart(){
+            super.onRestart();
+            recreate();
+        }
+        
+        @Override
+        public  void onBackPressed(){
+            Log.i("LOG", "Not possible");
+        }
+
+
 }
 

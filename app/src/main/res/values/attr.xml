@@ -5,4 +5,5 @@
     <attr name="actionBarTheme" format="reference"/>
     <attr name="disabledAlpha" format="float"/>
     <attr name="colorPrimaryLight" format="color"/>
+    <attr name="colorText" format="color"/>
 </resources>

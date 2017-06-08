@@ -1,12 +1,15 @@
 package com.svenwesterlaken.gemeentebreda.domain;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import java.io.Serializable;
 
 /**
  * Created by lukab on 9-5-2017.
  */
 
-public class User implements Serializable{
+public class User implements Parcelable {
     int userID;
     String name, emailaddress, mobileNumber;
 
@@ -58,4 +61,36 @@ public class User implements Serializable{
     public void setName(String name) {
         this.name = name;
     }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(this.userID);
+        dest.writeString(this.name);
+        dest.writeString(this.emailaddress);
+        dest.writeString(this.mobileNumber);
+    }
+
+    protected User(Parcel in) {
+        this.userID = in.readInt();
+        this.name = in.readString();
+        this.emailaddress = in.readString();
+        this.mobileNumber = in.readString();
+    }
+
+    public static final Parcelable.Creator<User> CREATOR = new Parcelable.Creator<User>() {
+        @Override
+        public User createFromParcel(Parcel source) {
+            return new User(source);
+        }
+
+        @Override
+        public User[] newArray(int size) {
+            return new User[size];
+        }
+    };
 }
