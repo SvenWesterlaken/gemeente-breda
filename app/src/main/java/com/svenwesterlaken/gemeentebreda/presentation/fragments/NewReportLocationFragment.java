@@ -254,6 +254,11 @@ public class NewReportLocationFragment extends Fragment implements NewLocationMa
         if (location != null) {
             setAddress(location);
         }
+
+        if (chosenLocation != null) {
+            setReceivedLocation(chosenLocation, FetchAddressIntentService.CHOOSE_LOCATION);
+            enableButton(FetchAddressIntentService.CHOOSE_LOCATION);
+        }
         super.onResume();
     }
 

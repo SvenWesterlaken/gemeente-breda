@@ -13,6 +13,7 @@ import com.drew.metadata.Metadata;
 import com.drew.metadata.exif.GpsDirectory;
 import com.google.android.gms.maps.model.LatLng;
 import com.svenwesterlaken.gemeentebreda.logic.exceptions.NoLocationMetaException;
+import com.svenwesterlaken.gemeentebreda.logic.util.DoubleUtil;
 
 import java.io.File;
 import java.io.IOException;
@@ -42,7 +43,7 @@ public class MediaLocationHandler {
             }
         }
 
-        if (latlong == null) {
+        if (latlong == null || DoubleUtil.isZero(latlong.latitude, 0.0001)) {
             throw new NoLocationMetaException();
         } else {
             return latlong;
