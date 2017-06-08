@@ -10,6 +10,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
 import com.svenwesterlaken.gemeentebreda.R;
+import com.svenwesterlaken.gemeentebreda.data.api.CategoryRequest;
+import com.svenwesterlaken.gemeentebreda.data.api.ReportRequest;
 
 import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
@@ -21,6 +23,7 @@ public class LoadingActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_loading);
 
+
         CalligraphyConfig.initDefault(new CalligraphyConfig.Builder()
                 .setDefaultFontPath("fonts/Roboto-Regular.ttf")
                 .setFontAttrId(R.attr.fontPath)
@@ -30,7 +33,10 @@ public class LoadingActivity extends AppCompatActivity {
         new CountDownTimer(1500, 1000) {
 
             @Override
-            public void onTick(long millisUntilFinished) {}
+            public void onTick(long millisUntilFinished) {
+                getCategories();
+                getReports();
+            }
 
             @Override
             public void onFinish() {
@@ -43,6 +49,8 @@ public class LoadingActivity extends AppCompatActivity {
                 //Start login activity when no name, email and phonenumber is specified (First time using the app)
                 //Otherwise start ReportActivity
                 if (name == null && email == null && phone == null) {
+                    i = new Intent(getApplicationContext(), LoginActivity.class);
+                } else if (name.equals("Onbekend") && email.equals("Onbekend") && phone.equals("Onbekend")){
                     i = new Intent(getApplicationContext(), LoginActivity.class);
                 } else {
                     i = new Intent(getApplicationContext(), ReportActivity.class);
@@ -59,5 +67,17 @@ public class LoadingActivity extends AppCompatActivity {
     @Override
     protected void attachBaseContext(Context newBase) {
         super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
+    }
+    
+    private void getReports(){
+    
+        ReportRequest request = new ReportRequest(getApplicationContext());
+        request.handleGetAllReports();
+    }
+    
+    private void getCategories(){
+        
+        CategoryRequest request = new CategoryRequest(getApplicationContext());
+        request.handleGetCategories();
     }
 }

@@ -39,7 +39,7 @@ public class DetailedReportActivity extends BaseActivity  {
         Bundle extras = getIntent().getExtras();
 
         if (extras != null) {
-            report =  (Report) extras.getSerializable("REPORT");
+            report =  extras.getParcelable("REPORT");
         }
 
 
@@ -51,10 +51,18 @@ public class DetailedReportActivity extends BaseActivity  {
         ImageView upvotes = (ImageView) findViewById(R.id.report_IV_upvotes);
 
         category.setText(report.getCategory().getCategoryName());
-        address.setText(report.getLocation().getStreet() + " " + report.getLocation().getHouseNumber());
+        address.setText(report.getLocation().getStreet());
         description.setText(report.getDescription());
         icon.setImageResource( R.drawable.lightbulb);
-        status.setImageResource( R.drawable.eye_off);
+        
+        if (report.getStatus() == "open") {
+           status.setImageResource(R.drawable.eye_off);
+        }
+        
+        else {
+            status.setImageResource(R.drawable.check);
+        }
+        
         upvotes.setImageResource(R.drawable.star);
 
         RecyclerView reportComments = (RecyclerView) findViewById(R.id.detailed_RV_comments);

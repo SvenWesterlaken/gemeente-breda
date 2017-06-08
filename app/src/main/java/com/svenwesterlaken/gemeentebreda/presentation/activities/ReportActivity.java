@@ -8,6 +8,7 @@ import android.support.design.widget.TabLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 
+import android.support.v4.app.ListFragment;
 import android.support.v4.view.PagerAdapter;
 
 import android.support.v4.app.ActivityCompat;
@@ -45,6 +46,8 @@ import com.android.volley.toolbox.Volley;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.svenwesterlaken.gemeentebreda.R;
+import com.svenwesterlaken.gemeentebreda.data.api.CategoryRequest;
+import com.svenwesterlaken.gemeentebreda.data.api.ReportRequest;
 import com.svenwesterlaken.gemeentebreda.data.database.DatabaseHandler;
 import com.svenwesterlaken.gemeentebreda.domain.Category;
 import com.svenwesterlaken.gemeentebreda.domain.Location;
@@ -63,17 +66,13 @@ import java.util.List;
 import java.util.Random;
 
 
-public class ReportActivity extends MenuActivity {
+public class ReportActivity extends MenuActivity  {
 
     private PagerAdapter mSectionsPagerAdapter;
+    private ArrayList<Report> reports ;
     private ViewPager mViewPager;
     private ReportMapFragment mapFragment;
     private ReportListFragment listFragment;
-    private static final String ENDPOINT = "http://37.34.59.50/breda/CitySDK/services.json";
-    private static final String ENDPOINT2 = "http://37.34.59.50/breda/CitySDK/requests.json/?service_code=OV";
-    private RequestQueue categoryQueue;
-    private Gson gson;
-
 
     private static final int MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 1;
     DatabaseHandler handler;
@@ -85,22 +84,17 @@ public class ReportActivity extends MenuActivity {
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
-        categoryQueue = Volley.newRequestQueue(getApplicationContext());
-        GsonBuilder gbuilder = new GsonBuilder();
-        gson = gbuilder.create();
-        fetchPosts();
-
+        
+        
+        
         super.onCreateDrawer(toolbar, this);
-
+        handler = new DatabaseHandler(getApplicationContext());
+    
+    
         mapFragment = new ReportMapFragment();
         listFragment = new ReportListFragment();
-
-        // Create the adapter that will return a fragment for each of the three
-        // primary sections of the activity.
         mSectionsPagerAdapter = new ReportPagerAdapter(getSupportFragmentManager(), 2, getApplicationContext(), mapFragment, listFragment);
-        handler = new DatabaseHandler(getApplicationContext());
-
+        
 
         // Set up the ViewPager with the sections adapter.
         mViewPager = (ViewPager) findViewById(R.id.container);
@@ -116,10 +110,7 @@ public class ReportActivity extends MenuActivity {
 
                 Intent i = new Intent(getApplicationContext(), NewReportActivity.class);
                 startActivity(i);
-//
-//                Intent intent = getIntent();
-//                finish();
-//                startActivity(intent);
+
 
             }
         });
@@ -189,43 +180,8 @@ public class ReportActivity extends MenuActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_report, menu);
-        final Spinner spinner = (Spinner) findViewById(R.id.spinner);
-//        spinner.setVisibility(View.GONE);
+
         menu.findItem(R.id.action_filter);
-
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getSupportActionBar().getThemedContext(), R.array.report_filter_array, android.R.layout.simple_spinner_item);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinner.setAdapter(adapter);
-
-        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-//                String filter = parent.getItemAtPosition(position).toString();
-//                String sPopular = getResources().getString(R.string.popular);
-//                String sRecent = getResources().getString(R.string.recent);
-//                String sAdult = getResources().getString(R.string.adult);
-//                String sRating = getResources().getString(R.string.rating);
-//                String sTitle = getResources().getString(R.string.title);
-//
-//                if (filter.equals(sPopular)) {
-//                    fManager.findPopularMovies();
-//                } else if (filter.equals(sRecent)) {
-//                    fManager.findRecentMovies();
-//                } else if (filter.equals(sAdult)) {
-//                    fManager.findAdultMovies();
-//                } else if (filter.equals(sRating)) {
-//                    fManager.findRatedMovies();
-//                } else if (filter.equals(sTitle)) {
-//                    fManager.findMoviesByTitle();
-//                }
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        });
 
         return true;
     }
@@ -261,70 +217,7 @@ public class ReportActivity extends MenuActivity {
             // permissions this app might request
         }
     }
-
-    private void fetchPosts() {
-        StringRequest categoryRequest = new StringRequest(Request.Method.GET, ENDPOINT, onPostsLoaded, onPostsError);
-        StringRequest reportsRequest = new StringRequest(Request.Method.GET, ENDPOINT2, onPostsLoaded2, onPostsError);
-        categoryQueue.add(categoryRequest);
-        categoryQueue.add(reportsRequest);
-    }
-
-
-    private final Response.Listener<String> onPostsLoaded = new Response.Listener<String>() {
-        @Override
-        public void onResponse(String response) {
-            List<ServiceCategory> categories = Arrays.asList(gson.fromJson(response, ServiceCategory[].class));
-            Log.i("Categories", categories.size() + "categories loaded");
-            if (!(handler.getAllCategories().size() == 0)) {
-                handler.deleteCategory();
-            }
-            for (ServiceCategory category : categories) {
-                Log.i("Categories", category.categoryName + category.description);
-                String name = category.categoryName;
-                String description = category.description;
-                Category category1 = new Category(handler.getAllCategories().size() + 1, name, description);
-
-                handler.addCategory(category1);
-            }
-
-
-        }
-    };
-
-    private final Response.Listener<String> onPostsLoaded2 = new Response.Listener<String>() {
-        @Override
-        public void onResponse(String response) {
-            List<ServiceReport> serviceReports = Arrays.asList(gson.fromJson(response, ServiceReport[].class));
-            Log.i("Reports", serviceReports.size() + "reports loaded");
-            if (handler.getAllCategories().size() == 0) {
-
-                for (ServiceReport report : serviceReports) {
-                    Log.i("Reports", report.address + report.serviceName);
-                    Report report1 = new Report();
-                    Location location = new Location();
-                    location.setStreet(report.address);
-                    location.setLatitude(report.latitude);
-                    location.setLocationID(handler.getAllReports().size() + 1);
-                    handler.addLocation(location);
-                    report1.setReportID(handler.getAllReports().size() + 1);
-                    report1.setCategory(handler.getCategory(1)); //ff aanpassen nog
-                    report1.setLocation(location);
-                    report1.setDescription("Wachten op API");
-
-                    handler.addReport(report1);
-                }
-
-
-            }
-        }
-    };
-
-        private final Response.ErrorListener onPostsError = new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Log.e("PostActivity", error.toString());
-            }
-        };
+    
 
 }
 

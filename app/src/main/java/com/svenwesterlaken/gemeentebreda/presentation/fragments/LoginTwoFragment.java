@@ -122,6 +122,10 @@ public class LoginTwoFragment extends Fragment {
             if (!TextUtils.isEmpty(phone.getText())) {
                 editor.putString("pref_phone", phone.getText().toString());
             }
+            
+            else {
+                editor.putString("pref_phone", "empty");
+            }
 
             editor.commit();
 
@@ -130,6 +134,7 @@ public class LoginTwoFragment extends Fragment {
             User user = new User();
             user.setName(preferences.getString("pref_name", ""));
             user.setEmailaddress(preferences.getString("pref_email", ""));
+            user.setMobileNumber(preferences.getString("pref_phone", ""));
             user.setUserID(1);
             handler.addUser( user);
 

@@ -62,8 +62,8 @@ public class FetchAddressIntentService extends IntentService {
                 String country = addresses.get(0).getCountryName();
                 String postalCode = addresses.get(0).getPostalCode();
                 String knownName = addresses.get(0).getFeatureName();
-
-                location.setCity(city);
+//
+//                location.setCity(city);
 
                 //deliverResultToReceiver(Constants.SUCCESS_RESULT, city);
             } else {

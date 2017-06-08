@@ -39,13 +39,13 @@ public class DatabaseHandler extends SQLiteAssetHelper {
     public void addUser(User user){
 
         String name = user.getName();
-//        String phone = user.getMobileNumber();
+        String phone = user.getMobileNumber();
         String email = user.getEmailaddress();
         int userId = user.getUserID();
 
         SQLiteDatabase db = this.getWritableDatabase();
 
-        String query = "INSERT INTO user VALUES (" + userId +  " , '" + name + "' , " + 0 + " , '" + email + "' );";
+        String query = "INSERT INTO user VALUES (" + userId +  " , '" + name + "' ,  '" + phone + "', '" + email + "');";
         db.execSQL(query);
 
         Log.i("TAG", "added user");
@@ -85,20 +85,19 @@ public class DatabaseHandler extends SQLiteAssetHelper {
 
         SQLiteDatabase db = this.getWritableDatabase();
 
-        String query = "INSERT INTO location(locationId, latitude, longitude, street, streetnr, postalcode, city) VALUES (" +
+        String query = "INSERT INTO location(locationId, latitude, longitude, street) VALUES (" +
                 location.getLocationID() + " , " + location.getLatitude() + " , " + location.getLongitude() + " , '" +
-                location.getStreet() +  "' , '"+ location.getHouseNumber() + "' , '" + location.getPostalCode() + "' , '" +
-                location.getCity() + "');";
+                location.getStreet() + "');";
         db.execSQL(query);
         Log.i("TAG", "added location");
         db.close();
     }
 
 
-    public void addReportUser(Report report, User user){
+    public void addReportUser(Report report){
 
         SQLiteDatabase db = this.getWritableDatabase();
-        String query = "INSERT INTO user_report VALUES (" + user.getUserID() + " , " + report.getReportID() + ");";
+        String query = "INSERT INTO user_report VALUES (" + 1 + " , " + report.getReportID() + ");";
         db.execSQL(query);
         db.close();
     }
@@ -171,7 +170,7 @@ public class DatabaseHandler extends SQLiteAssetHelper {
     public User getUser(int userID){
         User user = null;
 
-        String query = "SELECT name" + " FROM user WHERE userId = " + userID;
+        String query = "SELECT *" + " FROM user WHERE userId = " + userID;
 
         SQLiteDatabase db = this.getReadableDatabase();
 
@@ -183,7 +182,9 @@ public class DatabaseHandler extends SQLiteAssetHelper {
         while(cursor.moveToNext() ) {
             user = new User();
             user.setName(cursor.getString(cursor.getColumnIndex("name")));
-            Log.i("TAG", "got user");
+            user.setUserID(1);
+            user.setEmailaddress(cursor.getString(cursor.getColumnIndex("email")));
+            user.setMobileNumber(cursor.getString(cursor.getColumnIndex("phone")));
         };
 
         cursor.close();
@@ -207,9 +208,8 @@ public class DatabaseHandler extends SQLiteAssetHelper {
 
         while(cursor.moveToNext() ) {
             location = new Location();
-            location.setCity(cursor.getString(cursor.getColumnIndex("city")));
+            location.setLocationID(locationID);
             location.setStreet(cursor.getString(cursor.getColumnIndex("street")));
-            location.setHouseNumber(cursor.getInt(cursor.getColumnIndex("streetnr")));
             location.setLatitude(cursor.getDouble(cursor.getColumnIndex("latitude")));
             location.setLongitude(cursor.getDouble(cursor.getColumnIndex("longitude")));
             Log.i("TAG", "got location " + cursor.getDouble(cursor.getColumnIndex("longitude")) + " " + cursor.getDouble(cursor.getColumnIndex("latitude")));
@@ -395,6 +395,22 @@ public class DatabaseHandler extends SQLiteAssetHelper {
         cursor.close();
 
         return  report1;
+    }
+    
+    public void deleteAllReports(){
+        SQLiteDatabase db = this.getWritableDatabase();
+        String query = "DELETE FROM Report";
+        db.execSQL(query);
+        
+        db.close();
+        
+    }
+    public void removeAllLocations(){
+        SQLiteDatabase db = this.getWritableDatabase();
+        String query = "DELETE FROM location";
+        db.execSQL(query);
+        
+        db.close();
     }
 
 
