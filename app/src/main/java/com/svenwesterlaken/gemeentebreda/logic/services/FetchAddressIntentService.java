@@ -5,8 +5,8 @@ import android.content.Intent;
 import android.location.Address;
 import android.location.Geocoder;
 import android.os.Bundle;
+import android.os.ResultReceiver;
 import android.support.annotation.Nullable;
-import android.support.v4.os.ResultReceiver;
 import android.util.Log;
 
 import com.svenwesterlaken.gemeentebreda.domain.Location;
@@ -20,22 +20,22 @@ import java.util.Locale;
  */
 
 public class FetchAddressIntentService extends IntentService {
-    protected ResultReceiver mReceiver;
+    private ResultReceiver mReceiver;
+    private int type;
+
+    public static final int SUCCESS_RESULT = 0;
+    public static final int FAILURE_RESULT = 1;
+    public static final String PACKAGE_NAME = "com.svenwesterlaken.gemeentebreda.logic.services";
+    public static final String RESULT_DATA_KEY = PACKAGE_NAME + ".RESULT_DATA_KEY";
+    public static final String LATITUDE_DATA_EXTRA = PACKAGE_NAME + ".LATITUDE_DATA_EXTRA";
+    public static final String LONGITUDE_DATA_EXTRA = PACKAGE_NAME + ".LONGITUDE_DATA_EXTRA";
+
+    public static final int CURRENT_LOCATION = 1;
+    public static final int MEDIA_LOCATION = 2;
+    public static final int CHOOSE_LOCATION = 3;
 
     public FetchAddressIntentService() {
         super("AddressService");
-    }
-
-    public final class Constants {
-        public static final int SUCCESS_RESULT = 0;
-        public static final int FAILURE_RESULT = 1;
-        public static final String PACKAGE_NAME =
-                "com.svenwesterlaken.gemeentebreda.logic.services";
-        public static final String RECEIVER = PACKAGE_NAME + ".RECEIVER";
-        public static final String RESULT_DATA_KEY = PACKAGE_NAME +
-                ".RESULT_DATA_KEY";
-        public static final String LATITUDE_DATA_EXTRA = PACKAGE_NAME + ".LATITUDE_DATA_EXTRA";
-        public static final String LONGITUDE_DATA_EXTRA = PACKAGE_NAME + ".LONGITUDE_DATA_EXTRA";
     }
 
     @Override
@@ -46,8 +46,12 @@ public class FetchAddressIntentService extends IntentService {
 
         Location location = new Location();
 
-        double latitude = intent.getDoubleExtra(Constants.LATITUDE_DATA_EXTRA, 0);
-        double longitude = intent.getDoubleExtra(Constants.LONGITUDE_DATA_EXTRA, 0);
+        assert intent != null;
+        mReceiver = intent.getParcelableExtra("RECEIVER");
+        type = intent.getIntExtra("TYPE", 0);
+
+        double latitude = intent.getDoubleExtra(LATITUDE_DATA_EXTRA, 0);
+        double longitude = intent.getDoubleExtra(LONGITUDE_DATA_EXTRA, 0);
 
         Log.d("GEOCODER", "" + "Geocoder is present: " + Geocoder.isPresent());
 
@@ -62,12 +66,17 @@ public class FetchAddressIntentService extends IntentService {
                 String country = addresses.get(0).getCountryName();
                 String postalCode = addresses.get(0).getPostalCode();
                 String knownName = addresses.get(0).getFeatureName();
-//
-//                location.setCity(city);
 
-                //deliverResultToReceiver(Constants.SUCCESS_RESULT, city);
+
+                location.setStreet(address);
+                location.setLatitude(latitude);
+                location.setLongitude(longitude);
+
+           
+                deliverResultToReceiver(SUCCESS_RESULT, location);
             } else {
                 Log.e("ADDRESSES", "No addresses were returned by the geocoder.");
+                deliverResultToReceiver(FAILURE_RESULT, location);
             }
 
         } catch (IOException e){
@@ -76,9 +85,11 @@ public class FetchAddressIntentService extends IntentService {
 
     }
 
-    private void deliverResultToReceiver(int resultCode, String message) {
+    private void deliverResultToReceiver(int resultCode, Location location) {
         Bundle bundle = new Bundle();
-        bundle.putString(Constants.RESULT_DATA_KEY, message);
+        bundle.putParcelable(RESULT_DATA_KEY, location);
+        bundle.putInt("TYPE", type);
+
         mReceiver.send(resultCode, bundle);
     }
 

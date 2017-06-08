@@ -11,8 +11,6 @@ import android.support.v4.content.ContextCompat;
 
 import com.afollestad.materialcamera.MaterialCamera;
 import com.svenwesterlaken.gemeentebreda.R;
-import com.svenwesterlaken.gemeentebreda.domain.Media;
-import com.svenwesterlaken.gemeentebreda.presentation.fragments.NewReportMediaFragment;
 
 import java.io.File;
 
@@ -35,7 +33,6 @@ public class MediaManager {
         if (ContextCompat.checkSelfPermission(activity, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
             String dir = activity.getString(R.string.app_name).replaceAll("\\s","");
             saveDir = new File(Environment.getExternalStorageDirectory(), dir);
-            saveDir.mkdirs();
         }
 
         return saveDir;

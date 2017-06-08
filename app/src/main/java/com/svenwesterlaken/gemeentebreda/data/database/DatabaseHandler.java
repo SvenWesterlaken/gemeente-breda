@@ -1,22 +1,17 @@
 package com.svenwesterlaken.gemeentebreda.data.database;
 
-import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
 import com.readystatesoftware.sqliteasset.SQLiteAssetHelper;
 import com.svenwesterlaken.gemeentebreda.domain.Category;
 import com.svenwesterlaken.gemeentebreda.domain.Location;
-import com.svenwesterlaken.gemeentebreda.domain.Media;
 import com.svenwesterlaken.gemeentebreda.domain.Report;
 import com.svenwesterlaken.gemeentebreda.domain.User;
 
 import java.util.ArrayList;
-
-import static android.R.attr.id;
 
 /**
  * Created by Luka Brinkman
@@ -30,8 +25,6 @@ public class DatabaseHandler extends SQLiteAssetHelper {
 
     public DatabaseHandler (Context context){
         super(context, DB_NAME, null, DB_VERSION);
-
-
     }
 
 
@@ -45,7 +38,9 @@ public class DatabaseHandler extends SQLiteAssetHelper {
 
         SQLiteDatabase db = this.getWritableDatabase();
 
+
         String query = "INSERT INTO user VALUES (" + userId +  " , '" + name + "' ,  '" + phone + "', '" + email + "');";
+
         db.execSQL(query);
 
         Log.i("TAG", "added user");
@@ -109,7 +104,7 @@ public class DatabaseHandler extends SQLiteAssetHelper {
 
         //cursor.moveToFirst();
         Log.i("TAG", "before while");
-        ArrayList<Report> reports = new ArrayList<Report>();
+        ArrayList<Report> reports = new ArrayList<>();
 
         while(cursor.moveToNext() ) {
             Report report = new Report();
@@ -269,6 +264,7 @@ public class DatabaseHandler extends SQLiteAssetHelper {
         }
 
         cursor.close();
+        db.close();
 
         return category;
     }
@@ -303,6 +299,8 @@ public class DatabaseHandler extends SQLiteAssetHelper {
         }
 
         cursor.close();
+        db.close();
+
         return reports;
 
     }
@@ -332,6 +330,8 @@ public class DatabaseHandler extends SQLiteAssetHelper {
         }
 
         cursor.close();
+        db.close();
+
         return categories;
 
     }
@@ -357,6 +357,8 @@ public class DatabaseHandler extends SQLiteAssetHelper {
         }
 
         cursor.close();
+        db.close();
+
         return reports;
 
     }
@@ -375,6 +377,7 @@ public class DatabaseHandler extends SQLiteAssetHelper {
         String query = "DELETE FROM favourite WHERE reportId  = " + report.getReportID();
 
         db.execSQL(query);
+        db.close();
 
     }
 
@@ -388,11 +391,12 @@ public class DatabaseHandler extends SQLiteAssetHelper {
         while(cursor.moveToNext() ) {
 
             int reportId = cursor.getInt(cursor.getColumnIndex("reportId"));
-            int userId = cursor.getInt(cursor.getColumnIndex("userId"));
+            //int userId = cursor.getInt(cursor.getColumnIndex("userId"));
             report1 = getReport(reportId);
         }
 
         cursor.close();
+        db.close();
 
         return  report1;
     }

@@ -1,4 +1,7 @@
 package com.svenwesterlaken.gemeentebreda.domain;
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.google.gson.annotations.SerializedName;
 
 /**
@@ -39,5 +42,4 @@ public class ServiceCategory {
     }
 
     //http://37.34.59.50/breda/CitySDK/services.json
-
 }

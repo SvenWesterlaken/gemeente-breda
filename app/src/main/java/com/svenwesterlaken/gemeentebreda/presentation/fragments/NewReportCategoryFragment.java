@@ -2,24 +2,18 @@ package com.svenwesterlaken.gemeentebreda.presentation.fragments;
 
 import android.app.Activity;
 import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Adapter;
-import android.widget.AdapterView;
-import android.widget.ListView;
-import android.widget.Toast;
 
 import com.svenwesterlaken.gemeentebreda.R;
 import com.svenwesterlaken.gemeentebreda.data.database.DatabaseHandler;
 import com.svenwesterlaken.gemeentebreda.domain.Category;
-import com.svenwesterlaken.gemeentebreda.domain.Media;
 import com.svenwesterlaken.gemeentebreda.logic.adapters.NewCategoryAdapter;
-import com.svenwesterlaken.gemeentebreda.presentation.activities.NewReportActivity;
 
 import java.util.ArrayList;
 
@@ -34,30 +28,20 @@ public class NewReportCategoryFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-        final View rootView = inflater.inflate(R.layout.fragment_new_report_category, container, false);
-        final ListView reportList = (ListView) rootView.findViewById(R.id.category_LV_categories);
+        View rootView = inflater.inflate(R.layout.fragment_new_report_category, container, false);
+        RecyclerView categoryList = (RecyclerView) rootView.findViewById(R.id.category_RV_categories);
 
-        final DatabaseHandler handler = new DatabaseHandler(getContext());
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
+        layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+        categoryList.setLayoutManager(layoutManager);
 
-        final ArrayList<Category> categories = handler.getAllCategories();
+        DatabaseHandler handler = new DatabaseHandler(getContext());
+        ArrayList<Category> categories = handler.getAllCategories();
 
-        final NewCategoryAdapter categoryAdapter = new NewCategoryAdapter(getContext(), categories);
-        reportList.setAdapter(categoryAdapter);
+        NewCategoryAdapter categoryAdapter = new NewCategoryAdapter(categories, getActivity(), categoryList, mListener);
+        categoryList.setAdapter(categoryAdapter);
 
         categoryAdapter.notifyDataSetChanged();
-
-        reportList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Category categorySelected = categories.get(position);
-                mListener.setCategory(categorySelected);
-                Toast.makeText(getActivity().getApplicationContext(), "Categorie is toegevoegd", Toast.LENGTH_SHORT).show();
-                ((NewReportActivity) getActivity()).scrollToNext();
-            }
-
-        });
-
-
 
         return rootView;
     }
@@ -68,11 +52,12 @@ public class NewReportCategoryFragment extends Fragment {
         Activity a = null;
 
         if (context instanceof Activity){
-            a=(Activity) context;
+            a= (Activity) context;
         }
         try {
             mListener = (CategoryChangedListener) a;
         } catch (ClassCastException e) {
+            assert a != null;
             throw new ClassCastException(a.toString() + " must implement CategoryChangedListener");
         }
     }

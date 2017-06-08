@@ -6,6 +6,7 @@
     android:layout_height="wrap_content"
     android:minHeight="64dp"
     tools:ignore="MissingPrefix"
+    android:id="@+id/layout"
     android:paddingRight="?android:attr/scrollbarSize"
     android:paddingEnd="?android:attr/scrollbarSize">
 

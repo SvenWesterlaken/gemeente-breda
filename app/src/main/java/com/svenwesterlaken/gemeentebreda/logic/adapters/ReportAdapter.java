@@ -3,13 +3,10 @@ package com.svenwesterlaken.gemeentebreda.logic.adapters;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.drawable.Drawable;
 import android.support.v7.widget.RecyclerView;
-import android.text.Layout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -17,30 +14,21 @@ import com.svenwesterlaken.gemeentebreda.R;
 import com.svenwesterlaken.gemeentebreda.domain.Report;
 import com.svenwesterlaken.gemeentebreda.presentation.activities.DetailedReportActivity;
 
-import org.parceler.Parcels;
-
 import java.util.List;
-
-import static com.svenwesterlaken.gemeentebreda.R.id.constraintLayout;
-import static com.svenwesterlaken.gemeentebreda.R.id.view;
-
-/**
- * Created by lukab on 7-5-2017.
- */
 
 public class ReportAdapter extends RecyclerView.Adapter<ReportAdapter.ReportViewHolder>  {
 
     private List<Report> reports;
     private Context context;
-    private Intent intent;
-    private Report report;
 
 
     // Constructor
-    public ReportAdapter(List<Report> reports) {
+    public ReportAdapter(List<Report> reports, Context c) {
         this.reports = reports;
+        this.context = c;
     }
 
+    @Override
     public int getItemCount() {
         return reports.size();
     }
@@ -49,22 +37,29 @@ public class ReportAdapter extends RecyclerView.Adapter<ReportAdapter.ReportView
     public ReportViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.row_report, parent, false);
 
-        return new ReportViewHolder(itemView, reports);
+        return new ReportViewHolder(itemView);
     }
 
     @Override
-    public void onBindViewHolder(final ReportViewHolder contactViewHolder, final int i) {
-         report = reports.get(i);
-        contactViewHolder.title.setText(report.getCategory().getCategoryName());
-        contactViewHolder.address.setText(report.getLocation().getStreet() );
-        contactViewHolder.description.setText(report.getDescription());
+    public void onBindViewHolder(final ReportViewHolder viewholder, final int i) {
+        Report report = reports.get(i);
+
+        String description = report.getDescription();
+
+        if(description == null || description.equals("null") || description.isEmpty() ) {
+            description = context.getString(R.string.summary_missing_description);
+        }
+
+        viewholder.title.setText(report.getCategory().getCategoryName());
+        viewholder.address.setText(report.getLocation().getStreet() );
+        viewholder.description.setText(description);
 
 
-        contactViewHolder.icon.setImageResource( R.drawable.lightbulb);
-        contactViewHolder.status.setImageResource( R.drawable.eye_off);
+        viewholder.icon.setImageResource( R.drawable.lightbulb);
+        viewholder.status.setImageResource( R.drawable.eye_off);
 
 
-        contactViewHolder.layout.setOnClickListener(new View.OnClickListener() {
+        viewholder.layout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
@@ -77,11 +72,6 @@ public class ReportAdapter extends RecyclerView.Adapter<ReportAdapter.ReportView
             }
         });
 
-
-
-
-        //notifyItemInserted(i);
-
     }
 
     public static class ReportViewHolder extends RecyclerView.ViewHolder  {
@@ -90,7 +80,7 @@ public class ReportAdapter extends RecyclerView.Adapter<ReportAdapter.ReportView
         private View layout;
 
 
-        public ReportViewHolder(View v, final List<Report> reports) {
+        public ReportViewHolder(View v) {
             super(v);
 
 
@@ -107,10 +97,6 @@ public class ReportAdapter extends RecyclerView.Adapter<ReportAdapter.ReportView
 
         }
 
-    }
-
-    public void updateReports(List<Report> list){
-        reports = list;
     }
 
 }

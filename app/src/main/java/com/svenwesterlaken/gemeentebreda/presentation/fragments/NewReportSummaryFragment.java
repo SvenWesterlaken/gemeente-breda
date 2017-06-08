@@ -203,7 +203,9 @@ public class NewReportSummaryFragment extends Fragment implements NewReportActiv
         }
 
         if (location != null) {
+
             locationTV.setText(location.getStreet());
+
             locationTV.setTextColor(descriptionTV.getTextColors().getDefaultColor());
         } else {
             locationTV.setText(R.string.summary_missing_location);

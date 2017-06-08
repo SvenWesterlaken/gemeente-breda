@@ -1,24 +1,12 @@
 package com.svenwesterlaken.gemeentebreda.presentation.fragments;
 
-import android.Manifest;
 import android.app.Activity;
-import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.database.Cursor;
-import android.net.Uri;
 import android.os.Bundle;
-import android.os.Handler;
-import android.provider.MediaStore;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
-import android.support.v4.os.ResultReceiver;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,379 +14,248 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.TextView;
 
-import com.drew.imaging.ImageMetadataReader;
-import com.drew.imaging.ImageProcessingException;
-import com.drew.lang.GeoLocation;
-import com.drew.metadata.Directory;
-import com.drew.metadata.Metadata;
-import com.drew.metadata.Tag;
-import com.drew.metadata.exif.GpsDirectory;
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.location.LocationServices;
 import com.svenwesterlaken.gemeentebreda.R;
-import com.svenwesterlaken.gemeentebreda.data.database.DatabaseHandler;
 import com.svenwesterlaken.gemeentebreda.domain.Location;
 import com.svenwesterlaken.gemeentebreda.domain.Media;
+import com.svenwesterlaken.gemeentebreda.logic.managers.NewLocationManager;
 import com.svenwesterlaken.gemeentebreda.logic.services.FetchAddressIntentService;
 import com.svenwesterlaken.gemeentebreda.presentation.activities.NewLocationActivity;
 import com.svenwesterlaken.gemeentebreda.presentation.activities.NewReportActivity;
-import com.svenwesterlaken.gemeentebreda.presentation.partials.NotImplementedListener;
-
-import java.io.File;
-import java.io.IOException;
-import java.util.Collection;
-import java.util.Random;
 
 import static android.app.Activity.RESULT_OK;
 
 
-public class NewReportLocationFragment extends Fragment implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
-    private LocationChangedListener mListener;
-    private AddressResultReceiver mResultReceiver;
-    private GoogleApiClient mGoogleApiClient;
-
-    private Location location;
-    private android.location.Location mLastLocation;
-
-    private Double lat, lon;
-    private DatabaseHandler handler;
-
-    private ConstraintLayout chooseBTN, metaBTN, currentBTN;
-    private Location locationFromMedia;
-    private View rootView;
-    private TextView locationTV;
-    private FloatingActionButton confirmFAB;
-    private Animation popupAnimation, popoutAnimation;
-
-    private float alpha;
-    private static int NEW_LOCATION_REQUEST = 1;
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-        popupAnimation = AnimationUtils.loadAnimation(getContext(), R.anim.popup_animation);
-        popoutAnimation = AnimationUtils.loadAnimation(getContext(), R.anim.popout_animation);
-
-        if (mGoogleApiClient == null) {
-            mGoogleApiClient = new GoogleApiClient.Builder(getContext()).addConnectionCallbacks(this).addOnConnectionFailedListener(this).addApi(LocationServices.API).build();
-        }
-
-        handler = new DatabaseHandler(getContext());
-
-
-    }
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        rootView = inflater.inflate(R.layout.fragment_new_report_location, container, false);
-
-        alpha = rootView.findViewById(R.id.location_BTN_delete).getAlpha();
-
-        chooseBTN = (ConstraintLayout) rootView.findViewById(R.id.location_BTN_choose);
-        metaBTN = (ConstraintLayout) rootView.findViewById(R.id.location_BTN_meta);
-        currentBTN = (ConstraintLayout) rootView.findViewById(R.id.location_BTN_current);
-
-        locationTV = (TextView) rootView.findViewById(R.id.location_TV_location);
-
-
-        metaBTN.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-//                location = new Location("Metadata straat", "Breda", new Random().nextInt(6), "4818MD", handler.getAllReports().size()+1, lat, lon);
-                location = new Location("Metadata straat", handler.getAllReports().size()+1, lat, lon);
-                setAddress(location);
-                enableConfirmButton();
-            }
-        });
-        currentBTN.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                    onConnectionSuspended(1);
-                } else {
-                    mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
-                    if (mLastLocation != null) {
-//                        location = new Location("Huidige straat", "Breda", new Random().nextInt(6), "4818CS", handler.getAllReports().size()+1, mLastLocation.getLatitude(), mLastLocation.getLongitude());
-                        location = new Location("Huidige straat", handler.getAllReports().size()+1, mLastLocation.getLatitude(), mLastLocation.getLongitude());
-                        setAddress(location);
-                        enableConfirmButton();
-                    }
-                }
-            }
-        });
-        chooseBTN.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent i = new Intent(getActivity(), NewLocationActivity.class);
-                startActivityForResult(i, NEW_LOCATION_REQUEST);
-            }
-
-
-        });
-
-        confirmFAB = (FloatingActionButton) rootView.findViewById(R.id.location_FAB_confirm);
-        confirmFAB.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mListener.setLocation(location);
-                confirmFAB.setAnimation(popoutAnimation);
-                confirmFAB.setVisibility(View.INVISIBLE);
-                ((NewReportActivity) getActivity()).scrollToNext();
-            }
-        });
-
-        return rootView;
-    }
-
-    public void createLocationFromMedia(Uri uri) {
-        String mime = getContext().getContentResolver().getType(uri);
-        locationFromMedia = new Location();
-
-        if (mime != null) {
-            if (mime.contains("video")) {
-                getVideoLocationMetadata(uri);
-            } else if (mime.contains("image")) {
-                getImageLocationMetadata(uri);
-            }
-        }
-
-        if (locationFromMedia.getLongitude() != null && locationFromMedia.getLatitude() != null) {
-            //TODO: Geocoder doesn't return any addresses, should use Google API (not actually an option)
-            startGeoIntentService(locationFromMedia);
-            Log.i("SERVICE", "GeoService has started");
-        }
-
-    }
-
-    private void getImageLocationMetadata(Uri imageUri) {
-
-        try {
-            File file = new File(getRealPathFromURI(getContext(), imageUri));
-            // Read all metadata from the image
-            Metadata metadata = ImageMetadataReader.readMetadata(file);
-            // See whether it has GPS data
-            Collection<GpsDirectory> gpsDirectories = metadata.getDirectoriesOfType(GpsDirectory.class);
-            if (gpsDirectories.isEmpty()) {
-                Log.i("GEOLOCATION", "Geolocation is not available for this image: " + file.getAbsolutePath());
-            }
-            for (GpsDirectory gpsDirectory : gpsDirectories) {
-                // Try to read out the location, making sure it's non-zero
-                GeoLocation geoLocation = gpsDirectory.getGeoLocation();
-                if (geoLocation != null && !geoLocation.isZero()) {
-                    Log.i("Photo Latitude", "Latitude: " + geoLocation.getLatitude());
-                    Log.i("Photo Longitude", "Longitude: " + geoLocation.getLongitude());
-                    locationFromMedia.setLatitude(geoLocation.getLatitude());
-                    locationFromMedia.setLongitude(geoLocation.getLongitude());
-                } else {
-                    Log.i("GEOLOCATION", "Geolocation is not available for this image: " + file.getAbsolutePath());
-                }
-            }
-        } catch (IOException | ImageProcessingException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public void getVideoLocationMetadata(Uri videoUri) {
-        ContentResolver videoResolver = getContext().getContentResolver();
-        Cursor videoCursor = videoResolver.query(videoUri, null, null, null, null);
-
-        if (videoCursor != null && videoCursor.moveToFirst()) {
-            //get columns
-            int latColumn = videoCursor.getColumnIndex
-                    (MediaStore.Video.Media.LATITUDE);
-            int lonColumn = videoCursor.getColumnIndex
-                    (MediaStore.Video.Media.LONGITUDE);
-            int resColumn = videoCursor.getColumnIndex
-                    (MediaStore.Video.Media.RESOLUTION);
-            int durationColumn = videoCursor.getColumnIndex
-                    (MediaStore.Video.Media.DURATION);
-
-            do {
-                String thisLat = Double.toString(videoCursor.getDouble(latColumn));
-                String thisLon = Double.toString(videoCursor.getDouble(lonColumn));
-
-                Log.d("video", "------------------");
-                Log.d("video Latitude", thisLat);
-                Log.d("video Longitude", thisLon);
-
-                locationFromMedia.setLatitude(videoCursor.getDouble(latColumn));
-                locationFromMedia.setLongitude(videoCursor.getDouble(lonColumn));
-            }
-            while (videoCursor.moveToNext());
-        }
-
-        if (videoCursor != null) {
-            videoCursor.close();
-        }
-
-    }
-
-    public String getRealPathFromURI(Context context, Uri contentUri) {
-        Cursor cursor = null;
-        try {
-            String[] proj = {MediaStore.Images.Media.DATA};
-            cursor = context.getContentResolver().query(contentUri, proj, null, null, null);
-            int column_index = 0;
-            if (cursor != null) {
-                column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
-                cursor.moveToFirst();
-                return cursor.getString(column_index);
-            } else {
-                return null;
-            }
-        } finally {
-            if (cursor != null) {
-                cursor.close();
-            }
-        }
-    }
-
-    protected void startGeoIntentService(Location location) {
-        Intent intent = new Intent(getContext(), FetchAddressIntentService.class);
-        intent.putExtra(FetchAddressIntentService.Constants.RECEIVER, mResultReceiver);
-        intent.putExtra(FetchAddressIntentService.Constants.LATITUDE_DATA_EXTRA, location.getLatitude());
-        intent.putExtra(FetchAddressIntentService.Constants.LONGITUDE_DATA_EXTRA, location.getLongitude());
-        getActivity().startService(intent);
-    }
-
-    @Override
-    public void onConnected(@Nullable Bundle bundle) {
-        if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            onConnectionSuspended(1);
-        } else {
-            mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
-            if (mLastLocation != null) {
-                TextView text = (TextView) rootView.findViewById(R.id.location_TV_currentMessage);
-                text.setText(String.valueOf(mLastLocation.getLatitude()) + ", " + String.valueOf(mLastLocation.getLongitude()));
-            }
-        }
-    }
-
-    @Override
-    public void onConnectionSuspended(int i) {
-        currentBTN.setEnabled(false);
-        currentBTN.setAlpha(alpha);
-    }
-
-    @Override
-    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-        currentBTN.setEnabled(false);
-        currentBTN.setAlpha(alpha);
-    }
-
-    private class AddressResultReceiver extends ResultReceiver {
-        public AddressResultReceiver(Handler handler) {
-            super(handler);
-        }
-
+public class NewReportLocationFragment extends Fragment implements NewLocationManager.LocationManagerListener {
+        private LocationChangedListener mListener;
+        private NewLocationManager lManager;
+        
+        private Location location, mediaLocation, currentLocation, chosenLocation;
+        
+        private ConstraintLayout chooseBTN, metaBTN, currentBTN, chosenBTN, deleteBTN;
+        private View rootView;
+        private TextView locationTV, currentMessage, metaMessage, chosenMessage;
+        private FloatingActionButton confirmFAB;
+        private Animation popupAnimation, popoutAnimation;
+        
+        private float alpha = 0;
+        private static int NEW_LOCATION_REQUEST = 1;
+        
         @Override
-        protected void onReceiveResult(int resultCode, Bundle resultData) {
-
-            // Display the address string
-            // or an error message sent from the intent service.
-            String mAddressOutput = resultData.getString(FetchAddressIntentService.Constants.RESULT_DATA_KEY);
-            Log.i("ADDRESS", mAddressOutput);
-
+        public void onCreate(Bundle savedInstanceState) {
+            super.onCreate(savedInstanceState);
+            
+            popupAnimation = AnimationUtils.loadAnimation(getContext(), R.anim.popup_animation);
+            popoutAnimation = AnimationUtils.loadAnimation(getContext(), R.anim.popout_animation);
+            lManager = new NewLocationManager(getActivity(), getContext(), this);
         }
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if(requestCode == NEW_LOCATION_REQUEST && resultCode == RESULT_OK) {
-            Bundle extras = data.getExtras();
-            if (extras != null) {
-                Location location = extras.getParcelable("location");
-
-                if (location != null) {
-                    setAddress(location);
+        
+        @Override
+        public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+            rootView = inflater.inflate(R.layout.fragment_new_report_location, container, false);
+            
+            if (alpha == 0.0f) {
+                alpha = rootView.findViewById(R.id.location_BTN_delete).getAlpha();
+            }
+            
+            chooseBTN = (ConstraintLayout) rootView.findViewById(R.id.location_BTN_choose);
+            metaBTN = (ConstraintLayout) rootView.findViewById(R.id.location_BTN_meta);
+            currentBTN = (ConstraintLayout) rootView.findViewById(R.id.location_BTN_current);
+            chosenBTN = (ConstraintLayout) rootView.findViewById(R.id.location_BTN_chosen);
+            deleteBTN = (ConstraintLayout) rootView.findViewById(R.id.location_BTN_delete);
+            
+            chosenBTN.setEnabled(false);
+            deleteBTN.setEnabled(false);
+            
+            currentMessage = (TextView) rootView.findViewById(R.id.location_TV_currentMessage);
+            metaMessage = (TextView) rootView.findViewById(R.id.location_TV_metaMessage);
+            chosenMessage = (TextView) rootView.findViewById(R.id.location_TV_chosenMessage);
+            
+            locationTV = (TextView) rootView.findViewById(R.id.location_TV_location);
+            
+            
+            metaBTN.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    setAddress(mediaLocation);
                     enableConfirmButton();
                 }
-
+            });
+            currentBTN.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    setAddress(currentLocation);
+                    enableConfirmButton();
+                }
+            });
+            chosenBTN.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    setAddress(chosenLocation);
+                    enableConfirmButton();
+                }
+            });
+            chooseBTN.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent i = new Intent(getActivity(), NewLocationActivity.class);
+                    startActivityForResult(i, NEW_LOCATION_REQUEST);
+                }
+                
+                
+            });
+            
+            
+            confirmFAB = (FloatingActionButton) rootView.findViewById(R.id.location_FAB_confirm);
+            confirmFAB.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    mListener.setLocation(location);
+                    confirmFAB.setAnimation(popoutAnimation);
+                    confirmFAB.setVisibility(View.INVISIBLE);
+                    ((NewReportActivity) getActivity()).scrollToNext();
+                }
+            });
+            
+            return rootView;
+        }
+        
+        @Override
+        public void setReceivedLocation(Location l, int type) {
+            TextView text = null;
+            
+            if(type == FetchAddressIntentService.CURRENT_LOCATION) {
+                text = currentMessage;
+                currentLocation = l;
+            } else if (type == FetchAddressIntentService.MEDIA_LOCATION) {
+                text = metaMessage;
+                mediaLocation = l;
+            } else if (type == FetchAddressIntentService.CHOOSE_LOCATION) {
+                text = chosenMessage;
+                chosenLocation = l;
+            }
+            
+            
+            if(text != null && l != null) {
+                text.setText(l.getStreet() + ", " + l.getCity());
+            }
+            
+        }
+        
+        @Override
+        public void disableButton(int type) {
+            ConstraintLayout btn = null;
+            TextView tv = null;
+            
+            if(type == FetchAddressIntentService.CURRENT_LOCATION) {
+                btn = currentBTN;
+                tv = currentMessage;
+            } else if (type == FetchAddressIntentService.MEDIA_LOCATION) {
+                btn = metaBTN;
+                tv = metaMessage;
+            }
+            
+            if (btn != null && tv != null) {
+                btn.setEnabled(false);
+                btn.setAlpha(alpha);
+                tv.setText(R.string.location_error);
             }
         }
-
-        super.onActivityResult(requestCode, resultCode, data);
-    }
-
-    private void enableConfirmButton() {
-        confirmFAB.setVisibility(View.VISIBLE);
-        confirmFAB.startAnimation(popupAnimation);
-    }
-
-    private void setAddress(Location l) {
-        this.location = l;
-        locationTV.setText(l.getStreet() + " " );
-    }
-
-
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-
-        Activity a = null;
-
-        if (context instanceof Activity) {
-            a = (Activity) context;
+        
+        private void enableConfirmButton() {
+            confirmFAB.setVisibility(View.VISIBLE);
+            confirmFAB.startAnimation(popupAnimation);
         }
-        try {
-            mListener = (LocationChangedListener) a;
-        } catch (ClassCastException e) {
-            throw new ClassCastException(a.toString() + " must implement LocationChangedListener");
-        }
-    }
-
-    public interface LocationChangedListener {
-        void setLocation(Location t);
-    }
-
-    public void setImageLocationTag(Media m) {
-        TextView text = (TextView) rootView.findViewById(R.id.location_TV_metaMessage);
-        createLocationFromMedia(m.getUri());
-        lat = locationFromMedia.getLatitude();
-        lon = locationFromMedia.getLongitude();
-
-        if (lat != null) {
-            if (lat == 0.0) {
-                lat = null;
-                lon = null;
+        
+        private void enableButton(int type) {
+            ConstraintLayout btn = null;
+            
+            if(type == FetchAddressIntentService.CURRENT_LOCATION) {
+                btn = currentBTN;
+            } else if(type == FetchAddressIntentService.MEDIA_LOCATION) {
+                btn = metaBTN;
+            } else if (type == FetchAddressIntentService.CHOOSE_LOCATION) {
+                btn = chosenBTN;
+            }
+            
+            if (btn != null) {
+                btn.setEnabled(true);
+                btn.setAlpha(1.0f);
             }
         }
-
-
-        if (lat == null) {
-            text.setText(R.string.location_error);
-            metaBTN.setEnabled(false);
-            metaBTN.setAlpha(alpha);
-
-        } else {
-
-            text.setText(lat + ", " + lon);
+        
+        
+        private void setAddress(Location l) {
+            this.location = l;
+            
+            if (l != null) {
+                locationTV.setText(l.getStreet() + ", " + l.getCity());
+            }
         }
-
-    }
-
-    @Override
-    public void onStart() {
-        mGoogleApiClient.connect();
-        super.onStart();
-    }
-
-    @Override
-    public void onStop() {
-        mGoogleApiClient.disconnect();
-        super.onStop();
-    }
-
-    @Override
-    public void onResume() {
-        if(location != null) {
-            setAddress(location);
+        
+        @Override
+        public void onActivityResult(int requestCode, int resultCode, Intent data) {
+            if (requestCode == NEW_LOCATION_REQUEST && resultCode == RESULT_OK) {
+                Bundle extras = data.getExtras();
+                if (extras != null) {
+                    Location temploc = extras.getParcelable("location");
+                    
+                    if (temploc != null) {
+                        enableConfirmButton();
+                        setAddress(temploc);
+                        enableButton(FetchAddressIntentService.CHOOSE_LOCATION);
+                        setReceivedLocation(temploc, FetchAddressIntentService.CHOOSE_LOCATION);
+                    }
+                    
+                }
+            }
+            
+            super.onActivityResult(requestCode, resultCode, data);
         }
-        super.onResume();
+        
+        @Override
+        public void onAttach(Context context) {
+            super.onAttach(context);
+            
+            Activity a = null;
+            
+            if (context instanceof Activity) {
+                a = (Activity) context;
+            }
+            try {
+                mListener = (LocationChangedListener) a;
+            } catch (ClassCastException e) {
+                assert a != null;
+                throw new ClassCastException(a.toString() + " must implement LocationChangedListener");
+            }
+        }
+        
+        public interface LocationChangedListener {
+            void setLocation(Location t);
+        }
+        
+        public void getImageLocation(Media m) {
+            lManager.getMediaLocation(m);
+        }
+        
+        @Override
+        public void onStart() {
+            lManager.getApiClient().connect();
+            super.onStart();
+        }
+        
+        @Override
+        public void onStop() {
+            lManager.getApiClient().disconnect();
+            super.onStop();
+        }
+        
+        @Override
+        public void onResume() {
+            if (location != null) {
+                setAddress(location);
+            }
+            super.onResume();
+        }
+        
+        
     }
-
-
-
-}

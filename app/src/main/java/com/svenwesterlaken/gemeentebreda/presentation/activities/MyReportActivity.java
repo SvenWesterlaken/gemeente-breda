@@ -42,4 +42,6 @@ public class MyReportActivity  extends MenuActivity {
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(mViewPager);
     }
+
+
 }

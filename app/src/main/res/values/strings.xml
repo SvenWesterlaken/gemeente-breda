@@ -71,6 +71,7 @@
     <string name="new_report_title_location">Locatie Toevoegen</string>
     <string name="location_current">Huidige locatie</string>
     <string name="location_meta">Locatie van foto</string>
+    <string name="location_chosen">Gekozen locatie</string>
     <string name="location_choose">Locatie kiezen</string>
     <string name="location_unavailable">Niet gevonden</string>
     <string name="location_error">Niet mogelijk</string>
