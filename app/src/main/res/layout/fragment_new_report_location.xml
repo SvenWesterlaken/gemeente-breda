@@ -175,6 +175,79 @@
     </android.support.constraint.ConstraintLayout>
 
     <android.support.constraint.ConstraintLayout
+        android:id="@+id/location_BTN_chosen"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="?attr/selectableItemBackground"
+        android:alpha="?attr/disabledAlpha"
+        android:clickable="true"
+        android:minHeight="56dp"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/location_BTN_meta">
+
+        <ImageView
+            android:id="@+id/location_IV_chosenIcon"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginStart="16dp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:srcCompat="@drawable/map"
+            app:layout_constraintTop_toTopOf="@+id/location_CL_chosenText"
+            android:layout_marginTop="8dp"
+            app:layout_constraintBottom_toBottomOf="@+id/location_CL_chosenText"
+            android:layout_marginBottom="8dp" />
+
+        <android.support.constraint.ConstraintLayout
+            android:id="@+id/location_CL_chosenText"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginLeft="72dp"
+            android:layout_marginRight="16dp"
+            android:layout_marginStart="72dp"
+            android:layout_marginTop="16dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <TextView
+                android:id="@+id/location_TV_chosenTitle"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:ellipsize="marquee"
+                android:fadingEdge="horizontal"
+                android:maxLines="1"
+                android:text="@string/location_chosen"
+                android:textAppearance="@style/SettingsTextAppearanceMedium"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/location_TV_chosenMessage"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:maxLines="2"
+                android:text="@string/location_unavailable"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:textColor="?android:attr/textColorSecondary"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/location_TV_chosenTitle" />
+        </android.support.constraint.ConstraintLayout>
+
+    </android.support.constraint.ConstraintLayout>
+
+    <android.support.constraint.ConstraintLayout
         android:id="@+id/location_BTN_choose"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -184,7 +257,8 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/location_BTN_meta">
+        app:layout_constraintTop_toBottomOf="@+id/location_BTN_chosen"
+        android:layout_marginTop="0dp">
 
         <ImageView
             android:id="@+id/location_IV_chooseIcon"
@@ -197,7 +271,7 @@
             app:layout_constraintBottom_toBottomOf="@+id/location_TV_chooseTitle"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toTopOf="@+id/location_TV_chooseTitle"
-            app:srcCompat="@drawable/map" />
+            app:srcCompat="@drawable/map_marker_plus" />
 
         <TextView
             android:id="@+id/location_TV_chooseTitle"

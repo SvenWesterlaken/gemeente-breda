@@ -98,7 +98,7 @@ public class ReportMapFragment extends Fragment {
                 // Enable MyLocation Layer of Google Map
                 enableMyLocation();
 
-                // Get LocationManager object from System Service LOCATION_SERVICE
+                // Get NewLocationManager object from System Service LOCATION_SERVICE
                 LocationManager locationManager = (LocationManager) getContext().getSystemService(LOCATION_SERVICE);
 
                 // Create a criteria object to retrieve provider

@@ -8,23 +8,16 @@ import android.location.Criteria;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.widget.TextView;
 
 import com.arlib.floatingsearchview.FloatingSearchView;
-import com.arlib.floatingsearchview.suggestions.model.SearchSuggestion;
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.common.api.PendingResult;
-import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.location.places.AutocompletePrediction;
-import com.google.android.gms.location.places.AutocompletePredictionBuffer;
-import com.google.android.gms.location.places.Places;
+import com.arlib.floatingsearchview.FloatingSearchView.OnHomeActionClickListener;
+import com.arlib.floatingsearchview.FloatingSearchView.OnQueryChangeListener;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
@@ -39,23 +32,22 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.svenwesterlaken.gemeentebreda.R;
 import com.svenwesterlaken.gemeentebreda.data.database.DatabaseHandler;
 import com.svenwesterlaken.gemeentebreda.domain.Location;
-import com.svenwesterlaken.gemeentebreda.logic.partials.PlaceSearchSuggestion;
+import com.svenwesterlaken.gemeentebreda.logic.managers.NewLocationManager;
 import com.svenwesterlaken.gemeentebreda.presentation.fragments.SettingsFragment;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
+import static com.google.android.gms.maps.GoogleMap.OnMapClickListener;
+import static com.svenwesterlaken.gemeentebreda.logic.managers.NewLocationManager.SelectedLocationListener;
 
-public class NewLocationActivity extends BaseActivity implements FloatingSearchView.OnQueryChangeListener, FloatingSearchView.OnHomeActionClickListener, View.OnClickListener, OnMapReadyCallback, GoogleMap.OnMapClickListener, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
+public class NewLocationActivity extends BaseActivity implements OnQueryChangeListener, OnHomeActionClickListener, OnClickListener, OnMapReadyCallback, OnMapClickListener, SelectedLocationListener {
 
-    MapView mMapView;
+    private MapView mMapView;
+    private NewLocationManager lManager;
     private GoogleMap map;
     private Marker placedMarker;
     private DatabaseHandler handler;
-    private TextView addressTV;
-    private Double lat, lon;
+    private TextView streetTV, postalTV;
+    private Location selectedLocation;
     private FloatingSearchView mSearchView;
-    private GoogleApiClient mGoogleApiClient;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,18 +55,17 @@ public class NewLocationActivity extends BaseActivity implements FloatingSearchV
         setContentView(R.layout.activity_new_location);
 
         handler = new DatabaseHandler(getApplicationContext());
+        lManager = new NewLocationManager(this, getApplicationContext(), this);
 
         mSearchView = (FloatingSearchView) findViewById(R.id.newLocation_FSV_searchbar);
         FloatingActionButton confirmBTN = (FloatingActionButton) findViewById(R.id.newLocation_FAB_confirm);
-        addressTV = (TextView) findViewById(R.id.newLocation_TV_adress);
+
+        streetTV = (TextView) findViewById(R.id.newLocation_TV_adress);
+        postalTV = (TextView) findViewById(R.id.newLocation_TV_postalCode);
 
         mSearchView.setOnQueryChangeListener(this);
         mSearchView.setOnHomeActionClickListener(this);
         confirmBTN.setOnClickListener(this);
-
-        if (mGoogleApiClient == null) {
-            mGoogleApiClient = new GoogleApiClient.Builder(this).addConnectionCallbacks(this).addOnConnectionFailedListener(this).addApi(LocationServices.API).addApi(Places.GEO_DATA_API).build();
-        }
 
         mMapView = (MapView) findViewById(R.id.newLocation_MV_map);
         mMapView.onCreate(savedInstanceState);
@@ -88,57 +79,12 @@ public class NewLocationActivity extends BaseActivity implements FloatingSearchV
 
         mMapView.getMapAsync(this);
     }
+
+
     public void enableMyLocation(){
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
-                == PackageManager.PERMISSION_GRANTED) {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             map.setMyLocationEnabled(true);
         }
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        mMapView.onResume();
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        mMapView.onPause();
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        mMapView.onDestroy();
-    }
-
-    @Override
-    public void onLowMemory() {
-        super.onLowMemory();
-        mMapView.onLowMemory();
-    }
-
-    @Override
-    public void onStart() {
-        mGoogleApiClient.connect();
-        super.onStart();
-    }
-
-    @Override
-    public void onStop() {
-        mGoogleApiClient.disconnect();
-        super.onStop();
-    }
-
-    @Override
-    public void onClick(View v) {
-        Location testLocation = new Location("Geselecteerde straat", "Breda", new Random().nextInt(6) + 1, "4818RA", handler.getAllReports().size()+1, lat, lon);
-
-        Intent intent = new Intent();
-        intent.putExtra("location", testLocation);
-        setResult(RESULT_OK, intent);
-        finish();
     }
 
     @Override
@@ -185,17 +131,9 @@ public class NewLocationActivity extends BaseActivity implements FloatingSearchV
             Log.e("GOOGLE MAP", "Can't find style. Error: ", e);
         }
 
-        // Enable MyLocation Layer of Google Map
         enableMyLocation();
-
-        // Get LocationManager object from System Service LOCATION_SERVICE
         LocationManager locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
-
-        // Create a criteria object to retrieve provider
-        Criteria criteria = new Criteria();
-
-        // Get the name of the best provider
-        String provider = locationManager.getBestProvider(criteria, true);
+        String provider = locationManager.getBestProvider(new Criteria(), true);
 
         // Get Current Location
         android.location.Location myLocation = null;
@@ -204,23 +142,12 @@ public class NewLocationActivity extends BaseActivity implements FloatingSearchV
         }
 
         if (myLocation != null){
-            // Get latitude of the current location
             double latitude = myLocation.getLatitude();
-
-            // Get longitude of the current location
             double longitude = myLocation.getLongitude();
-
-            // Create a LatLng object for the current location
             LatLng latLng = new LatLng(latitude, longitude);
-
-            // Add a marker at users initial position
-            googleMap.addMarker(new MarkerOptions().position(latLng).title("Current Location").snippet("You are here!"));
-
-            // Move camera
             googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 17));
             CameraPosition cameraPosition = new CameraPosition.Builder().target(latLng).zoom(17).build();
             map.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
-
         }
 
         googleMap.setOnMapClickListener(this);
@@ -232,25 +159,60 @@ public class NewLocationActivity extends BaseActivity implements FloatingSearchV
             placedMarker.remove();
         }
 
-        lat = point.latitude;
-        lon = point.longitude;
-
-        addressTV.setText(point.latitude + ", " + point.longitude);
+        lManager.getSelectedLocation(point);
         placedMarker = map.addMarker(new MarkerOptions().position(point).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
     }
 
     @Override
-    public void onConnected(@Nullable Bundle bundle) {
-
+    public void setSelectedLocation(Location l) {
+        selectedLocation = l;
+        streetTV.setText(l.getStreet());
+        postalTV.setText(l.getPostalCode() + " " + l.getCity());
     }
 
     @Override
-    public void onConnectionSuspended(int i) {
-
+    public void onClick(View v) {
+        if(selectedLocation != null) {
+            Intent intent = new Intent();
+            intent.putExtra("location", selectedLocation);
+            setResult(RESULT_OK, intent);
+            finish();
+        }
     }
 
     @Override
-    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+    public void onResume() {
+        super.onResume();
+        mMapView.onResume();
+    }
 
+    @Override
+    public void onPause() {
+        super.onPause();
+        mMapView.onPause();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        mMapView.onDestroy();
+    }
+
+    @Override
+    public void onLowMemory() {
+        super.onLowMemory();
+        mMapView.onLowMemory();
+    }
+
+    @Override
+    public void onStart() {
+        lManager.getApiClient().connect();
+        super.onStart();
+    }
+
+    @Override
+    public void onStop() {
+        lManager.getApiClient().disconnect();
+        super.onStop();
     }
 }
