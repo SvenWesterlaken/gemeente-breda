@@ -3,6 +3,7 @@ jdk: oraclejdk8
 cache: false
 dist: trusty
 sudo: required
+group: edge
 
 before_install:
   - mkdir "$ANDROID_HOME/licenses" || true
