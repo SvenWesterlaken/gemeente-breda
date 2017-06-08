@@ -26,29 +26,31 @@ import static android.app.Activity.RESULT_OK;
 
 
 public class NewReportLocationFragment extends Fragment implements NewLocationManager.LocationManagerListener {
-        private LocationChangedListener mListener;
-        private NewLocationManager lManager;
-        
-        private Location location, mediaLocation, currentLocation, chosenLocation;
-        
-        private ConstraintLayout chooseBTN, metaBTN, currentBTN, chosenBTN, deleteBTN;
-        private View rootView;
-        private TextView locationTV, currentMessage, metaMessage, chosenMessage;
-        private FloatingActionButton confirmFAB;
-        private Animation popupAnimation, popoutAnimation;
-        
-        private float alpha = 0;
-        private static int NEW_LOCATION_REQUEST = 1;
-        
-        @Override
-        public void onCreate(Bundle savedInstanceState) {
-            super.onCreate(savedInstanceState);
-            
-            popupAnimation = AnimationUtils.loadAnimation(getContext(), R.anim.popup_animation);
-            popoutAnimation = AnimationUtils.loadAnimation(getContext(), R.anim.popout_animation);
-            lManager = new NewLocationManager(getActivity(), getContext(), this);
-        }
-        
+
+    private LocationChangedListener mListener;
+    private NewLocationManager lManager;
+
+    private Location location, mediaLocation, currentLocation, chosenLocation;
+
+    private ConstraintLayout chooseBTN, metaBTN, currentBTN, chosenBTN, deleteBTN;
+    private View rootView;
+    private TextView locationTV, currentMessage, metaMessage, chosenMessage;
+    private FloatingActionButton confirmFAB;
+    private Animation popupAnimation, popoutAnimation;
+
+    private float alpha;
+    private static int NEW_LOCATION_REQUEST = 1;
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        popupAnimation = AnimationUtils.loadAnimation(getContext(), R.anim.popup_animation);
+        popoutAnimation = AnimationUtils.loadAnimation(getContext(), R.anim.popout_animation);
+        lManager = new NewLocationManager(getActivity(), getContext(), this);
+    }
+    
+    
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
             rootView = inflater.inflate(R.layout.fragment_new_report_location, container, false);
