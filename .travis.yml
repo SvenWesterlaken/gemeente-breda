@@ -2,7 +2,7 @@ language: android
 cache: false
 dist: trusty
 sudo: required
-group: deprecated
+group: edge
 jdk: oraclejdk8
 
 before_install:
