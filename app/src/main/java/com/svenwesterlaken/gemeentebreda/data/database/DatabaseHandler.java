@@ -80,9 +80,9 @@ public class DatabaseHandler extends SQLiteAssetHelper {
 
         SQLiteDatabase db = this.getWritableDatabase();
 
-        String query = "INSERT INTO location(locationId, latitude, longitude, street) VALUES (" +
+        String query = "INSERT INTO location(locationId, latitude, longitude, street, city) VALUES (" +
                 location.getLocationID() + " , " + location.getLatitude() + " , " + location.getLongitude() + " , '" +
-                location.getStreet() + "');";
+                location.getStreet() +  "', '" + location.getCity() + "');";
         db.execSQL(query);
         Log.i("TAG", "added location");
         db.close();
@@ -204,6 +204,7 @@ public class DatabaseHandler extends SQLiteAssetHelper {
         while(cursor.moveToNext() ) {
             location = new Location();
             location.setLocationID(locationID);
+	        location.setCity(cursor.getString(cursor.getColumnIndex("city")));
             location.setStreet(cursor.getString(cursor.getColumnIndex("street")));
             location.setLatitude(cursor.getDouble(cursor.getColumnIndex("latitude")));
             location.setLongitude(cursor.getDouble(cursor.getColumnIndex("longitude")));

@@ -221,7 +221,7 @@ public class ReportActivity extends MenuActivity  {
 
         public void onRestart(){
             super.onRestart();
-            recreate();
+//            recreate();
         }
         
         @Override
