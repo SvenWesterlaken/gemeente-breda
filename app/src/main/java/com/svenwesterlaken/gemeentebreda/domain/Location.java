@@ -26,6 +26,13 @@ public class Location implements Parcelable {
         this.longitude = longitude;
     }
     
+    public Location(String street, int locationID, Double latitude, Double longitude){
+        this.street = street;
+        this.locationID = locationID;
+        this.latitude = latitude;
+        this.longitude = longitude;
+    }
+    
     public Location(){};
     
     //getters

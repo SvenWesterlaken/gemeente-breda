@@ -73,6 +73,7 @@ public class ConfirmationActivity extends BaseActivity {
             @Override
             public void onClick(View v) {
                 Intent i = new Intent(getApplicationContext(), ReportActivity.class);
+                finish();
                 startActivity(i);
             }
         });

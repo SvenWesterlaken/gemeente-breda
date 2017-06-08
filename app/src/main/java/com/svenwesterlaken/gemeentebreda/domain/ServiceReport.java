@@ -25,7 +25,9 @@ public class ServiceReport {
     public String id;
     @SerializedName("description")
     public String description;
-
+    @SerializedName("upvotes")
+    public String upvotes;
+    
     public ServiceReport(String address, String statusGemeente, String addressnr, String serviceName, int latitude, int longitude, String description,String mediaUrl, String id) {
         this.address = address;
         this.statusGemeente = statusGemeente;
@@ -41,6 +43,8 @@ public class ServiceReport {
     public String getAddress() {
         return address;
     }
+    
+    public String getUpvotes() { return upvotes; }
 
     public String getStatusGemeente() {
         return statusGemeente;

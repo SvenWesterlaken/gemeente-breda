@@ -223,6 +223,11 @@ public class ReportActivity extends MenuActivity  {
             super.onRestart();
             recreate();
         }
+        
+        @Override
+        public  void onBackPressed(){
+            Log.i("LOG", "Not possible");
+        }
 
 
 }
