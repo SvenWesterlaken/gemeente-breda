@@ -37,7 +37,7 @@ public class NewReportLocationFragment extends Fragment implements NewLocationMa
     private FloatingActionButton confirmFAB;
     private Animation popupAnimation, popoutAnimation;
 
-    private float alpha = 0;
+    private float alpha;
     private static int NEW_LOCATION_REQUEST = 1;
 
     @Override
@@ -53,7 +53,7 @@ public class NewReportLocationFragment extends Fragment implements NewLocationMa
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.fragment_new_report_location, container, false);
 
-        if (alpha == 0.0f) {
+        if (alpha != alpha) {
             alpha = rootView.findViewById(R.id.location_BTN_delete).getAlpha();
         }
 

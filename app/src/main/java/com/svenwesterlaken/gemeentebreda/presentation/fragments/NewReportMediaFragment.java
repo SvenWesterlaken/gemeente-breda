@@ -3,13 +3,8 @@ package com.svenwesterlaken.gemeentebreda.presentation.fragments;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
-import android.media.ThumbnailUtils;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
-import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.FloatingActionButton;
@@ -21,13 +16,9 @@ import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
-import android.widget.MediaController;
 import android.widget.Toast;
-import android.widget.VideoView;
 
-import com.afollestad.materialcamera.MaterialCamera;
 import com.bumptech.glide.Glide;
-import com.squareup.picasso.Picasso;
 import com.svenwesterlaken.gemeentebreda.R;
 import com.svenwesterlaken.gemeentebreda.domain.Media;
 import com.svenwesterlaken.gemeentebreda.logic.managers.MediaManager;
@@ -205,6 +196,7 @@ public class NewReportMediaFragment extends Fragment implements View.OnClickList
             a = (Activity) context;
         }
         try {
+            assert a != null;
             mListener = (MediaChangedListener) a;
         } catch (ClassCastException e) {
             throw new ClassCastException(a.toString() + " must implement MediaChangedListener");

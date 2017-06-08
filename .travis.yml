@@ -44,7 +44,6 @@ addons:
         token:
             secure: f65271edd211baa9bce0aedb96573c4217b82401
         branches:
-            - master
             - develop
             
 branches:
