@@ -19,6 +19,7 @@ import com.svenwesterlaken.gemeentebreda.domain.Location;
 import com.svenwesterlaken.gemeentebreda.domain.Media;
 import com.svenwesterlaken.gemeentebreda.logic.managers.NewLocationManager;
 import com.svenwesterlaken.gemeentebreda.logic.services.FetchAddressIntentService;
+import com.svenwesterlaken.gemeentebreda.logic.util.ZeroUtil;
 import com.svenwesterlaken.gemeentebreda.presentation.activities.NewLocationActivity;
 import com.svenwesterlaken.gemeentebreda.presentation.activities.NewReportActivity;
 
@@ -53,7 +54,7 @@ public class NewReportLocationFragment extends Fragment implements NewLocationMa
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.fragment_new_report_location, container, false);
         
-        if (alpha != alpha) {
+        if (ZeroUtil.isZero(alpha, 0.0000000001)) {
             alpha = rootView.findViewById(R.id.location_BTN_delete).getAlpha();
         }
         

@@ -53,9 +53,9 @@ public class LoadingActivity extends AppCompatActivity {
                 } else if (name != null && email != null && phone != null) {
                     if (name.equals("Onbekend") && email.equals("Onbekend") && phone.equals("Onbekend")) {
                         i = new Intent(getApplicationContext(), LoginActivity.class);
+                    } else {
+                        i = new Intent(getApplicationContext(), ReportActivity.class);
                     }
-                } else {
-                    i = new Intent(getApplicationContext(), ReportActivity.class);
                 }
 
 
