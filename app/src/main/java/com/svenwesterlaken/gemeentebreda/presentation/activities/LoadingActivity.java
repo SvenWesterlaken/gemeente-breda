@@ -7,15 +7,19 @@ import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 
 import com.svenwesterlaken.gemeentebreda.R;
 import com.svenwesterlaken.gemeentebreda.data.api.CategoryRequest;
 import com.svenwesterlaken.gemeentebreda.data.api.ReportRequest;
+import com.svenwesterlaken.gemeentebreda.domain.Report;
+
+import java.util.ArrayList;
 
 import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
-public class LoadingActivity extends AppCompatActivity {
+public class LoadingActivity extends AppCompatActivity implements ReportRequest.ReportListener {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,7 +81,7 @@ public class LoadingActivity extends AppCompatActivity {
     
     private void getReports(){
     
-        ReportRequest request = new ReportRequest(getApplicationContext());
+        ReportRequest request = new ReportRequest(getApplicationContext(), this);
         request.handleGetAllReports();
     }
     
@@ -85,5 +89,11 @@ public class LoadingActivity extends AppCompatActivity {
         
         CategoryRequest request = new CategoryRequest(getApplicationContext());
         request.handleGetCategories();
+    }
+    
+    @Override
+    public void onReportsAvailable(ArrayList<Report> reports) {
+        Log.i("Arraylist", "We hebben " + reports.size() + " items in de lijst");
+        
     }
 }

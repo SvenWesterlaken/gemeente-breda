@@ -66,10 +66,10 @@ import java.util.List;
 import java.util.Random;
 
 
-public class ReportActivity extends MenuActivity  {
+public class ReportActivity extends MenuActivity implements ReportRequest.ReportListener  {
 
     private PagerAdapter mSectionsPagerAdapter;
-    private ArrayList<Report> reports ;
+    private ArrayList<Report> reportArrayList = new ArrayList<>();
     private ViewPager mViewPager;
     private ReportMapFragment mapFragment;
     private ReportListFragment listFragment;
@@ -85,11 +85,7 @@ public class ReportActivity extends MenuActivity  {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         
-        
-        
         super.onCreateDrawer(toolbar, this);
-        handler = new DatabaseHandler(getApplicationContext());
-    
     
         mapFragment = new ReportMapFragment();
         listFragment = new ReportListFragment();
@@ -110,6 +106,7 @@ public class ReportActivity extends MenuActivity  {
 
                 Intent i = new Intent(getApplicationContext(), NewReportActivity.class);
                 startActivity(i);
+                finish();
 
 
             }
@@ -228,7 +225,18 @@ public class ReportActivity extends MenuActivity  {
         public  void onBackPressed(){
             Log.i("LOG", "Not possible");
         }
-
-
+    
+    
+    @Override
+    public void onReportsAvailable(ArrayList<Report> reports) {
+        Log.i("Arraylist", "We hebben " + reports.size() + " items in de lijst");
+    
+        reportArrayList.clear();
+        for(int i = 0; i < reports.size(); i++) {
+            reportArrayList.add(reports.get(i));
+        }
+        
+        
+    }
 }
 

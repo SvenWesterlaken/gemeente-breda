@@ -20,11 +20,12 @@ public class Report implements Parcelable {
     Media media;
     Category category;
     String status;
-
+    int upvotes;
+    
     public Report() {
     }
 
-    public Report(int reportID, User user, Location location, String description, Category category, int locationID, String status) {
+    public Report(int reportID, User user, Location location, String description, Category category, int locationID, String status, int upvotes) {
         this.reportID = reportID;
         this.category = category;
         this.user = user;
@@ -33,13 +34,19 @@ public class Report implements Parcelable {
         this.category = category;
         this.locationID = locationID;
         this.status = status;
+        this.upvotes = upvotes;
+       
     }
 
 
 
     //getters
-
-
+    
+    
+    public int getUpvotes() {
+        return upvotes;
+    }
+    
     public int getLocationID() {
         return locationID;
     }
@@ -118,7 +125,11 @@ public class Report implements Parcelable {
     }
     
     public void setStatus(String status) { this.status = status; }
-
+    
+    public void setUpvotes(int upvotes) {
+        this.upvotes = upvotes;
+    }
+    
     @Override
     public int describeContents() {
         return 0;

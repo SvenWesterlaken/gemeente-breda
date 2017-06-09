@@ -35,12 +35,11 @@ import java.util.Map;
 public class ReportRequest {
 	private Context context;
 	public final String TAG = this.getClass().getSimpleName();
-	private static final String ENDPOINTADD = "http://37.34.59.50/breda/CitySDK/services.json";
 	private static final String ENDPOINT2 = "http://37.34.59.50/breda/CitySDK/requests.json/?service_code=OV";
 	private Gson gson;
 	
 	// De aanroepende class implementeert deze interface.
-//	private ReportRequest.ReportListener listener;
+	private ReportRequest.ReportListener listener;
 	private DatabaseHandler handler;
 	
 	/**
@@ -48,9 +47,9 @@ public class ReportRequest {
 	 *
 	 * @param context
 	 */
-	public ReportRequest(Context context) {
+	public ReportRequest(Context context, ReportListener listener) {
 		this.context = context;
-//		this.listener = listener;
+		this.listener = listener;
 		GsonBuilder gbuilder = new GsonBuilder();
 		gson = gbuilder.create();
 		handler = new DatabaseHandler(context);
@@ -90,7 +89,7 @@ public class ReportRequest {
 						reports.add(report1);
 						
 				}
-//				listener.onReportsAvailable(reports);
+				listener.onReportsAvailable(reports);
 			} } ,              new Response.ErrorListener() {
 						@Override
 						public void onErrorResponse(VolleyError error) {
@@ -103,14 +102,14 @@ public class ReportRequest {
 	}
 	
 	
-	//
-	// Callback interface - implemented by the calling class (MainActivity in our case).
-	//
-//	public interface ReportListener {
-//		// Callback function to return a fresh list of ToDos
-//		void onReportsAvailable(ArrayList<Report> reports);
-//
-//	}
+
+//	 Callback interface - implemented by the calling class (MainActivity in our case).
+
+	public interface ReportListener {
+		// Callback function to return a fresh list of ToDos
+		void onReportsAvailable(ArrayList<Report> reports);
+
+	}
 	
 	
 	

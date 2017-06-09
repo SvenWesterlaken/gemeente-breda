@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,16 +25,18 @@ import java.util.ArrayList;
 import jp.wasabeef.recyclerview.animators.FadeInUpAnimator;
 
 
-public class ReportListFragment extends Fragment implements PullRefreshLayout.OnRefreshListener{
+public class ReportListFragment extends Fragment implements PullRefreshLayout.OnRefreshListener, ReportRequest.ReportListener{
 
     ReportAdapter reportAdapter;
     DatabaseHandler handler;
     PullRefreshLayout prf;
-    ArrayList<Report> reports;
+    ArrayList<Report> reportlist = new ArrayList<>();
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
+        getReports();
+     
         //Select view & cardView to inflate
         View rootView = inflater.inflate(R.layout.fragment_reportlist, container, false);
         RecyclerView reportList = (RecyclerView) rootView.findViewById(R.id.report_RV_reports);
@@ -46,15 +49,10 @@ public class ReportListFragment extends Fragment implements PullRefreshLayout.On
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         reportList.setLayoutManager(layoutManager);
         
-
-        handler = new DatabaseHandler(this.getContext());
-
-        reports = handler.getAllReports();
-
-        reportAdapter = new ReportAdapter(reports, getContext());
+        
+        reportAdapter = new ReportAdapter(reportlist, getContext());
         reportList.setAdapter(reportAdapter);
-
-        handler.close();
+        
         reportAdapter.notifyDataSetChanged();
 
         prf = (PullRefreshLayout) rootView.findViewById(R.id.swipeRefreshLayout);
@@ -63,27 +61,42 @@ public class ReportListFragment extends Fragment implements PullRefreshLayout.On
 
         return rootView;
     }
+    
+    
+    @Override
+    public void onReportsAvailable(ArrayList<Report> reports) {
+        Log.i("Arraylist", "We hebben " + reports.size() + " items in de lijst");
+        
+        reportlist.clear();
+        for(int i = 0; i < reports.size(); i++) {
+            reportlist.add(reports.get(i));
+        }
+        
+        reportAdapter.notifyDataSetChanged();
+        
+    }
+    
 
     @Override
     public void onRefresh() {
-        //        getReports();
-        reportAdapter.notifyItemRangeRemoved(0, reports.size() );
-        updateList(handler.getAllReports());
-        
-    }
 
-
-    public void updateList(ArrayList<Report> list){
-        reportAdapter.notifyItemRangeInserted(0, list.size());
+        getReports();
+        reportAdapter.notifyDataSetChanged();
         prf.setRefreshing(false);
 
     }
+
+
+//    public void updateList(ArrayList<Report> list){
+//        reportAdapter.notifyItemRangeInserted(0, list.size());
+//
+//
+//    }
+    
     
     private void getReports(){
         
-        ReportRequest request = new ReportRequest(getActivity().getApplicationContext());
+        ReportRequest request = new ReportRequest(this.getContext(), this);
         request.handleGetAllReports();
     }
-    
-
 }
