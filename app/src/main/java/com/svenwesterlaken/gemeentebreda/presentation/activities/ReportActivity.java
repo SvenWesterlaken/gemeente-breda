@@ -219,10 +219,10 @@ public class ReportActivity extends MenuActivity  {
     }
     
 
-        public void onRestart(){
-            super.onRestart();
-            recreate();
-        }
+//        public void onRestart(){
+//            super.onRestart();
+//            recreate();
+//        }
         
         @Override
         public  void onBackPressed(){

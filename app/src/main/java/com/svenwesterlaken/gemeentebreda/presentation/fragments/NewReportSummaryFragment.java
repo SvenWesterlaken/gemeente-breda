@@ -120,7 +120,7 @@ public class NewReportSummaryFragment extends Fragment implements NewReportActiv
                 Category category = report.getCategory();
 
                 Report reportNew = new Report(handler.getAllReports().size()+1, user, location, report.getDescription(), category, report.getLocationID(), "open");
-                
+            
                 
                 AddReport(reportNew);
                 

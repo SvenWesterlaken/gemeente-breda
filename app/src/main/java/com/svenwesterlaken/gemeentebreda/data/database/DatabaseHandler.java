@@ -34,7 +34,7 @@ public class DatabaseHandler extends SQLiteAssetHelper {
         String name = user.getName();
         String phone = user.getMobileNumber();
         String email = user.getEmailaddress();
-        int userId = user.getUserID();
+        int userId = 1;
 
         SQLiteDatabase db = this.getWritableDatabase();
 
