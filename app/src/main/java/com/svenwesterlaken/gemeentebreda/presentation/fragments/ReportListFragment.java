@@ -48,6 +48,7 @@ public class ReportListFragment extends Fragment implements PullRefreshLayout.On
         
 
         handler = new DatabaseHandler(this.getContext());
+
         reports = handler.getAllReports();
 
         reportAdapter = new ReportAdapter(reports, getContext());
@@ -65,7 +66,7 @@ public class ReportListFragment extends Fragment implements PullRefreshLayout.On
 
     @Override
     public void onRefresh() {
-        getReports();
+        //        getReports();
         reportAdapter.notifyItemRangeRemoved(0, reports.size() );
         updateList(handler.getAllReports());
         

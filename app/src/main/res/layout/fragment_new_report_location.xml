@@ -235,7 +235,7 @@
                 android:layout_height="wrap_content"
                 android:ellipsize="end"
                 android:maxLines="2"
-                android:text="@string/location_unavailable"
+                android:text="@string/location_notselected"
                 android:textAppearance="?android:attr/textAppearanceSmall"
                 android:textColor="?android:attr/textColorSecondary"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -353,7 +353,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="16dp"
-            android:text="TextView"
+            android:text="@string/location_empty"
             android:textSize="16sp" />
 
     </android.support.v7.widget.CardView>

@@ -136,6 +136,7 @@ public class Report implements Parcelable {
         dest.writeParcelable(this.media, flags);
         dest.writeParcelable(this.category, flags);
         dest.writeString(this.status);
+       
     }
 
     protected Report(android.os.Parcel in) {

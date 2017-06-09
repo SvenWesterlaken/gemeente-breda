@@ -7,7 +7,6 @@ import android.preference.PreferenceManager;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,41 +15,21 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.android.volley.DefaultRetryPolicy;
-import com.android.volley.Request;
 import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.VolleyLog;
-import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
 import com.bumptech.glide.Glide;
 import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.svenwesterlaken.gemeentebreda.R;
 import com.svenwesterlaken.gemeentebreda.data.api.AddReportRequest;
-import com.svenwesterlaken.gemeentebreda.data.api.ReportRequest;
-import com.svenwesterlaken.gemeentebreda.data.api.ReportRequestQueue;
 import com.svenwesterlaken.gemeentebreda.data.database.DatabaseHandler;
 import com.svenwesterlaken.gemeentebreda.domain.Category;
 import com.svenwesterlaken.gemeentebreda.domain.Location;
 import com.svenwesterlaken.gemeentebreda.domain.Media;
 import com.svenwesterlaken.gemeentebreda.domain.Report;
-import com.svenwesterlaken.gemeentebreda.domain.ServiceCategory;
 import com.svenwesterlaken.gemeentebreda.domain.User;
 import com.svenwesterlaken.gemeentebreda.presentation.activities.ConfirmationActivity;
 import com.svenwesterlaken.gemeentebreda.presentation.activities.ImageActivity;
 import com.svenwesterlaken.gemeentebreda.presentation.activities.NewReportActivity;
 import com.svenwesterlaken.gemeentebreda.presentation.activities.VideoActivity;
-
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 public class NewReportSummaryFragment extends Fragment implements NewReportActivity.SummaryFragmentListener{
 

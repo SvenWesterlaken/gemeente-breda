@@ -75,6 +75,8 @@
     <string name="location_choose">Locatie kiezen</string>
     <string name="location_unavailable">Niet gevonden</string>
     <string name="location_error">Niet mogelijk</string>
+    <string name="location_notselected">Nog niet gekozen</string>
+    <string name="location_empty">Nog geen locatie gekozen</string>
 
     <string name="new_report_title_category">Categorie Toevoegen</string>
 

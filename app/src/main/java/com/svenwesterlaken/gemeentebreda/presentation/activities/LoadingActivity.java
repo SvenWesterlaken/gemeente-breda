@@ -53,18 +53,20 @@ public class LoadingActivity extends AppCompatActivity {
                 } else if (name != null && email != null && phone != null) {
                     if (name.equals("Onbekend") && email.equals("Onbekend") && phone.equals("Onbekend")) {
                         i = new Intent(getApplicationContext(), LoginActivity.class);
+                    } else {
+                        i = new Intent(getApplicationContext(), ReportActivity.class);
                     }
-                } else {
-                    i = new Intent(getApplicationContext(), ReportActivity.class);
                 }
 
-                if (i != null) {
+
+                if(i != null) {
                     i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     startActivity(i);
                     finish();
                     overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
                 }
             }
+            
         }.start();
     }
 
