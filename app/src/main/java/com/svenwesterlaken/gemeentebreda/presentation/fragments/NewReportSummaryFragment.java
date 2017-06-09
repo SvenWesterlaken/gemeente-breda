@@ -174,7 +174,7 @@ public class NewReportSummaryFragment extends Fragment implements NewReportActiv
         authorEmail.setText(email);
 
         if(phone != null) {
-            if (phone.equals("Onbekend")) {
+            if (phone.equals("empty")) {
                 authorPhone.setVisibility(View.GONE);
             } else {
                 authorPhone.setText(phone);
