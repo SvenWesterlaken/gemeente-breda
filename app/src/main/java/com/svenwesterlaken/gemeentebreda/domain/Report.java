@@ -147,6 +147,7 @@ public class Report implements Parcelable {
         dest.writeParcelable(this.media, flags);
         dest.writeParcelable(this.category, flags);
         dest.writeString(this.status);
+        dest.writeInt(this.upvotes);
        
     }
 
@@ -161,6 +162,7 @@ public class Report implements Parcelable {
         this.media = in.readParcelable(Media.class.getClassLoader());
         this.category = in.readParcelable(Category.class.getClassLoader());
         this.status = in.readString();
+        this.upvotes = in.readInt();
     }
 
     public static final Parcelable.Creator<Report> CREATOR = new Parcelable.Creator<Report>() {

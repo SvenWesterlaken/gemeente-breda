@@ -38,6 +38,7 @@ public class ServiceReport {
         this.mediaUrl = mediaUrl;
         this.id = id;
         this.description = description;
+        this.upvotes = upvotes;
     }
 
     public String getAddress() {

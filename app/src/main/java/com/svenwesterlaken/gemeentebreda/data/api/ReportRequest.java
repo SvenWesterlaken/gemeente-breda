@@ -77,13 +77,14 @@ public class ReportRequest {
 					for (ServiceReport report : serviceReports) {
 						Log.i("Reports", report.address + report.serviceName);
 						Report report1 = new Report();
-						report1.setReportID(handler.getAllReports().size() + 1);
+						report1.setReportID(Integer.parseInt(report.id));
 						Location location = new Location(report.address, report1.getReportID(), report.latitude, report.longitude);
 						handler.addLocation(location);
 						report1.setLocation(location);
 						report1.setCategory(handler.getCategory(1)); //ff aanpassen nog
 						report1.setDescription(report.description);
 						report1.setStatus(report.statusGemeente);
+						report1.setUpvotes( Integer.parseInt(report.upvotes.substring(0,1)));
 						
 						handler.addReport(report1);
 						reports.add(report1);
