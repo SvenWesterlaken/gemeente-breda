@@ -35,6 +35,12 @@ public class NewLocationManager implements GoogleApiClient.ConnectionCallbacks, 
     private GoogleApiClient mGoogleApiClient;
     private MediaLocationHandler mlHandler;
 
+    /**
+     * Only used for NewReportLocationFragment
+     * @param a
+     * @param c
+     * @param mListener
+     */
     public NewLocationManager(Activity a, Context c, LocationManagerListener mListener) {
         this.activity = a;
         this.context = c;
@@ -46,6 +52,13 @@ public class NewLocationManager implements GoogleApiClient.ConnectionCallbacks, 
             newGoogleApiClient();
         }
     }
+
+    /**
+     * Only used for NewLocationActivity     *
+     * @param a
+     * @param c
+     * @param listener
+     */
 
     public NewLocationManager(Activity a, Context c, SelectedLocationListener listener) {
         this.sListener = listener;
@@ -91,7 +104,9 @@ public class NewLocationManager implements GoogleApiClient.ConnectionCallbacks, 
     @Override
     public void onConnected(@Nullable Bundle bundle) {
         if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            mListener.disableButton(FetchAddressIntentService.CURRENT_LOCATION);
+            if(mListener != null) {
+                mListener.disableButton(FetchAddressIntentService.CURRENT_LOCATION);
+            }
         } else {
             android.location.Location mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
             if (mLastLocation != null) {
