@@ -12,6 +12,7 @@ import com.google.gson.GsonBuilder;
 import com.svenwesterlaken.gemeentebreda.data.database.DatabaseHandler;
 import com.svenwesterlaken.gemeentebreda.domain.Category;
 import com.svenwesterlaken.gemeentebreda.domain.ServiceCategory;
+import com.svenwesterlaken.gemeentebreda.logic.util.ApiUtil;
 
 import java.util.Arrays;
 import java.util.List;
@@ -34,8 +35,8 @@ public class CategoryRequest implements Response.Listener<String>, Response.Erro
 	}
 	
 	public void handleGetCategories() {
-		StringRequest CategoryRequest = new StringRequest(Request.Method.GET, ApiUtil.getCategoryRequestURL(), this, this);
-		ReportRequestQueue.getInstance(context).addToRequestQueue(CategoryRequest);
+		StringRequest categoryRequest = new StringRequest(Request.Method.GET, ApiUtil.getCategoryRequestURL(), this, this);
+		ReportRequestQueue.getInstance(context).addToRequestQueue(categoryRequest);
 	}
 
 
@@ -48,7 +49,7 @@ public class CategoryRequest implements Response.Listener<String>, Response.Erro
     public void onResponse(String response) {
         List<ServiceCategory> categories = Arrays.asList(gson.fromJson(response, ServiceCategory[].class));
 
-        if (!(handler.getAllCategories().size() == 0)) {
+        if (!handler.getAllCategories().isEmpty()) {
             handler.deleteCategory();
         }
 

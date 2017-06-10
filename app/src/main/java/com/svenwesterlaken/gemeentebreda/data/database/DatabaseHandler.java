@@ -12,6 +12,7 @@ import com.svenwesterlaken.gemeentebreda.domain.Report;
 import com.svenwesterlaken.gemeentebreda.domain.User;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Luka Brinkman
@@ -97,21 +98,17 @@ public class DatabaseHandler extends SQLiteAssetHelper {
         db.close();
     }
 
-    public ArrayList<Report> getReportUser(User user) {
+    public List<Report> getReportUser(User user) {
         SQLiteDatabase db = this.getReadableDatabase();
         String query = "SELECT * FROM user_report WHERE userId = " + user.getUserID();
         Cursor cursor = db.rawQuery(query, null);
 
-        //cursor.moveToFirst();
         Log.i("TAG", "before while");
         ArrayList<Report> reports = new ArrayList<>();
 
         while(cursor.moveToNext() ) {
-            Report report = new Report();
             int reportId = cursor.getInt(cursor.getColumnIndex("reportId"));
-            report = getReport(reportId);
-
-            reports.add(report);
+            reports.add(getReport(reportId));
             Log.i("TAG", "got user");
         };
 
@@ -140,36 +137,6 @@ public class DatabaseHandler extends SQLiteAssetHelper {
         db.execSQL(query);
         db.close();
     }
-
-
-//    //ADD MEDIA
-//    public void addMedia(Media media){
-//        ContentValues values = new ContentValues();
-//        values.put(MEDIA_COLUMN_ID, media.getMediaId());
-//
-//        SQLiteDatabase db = this.getWritableDatabase();
-//        db.insert(MEDIA_TABLE_NAME, null, values);
-//        db.close();
-//    }
-//    //ADD PHOTO
-//    public void addPhoto(Photo photo){
-//        ContentValues values = new ContentValues();
-//        values.put(MEDIA_COLUMN_ID, photo.getMediaId());
-//
-//        SQLiteDatabase db = this.getWritableDatabase();
-//        db.insert(PHOTO_TABLE_NAME, null, values);
-//        db.close();
-//    }
-//
-//    //ADD VIDEO
-//    public void addVideo(Video video){
-//        ContentValues values = new ContentValues();
-//        values.put(VIDEO_COLUMN_ID, video.getMediaId());
-//
-//        SQLiteDatabase db = this.getWritableDatabase();
-//        db.insert(VIDEO_TABLE_NAME, null, values);
-//        db.close();
-//    }
 
     //GET USERS
     public User getUser(int userID){

@@ -128,31 +128,23 @@ public class ReportActivity extends MenuActivity  {
 
 
     @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String permissions[], @NonNull int[] grantResults) {
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
 
-        switch (requestCode) {
+        if (requestCode == MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION) {
+            if (grantResults.length > 0
+                    && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
 
-            case MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION: {
-                // If request is cancelled, the result arrays are empty.
-                if (grantResults.length > 0
-                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                // permission was granted.
+                // Do the task you need to do.
+                Log.i("LOCATION_PERMISSION", "GRANTED");
 
-                    // permission was granted.
-                    // Do the task you need to do.
-                    Log.i("LOCATION_PERMISSION", "GRANTED");
-                    //      mapFragment.enableMyLocation();
+            } else {
 
-                } else {
+                // permission denied. Disable the
+                // functionality that depends on this permission.
+                Log.i("LOCATION_PERMISSION", "DENIED");
 
-                    // permission denied. Disable the
-                    // functionality that depends on this permission.
-                    Log.i("LOCATION_PERMISSION", "DENIED");
-
-                }
             }
-
-            // other 'case' lines to check for other
-            // permissions this app might request
         }
     }
 }

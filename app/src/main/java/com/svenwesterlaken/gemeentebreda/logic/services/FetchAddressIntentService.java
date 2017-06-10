@@ -53,8 +53,6 @@ public class FetchAddressIntentService extends IntentService {
         double latitude = intent.getDoubleExtra(LATITUDE_DATA_EXTRA, 0);
         double longitude = intent.getDoubleExtra(LONGITUDE_DATA_EXTRA, 0);
 
-        Log.d("GEOCODER", "" + "Geocoder is present: " + Geocoder.isPresent());
-
         try {
 
             addresses = geocoder.getFromLocation(latitude, longitude, 1);
@@ -62,10 +60,7 @@ public class FetchAddressIntentService extends IntentService {
             if (!addresses.isEmpty()) {
                 String address = addresses.get(0).getAddressLine(0);
                 String city = addresses.get(0).getLocality();
-                String state = addresses.get(0).getAdminArea();
-                String country = addresses.get(0).getCountryName();
                 String postalCode = addresses.get(0).getPostalCode();
-                String knownName = addresses.get(0).getFeatureName();
 
 
                 location.setStreet(address);
@@ -82,7 +77,7 @@ public class FetchAddressIntentService extends IntentService {
             }
 
         } catch (IOException e){
-            e.printStackTrace();
+            Log.e("GEOCODER", e.getMessage());
         }
 
     }

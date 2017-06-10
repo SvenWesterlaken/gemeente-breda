@@ -1,5 +1,6 @@
 package com.svenwesterlaken.gemeentebreda.presentation.fragments;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -15,9 +16,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.android.volley.RequestQueue;
 import com.bumptech.glide.Glide;
-import com.google.gson.Gson;
 import com.svenwesterlaken.gemeentebreda.R;
 import com.svenwesterlaken.gemeentebreda.data.api.AddReportRequest;
 import com.svenwesterlaken.gemeentebreda.data.database.DatabaseHandler;
@@ -32,25 +31,23 @@ import com.svenwesterlaken.gemeentebreda.presentation.activities.NewReportActivi
 import com.svenwesterlaken.gemeentebreda.presentation.activities.VideoActivity;
 
 public class NewReportSummaryFragment extends Fragment implements NewReportActivity.SummaryFragmentListener{
-
-    private Category category;
-    private String description;
-    private Location location;
-    private Media media;
-    private Button sendBTN;
-    private String name, email, phone;
-    private TextView authorName, authorEmail, authorPhone, descriptionTV, categoryTV, locationTV;
-    private ImageView thumbnail;
-
     private final static int MEDIA_PICTURE = 1;
     private final static int MEDIA_VIDEO = 2;
 
-    private View rootView;
+    private static String defaultUserValue = "Onbekend";
 
-    private RequestQueue queue;
-    private Gson gson;
-    private String URL;
-    private Report newReport;
+    private Media media;
+    private Button sendBTN;
+    private String name;
+    private String email;
+    private String phone;
+    private TextView authorName;
+    private TextView authorEmail;
+    private TextView authorPhone;
+    private TextView descriptionTV;
+    private TextView categoryTV;
+    private TextView locationTV;
+    private ImageView thumbnail;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -59,14 +56,9 @@ public class NewReportSummaryFragment extends Fragment implements NewReportActiv
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        rootView = inflater.inflate(R.layout.fragment_new_report_summary, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_new_report_summary, container, false);
         sendBTN = (Button) rootView.findViewById(R.id.summary_BTN_send);
         final DatabaseHandler handler = new DatabaseHandler(getActivity().getApplicationContext());
-
-//        queue = Volley.newRequestQueue(rootView.getContext());
-//        GsonBuilder gbuilder = new GsonBuilder();
-//        gson = gbuilder.create();
-
 
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
         name = preferences.getString("pref_name", null);
@@ -101,8 +93,7 @@ public class NewReportSummaryFragment extends Fragment implements NewReportActiv
                 Report reportNew = new Report(handler.getAllReports().size()+1, user, location, report.getDescription(), category, report.getLocationID(), "open", report.getUpvotes());
             
                 
-                AddReport(reportNew);
-                
+                addReport(reportNew);
                 i.putExtra("REPORT", reportNew);
 
                 getActivity().finish();
@@ -133,6 +124,63 @@ public class NewReportSummaryFragment extends Fragment implements NewReportActiv
         return rootView;
     }
 
+    private void processDescription(String d) {
+        if (d != null) {
+            if(!d.isEmpty()) {
+                descriptionTV.setText(d);
+            } else {
+                descriptionTV.setText(R.string.summary_missing_description);
+            }
+        } else {
+            descriptionTV.setText(R.string.summary_missing_description);
+        }
+    }
+
+    private void processPhoneNumber() {
+        if(phone != null) {
+            if (phone.equals(defaultUserValue)) {
+                authorPhone.setVisibility(View.GONE);
+            } else {
+                authorPhone.setText(phone);
+            }
+        } else {
+            authorPhone.setVisibility(View.GONE);
+        }
+    }
+
+    private void processCategory(Category c, Activity a) {
+        if (c != null) {
+            categoryTV.setText(c.getCategoryName());
+            categoryTV.setTextColor(descriptionTV.getTextColors().getDefaultColor());
+
+        } else {
+            categoryTV.setText(R.string.summary_missing_category);
+            categoryTV.setTextColor(ContextCompat.getColor(a, R.color.md_edittext_error));
+        }
+    }
+
+    private void processLocation(Location l, Activity a) {
+        if (l != null) {
+
+            locationTV.setText(l.getStreet());
+
+            locationTV.setTextColor(descriptionTV.getTextColors().getDefaultColor());
+        } else {
+            locationTV.setText(R.string.summary_missing_location);
+            locationTV.setTextColor(ContextCompat.getColor(a, R.color.md_edittext_error));
+        }
+    }
+
+    private void processMedia(Media m) {
+        if(media != null) {
+            if(media.getType() == MEDIA_PICTURE) {
+                Glide.with(getContext()).load(media.getFilePath()).into(thumbnail);
+            } else if (media.getType() == MEDIA_VIDEO) {
+                Glide.with(getContext()).load(media.getUri()).into(thumbnail);
+            }
+        }
+    }
+
     @Override
     public void onResume() {
         super.onResume();
@@ -144,76 +192,34 @@ public class NewReportSummaryFragment extends Fragment implements NewReportActiv
         NewReportActivity activity = ((NewReportActivity)getActivity());
 
         Report report = activity.getNewReport();
-        description = report.getDescription();
-        category = report.getCategory();
-        location = report.getLocation();
+        String description = report.getDescription();
+        Category category = report.getCategory();
+        Location location = report.getLocation();
         media = report.getMedia();
 
         authorName.setText(name);
         authorEmail.setText(email);
 
-        if(phone != null) {
-            if (phone.equals("Onbekend")) {
-                authorPhone.setVisibility(View.GONE);
-            } else {
-                authorPhone.setText(phone);
-            }
-        } else {
-            authorPhone.setVisibility(View.GONE);
-        }
+        processPhoneNumber();
+        processDescription(description);
+        processCategory(category, activity);
+        processLocation(location, activity);
+        processMedia(media);
 
-        if (description != null) {
-            if(!description.isEmpty()) {
-                descriptionTV.setText(description);
-            } else {
-                descriptionTV.setText(R.string.summary_missing_description);
-            }
-        } else {
-            descriptionTV.setText(R.string.summary_missing_description);
-        }
-
-        if (category != null) {
-            categoryTV.setText(category.getCategoryName());
-            categoryTV.setTextColor(descriptionTV.getTextColors().getDefaultColor());
-
-        } else {
-            categoryTV.setText(R.string.summary_missing_category);
-            categoryTV.setTextColor(ContextCompat.getColor(activity, R.color.md_edittext_error));
-        }
-
-        if (location != null) {
-
-            locationTV.setText(location.getStreet());
-
-            locationTV.setTextColor(descriptionTV.getTextColors().getDefaultColor());
-        } else {
-            locationTV.setText(R.string.summary_missing_location);
-            locationTV.setTextColor(ContextCompat.getColor(activity, R.color.md_edittext_error));
-        }
-
-        if(media != null) {
-            if(media.getType() == MEDIA_PICTURE) {
-                Glide.with(getContext()).load(media.getFilePath()).into(thumbnail);
-            } else if (media.getType() == MEDIA_VIDEO) {
-                Glide.with(getContext()).load(media.getUri()).into(thumbnail);
-            }
-        }
-
-        if (media != null && category != null && location != null && !name.equalsIgnoreCase("Onbekend") && !email.equalsIgnoreCase("Onbekend")) {
+        if (media != null && category != null && location != null && !name.equalsIgnoreCase(defaultUserValue) && !email.equalsIgnoreCase(defaultUserValue)) {
             sendBTN.setEnabled(true);
         } else {
             sendBTN.setEnabled(false);
         }
     }
     
-    public void AddReport(Report report){
-        
+    public void addReport(Report report){
         AddReportRequest reportRequest = new AddReportRequest(getActivity().getApplicationContext());
         reportRequest.addAReport(report);
     }
 
 
-        }
+}
 
 
         

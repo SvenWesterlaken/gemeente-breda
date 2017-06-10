@@ -3,15 +3,14 @@ package com.svenwesterlaken.gemeentebreda.domain;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import java.io.Serializable;
-
 /**
  * Created by lukab on 9-5-2017.
  */
 
 public class Category implements Parcelable {
     int categoryID;
-    String categoryName, categorySummary;
+    String categoryName;
+    String categorySummary;
 
 
     public Category(int categoryID, String categoryName, String categorySummary) {

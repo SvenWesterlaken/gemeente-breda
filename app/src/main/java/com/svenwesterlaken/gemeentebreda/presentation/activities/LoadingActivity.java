@@ -16,6 +16,8 @@ import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class LoadingActivity extends AppCompatActivity {
 
+    private static String defaultSettingValue = "Onbekend";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,7 +50,7 @@ public class LoadingActivity extends AppCompatActivity {
                 if (name == null && email == null && phone == null) {
                     i = new Intent(getApplicationContext(), LoginActivity.class);
                 } else if (name != null && email != null && phone != null) {
-                    if (name.equals("Onbekend") && email.equals("Onbekend") && phone.equals("Onbekend")) {
+                    if (name.equals(defaultSettingValue) && email.equals(defaultSettingValue) && phone.equals(defaultSettingValue)) {
                         i = new Intent(getApplicationContext(), LoginActivity.class);
                     } else {
                         i = new Intent(getApplicationContext(), ReportActivity.class);

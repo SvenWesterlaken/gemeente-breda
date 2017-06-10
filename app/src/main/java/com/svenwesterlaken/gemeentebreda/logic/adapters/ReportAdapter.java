@@ -53,7 +53,7 @@ public class ReportAdapter extends RecyclerView.Adapter<ReportAdapter.ReportView
         viewholder.title.setText(report.getCategory().getCategoryName());
         viewholder.address.setText(report.getLocation().getStreet() );
         viewholder.description.setText(description);
-        viewholder.upvotes.setText("" + report.getUpvotes());
+        viewholder.upvotes.setText(String.format("", report.getUpvotes()));
 
 
         viewholder.icon.setImageResource( R.drawable.lightbulb);
@@ -82,7 +82,10 @@ public class ReportAdapter extends RecyclerView.Adapter<ReportAdapter.ReportView
     }
 
     public static class ReportViewHolder extends RecyclerView.ViewHolder  {
-        private TextView title, address, description, upvotes;
+        private TextView title;
+        private TextView address;
+        private TextView description;
+        private TextView upvotes;
         private ImageView icon, status;
         private View layout;
 

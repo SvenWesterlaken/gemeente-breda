@@ -1,11 +1,6 @@
 package com.svenwesterlaken.gemeentebreda.domain;
 
-import android.icu.util.ULocale;
 import android.os.Parcelable;
-
-import org.parceler.Parcel;
-
-import java.io.Serializable;
 
 /**
  * Created by lukab on 9-5-2017.
@@ -13,7 +8,10 @@ import java.io.Serializable;
 
 public class Report implements Parcelable {
 
-    int reportID, locationID, categoryID, userID;
+    int reportID;
+    int locationID;
+    int categoryID;
+    int userID;
     User user;
     Location location;
     String description;
@@ -35,13 +33,7 @@ public class Report implements Parcelable {
         this.locationID = locationID;
         this.status = status;
         this.upvotes = upvotes;
-       
     }
-
-
-
-    //getters
-    
     
     public int getUpvotes() {
         return upvotes;

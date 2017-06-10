@@ -11,12 +11,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.svenwesterlaken.gemeentebreda.R;
-import com.svenwesterlaken.gemeentebreda.data.api.AddReportRequest;
 import com.svenwesterlaken.gemeentebreda.data.api.UpvoteRequest;
 import com.svenwesterlaken.gemeentebreda.data.database.DatabaseHandler;
 import com.svenwesterlaken.gemeentebreda.domain.Report;
 import com.svenwesterlaken.gemeentebreda.domain.User;
-import com.svenwesterlaken.gemeentebreda.logic.adapters.DetailedCommentAdapter;
 
 public class DetailedReportActivity extends BaseActivity  {
 
@@ -78,12 +76,6 @@ public class DetailedReportActivity extends BaseActivity  {
         layoutManager2.setOrientation(LinearLayoutManager.VERTICAL);
         reportComments.setLayoutManager(layoutManager2);
 
-
-        final DetailedCommentAdapter adapter2 = new DetailedCommentAdapter();
-
-        reportComments.setAdapter(adapter2);
-        adapter2.notifyDataSetChanged();
-
         ImageView button1 = (ImageView) findViewById(R.id.detailed_IV_button1);
         button1.setImageResource(R.drawable.comment_alert_outline);
         final ImageView button2 = (ImageView) findViewById(R.id.detailed_IV_button2);
@@ -94,7 +86,7 @@ public class DetailedReportActivity extends BaseActivity  {
         button3.setImageResource(R.drawable.star_outline);
     
     
-        if (!(handler.searchUpvote(report, user) == null)){
+        if (handler.searchUpvote(report, user) != null){
             button3.setColorFilter(ContextCompat.getColor(getApplicationContext(), R.color.colorAccent));
             button3.setClickable(false);
         }
@@ -104,7 +96,7 @@ public class DetailedReportActivity extends BaseActivity  {
             public void onClick(View v) {
     
                 if (handler.searchUpvote(report, user) == null) {
-                    AddUpvote(report);
+                    addUpvote(report);
                     button3.setColorFilter(ContextCompat.getColor(getApplicationContext(), R.color.colorAccent));
                     upvotesTxt.setText(report.getUpvotes()+1 + " upvotes");
                   
@@ -114,7 +106,7 @@ public class DetailedReportActivity extends BaseActivity  {
                 // delete kan pas als dat ook via API kan
     
 //                else {
-////                    handler.deleteUpvote(report);
+//                    handler.deleteUpvote(report);
 //                    button3.setColorFilter(null);
 //                }
             }
@@ -122,7 +114,7 @@ public class DetailedReportActivity extends BaseActivity  {
         final ImageView button4 = (ImageView) findViewById(R.id.detailed_IV_button4);
         button4.setImageResource(R.drawable.bookmark_outline);
 
-        if (!(handler.searchFavourite(report, user) == null)){
+        if (handler.searchFavourite(report, user) != null){
             button4.setColorFilter(ContextCompat.getColor(getApplicationContext(), R.color.colorAccent));
         }
 
@@ -151,17 +143,12 @@ public class DetailedReportActivity extends BaseActivity  {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-        switch(id) {
-            case android.R.id.home:
-                onBackPressed();
-                return true;
+        if(id == android.R.id.home) {
+            super.onBackPressed();
+            return true;
+        } else {
+            return super.onOptionsItemSelected(item);
         }
-        return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    public void onBackPressed() {
-        super.onBackPressed();
     }
 
     @Override
@@ -170,7 +157,7 @@ public class DetailedReportActivity extends BaseActivity  {
         return true;
     }
     
-    public void AddUpvote(Report report){
+    public void addUpvote(Report report){
         
         UpvoteRequest request = new UpvoteRequest(getApplicationContext());
         request.addAUpvote(report);

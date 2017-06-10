@@ -1,9 +1,8 @@
 package com.svenwesterlaken.gemeentebreda.presentation.activities;
 
 import android.content.Intent;
-import android.os.CountDownTimer;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
@@ -15,9 +14,6 @@ import android.widget.TextView;
 
 import com.svenwesterlaken.gemeentebreda.R;
 import com.svenwesterlaken.gemeentebreda.domain.Report;
-
-import org.parceler.Parcel;
-import org.parceler.Parcels;
 
 public class ConfirmationActivity extends BaseActivity {
 

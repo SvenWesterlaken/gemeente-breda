@@ -13,6 +13,7 @@ import com.svenwesterlaken.gemeentebreda.data.database.DatabaseHandler;
 import com.svenwesterlaken.gemeentebreda.domain.Location;
 import com.svenwesterlaken.gemeentebreda.domain.Report;
 import com.svenwesterlaken.gemeentebreda.domain.ServiceReport;
+import com.svenwesterlaken.gemeentebreda.logic.util.ApiUtil;
 
 import java.util.Arrays;
 import java.util.List;
@@ -40,8 +41,8 @@ public class ReportRequest implements Response.Listener<String>, Response.ErrorL
 	 * Verstuur een GET request om alle reports op te halen
 	 */
 	public void handleGetAllReports() {
-		StringRequest ReportsRequest = new StringRequest(Request.Method.GET, ApiUtil.getReportRequestURL(), this, this);
-		ReportRequestQueue.getInstance(context).addToRequestQueue(ReportsRequest);
+		StringRequest reportsRequest = new StringRequest(Request.Method.GET, ApiUtil.getReportRequestURL(), this, this);
+		ReportRequestQueue.getInstance(context).addToRequestQueue(reportsRequest);
 	}
 
 	@Override

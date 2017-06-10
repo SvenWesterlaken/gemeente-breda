@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
 import android.provider.MediaStore;
+import android.util.Log;
 
 import com.drew.imaging.ImageMetadataReader;
 import com.drew.imaging.ImageProcessingException;
@@ -54,7 +55,8 @@ public class MediaLocationHandler {
     public LatLng getVideoLocationMetadata(Uri videoUri) {
         ContentResolver videoResolver = c.getContentResolver();
         Cursor videoCursor = videoResolver.query(videoUri, null, null, null, null);
-        double lat = 0, lon = 0;
+        double lat = 0;
+        double lon = 0;
         
         if (videoCursor != null && videoCursor.moveToFirst()) {
             //get columns
@@ -62,10 +64,6 @@ public class MediaLocationHandler {
                     (MediaStore.Video.Media.LATITUDE);
             int lonColumn = videoCursor.getColumnIndex
                     (MediaStore.Video.Media.LONGITUDE);
-//            int resColumn = videoCursor.getColumnIndex
-//                    (MediaStore.Video.Media.RESOLUTION);
-//            int durationColumn = videoCursor.getColumnIndex
-//                    (MediaStore.Video.Media.DURATION);
             
             do {
                 lat = videoCursor.getDouble(latColumn);
@@ -96,7 +94,7 @@ public class MediaLocationHandler {
                 }
             }
         } catch (IOException | ImageProcessingException e) {
-            e.printStackTrace();
+            Log.e("LOCATIONMETA", e.getMessage());
         }
         
         return latlong;
@@ -107,11 +105,11 @@ public class MediaLocationHandler {
         try {
             String[] proj = {MediaStore.Images.Media.DATA};
             cursor = c.getContentResolver().query(contentUri, proj, null, null, null);
-            int column_index = 0;
+            int index = 0;
             if (cursor != null) {
-                column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+                index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
                 cursor.moveToFirst();
-                return cursor.getString(column_index);
+                return cursor.getString(index);
             } else {
                 return null;
             }

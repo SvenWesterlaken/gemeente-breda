@@ -1,8 +1,10 @@
-package com.svenwesterlaken.gemeentebreda.data.api;
+package com.svenwesterlaken.gemeentebreda.logic.util;
 
 import com.svenwesterlaken.gemeentebreda.domain.Location;
 import com.svenwesterlaken.gemeentebreda.domain.Report;
 import com.svenwesterlaken.gemeentebreda.domain.User;
+
+import java.util.HashMap;
 
 /**
  * Created by Sven Westerlaken on 9-6-2017.
@@ -42,6 +44,15 @@ public class ApiUtil {
                 getLocationIDParameter() +
                 getUserParameters(report.getUser());
 
+    }
+
+    public static HashMap<String, String> getPostHeaders() {
+        HashMap<String, String> headers = new HashMap<>();
+        headers.put("Cache-Control", "no-cache");
+        headers.put("Content-Type", "application/json; charset=utf-8");
+        headers.put("Server", "Microsoft-ISS/8.5");
+
+        return headers;
     }
 
     //TODO: Needs to get a Category passed in for later use

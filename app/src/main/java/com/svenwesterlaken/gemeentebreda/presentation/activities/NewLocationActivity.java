@@ -30,7 +30,6 @@ import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.svenwesterlaken.gemeentebreda.R;
-import com.svenwesterlaken.gemeentebreda.data.database.DatabaseHandler;
 import com.svenwesterlaken.gemeentebreda.domain.Location;
 import com.svenwesterlaken.gemeentebreda.logic.managers.NewLocationManager;
 import com.svenwesterlaken.gemeentebreda.presentation.fragments.SettingsFragment;
@@ -44,19 +43,17 @@ public class NewLocationActivity extends BaseActivity implements OnQueryChangeLi
     private NewLocationManager lManager;
     private GoogleMap map;
     private Marker placedMarker;
-    private DatabaseHandler handler;
-    private TextView streetTV, postalTV;
+    private TextView streetTV;
+    private TextView postalTV;
     private Location selectedLocation;
     private FloatingSearchView mSearchView;
-    
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_location);
-        
-        handler = new DatabaseHandler(getApplicationContext());
         lManager = new NewLocationManager(this, getApplicationContext(), this);
-        
+
         mSearchView = (FloatingSearchView) findViewById(R.id.newLocation_FSV_searchbar);
         FloatingActionButton confirmBTN = (FloatingActionButton) findViewById(R.id.newLocation_FAB_confirm);
         
@@ -74,7 +71,7 @@ public class NewLocationActivity extends BaseActivity implements OnQueryChangeLi
         try {
             MapsInitializer.initialize(this);
         } catch (Exception e) {
-            e.printStackTrace();
+            Log.e("MAPINITIALIZER", e.getMessage());
         }
         
         mMapView.getMapAsync(this);

@@ -1,11 +1,9 @@
 package com.svenwesterlaken.gemeentebreda.domain;
 
-import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import java.io.Serializable;
 
 /**
  * Created by lukab on 9-5-2017.
@@ -17,9 +15,6 @@ public class Media implements Parcelable {
     private String filePath;
     private int type;
     private Uri uri;
-
-    private static int IMAGE = 1;
-    private static int VIDEO = 2;
 
     public Media(String filePath, Uri uri, int type) {
         this.filePath = filePath;

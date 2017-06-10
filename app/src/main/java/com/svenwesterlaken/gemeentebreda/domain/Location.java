@@ -3,18 +3,18 @@ package com.svenwesterlaken.gemeentebreda.domain;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import org.parceler.ParcelClass;
-
-import java.io.Serializable;
-
 /**
  * Created by lukab on 9-5-2017.
  */
 
 public class Location implements Parcelable {
-    String street, city, postalCode;
-    int houseNumber,  locationID;
-    Double latitude, longitude;
+    String street;
+    String city;
+    String postalCode;
+    int houseNumber;
+    int locationID;
+    Double latitude;
+    Double longitude;
     
     public Location(String street, String city, int houseNumber, String postalCode, int locationID, Double latitude, Double longitude ) {
         this.street = street;

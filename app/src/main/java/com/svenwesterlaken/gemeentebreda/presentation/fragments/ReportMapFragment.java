@@ -1,32 +1,20 @@
 package com.svenwesterlaken.gemeentebreda.presentation.fragments;
 
 
-import android.content.Intent;
-import android.content.res.Resources;
-import android.preference.PreferenceManager;
-import android.support.v4.app.Fragment;
-import android.os.Bundle;
-
-import android.os.Bundle;
-import android.support.v4.app.Fragment;
-
 import android.Manifest;
 import android.content.pm.PackageManager;
+import android.content.res.Resources;
 import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
-
-import com.google.android.gms.maps.model.MapStyleOptions;
-import com.svenwesterlaken.gemeentebreda.R;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -36,15 +24,15 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.svenwesterlaken.gemeentebreda.R;
 import com.svenwesterlaken.gemeentebreda.data.database.DatabaseHandler;
 import com.svenwesterlaken.gemeentebreda.domain.Report;
-import com.svenwesterlaken.gemeentebreda.presentation.activities.DetailedReportActivity;
 
 import java.util.ArrayList;
-
+import java.util.List;
 
 import static android.content.Context.LOCATION_SERVICE;
 
@@ -168,7 +156,7 @@ public class ReportMapFragment extends Fragment {
         return v;
     }
 
-    public ArrayList<Report> getAllReports() {
+    public List<Report> getAllReports() {
         DatabaseHandler handler = new DatabaseHandler(getContext());
         ArrayList<Report> reports;
         reports = handler.getAllReports();
@@ -182,7 +170,7 @@ public class ReportMapFragment extends Fragment {
         return reports;
     }
 
-    public void placeMarkers(ArrayList<Report> reports) {
+    public void placeMarkers(List<Report> reports) {
 
         for(Report report : reports) {
             if (report.getLocation() != null) {

@@ -43,20 +43,14 @@ public class ChangableViewPager extends ViewPager {
 
     @Override
     public boolean onInterceptTouchEvent(MotionEvent event) {
-        if(swipeable) {
-            return super.onInterceptTouchEvent(event) && mGestureDetector.onTouchEvent(event);
-        }
+        return swipeable && super.onInterceptTouchEvent(event) && mGestureDetector.onTouchEvent(event);
 
-        return false;
     }
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        if(swipeable) {
-            return super.onTouchEvent(event);
-        }
+        return swipeable && super.onTouchEvent(event);
 
-        return false;
     }
 
     public void enableSwiping() {
@@ -78,7 +72,7 @@ public class ChangableViewPager extends ViewPager {
         }
     }
 
-    class MyScroller extends Scroller {
+    private class MyScroller extends Scroller {
         MyScroller(Context context) {
             super(context, new AccelerateDecelerateInterpolator());
         }
@@ -89,13 +83,10 @@ public class ChangableViewPager extends ViewPager {
         }
     }
 
-    class XScrollDetector extends GestureDetector.SimpleOnGestureListener {
+    private class XScrollDetector extends GestureDetector.SimpleOnGestureListener {
         @Override
         public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
-            if (Math.abs(distanceY) < Math.abs(distanceX)) {
-                return true;
-            }
-            return false;
+            return Math.abs(distanceY) < Math.abs(distanceX);
         }
     }
 }

@@ -30,13 +30,24 @@ public class NewReportLocationFragment extends Fragment implements NewLocationMa
     private LocationChangedListener mListener;
     private NewLocationManager lManager;
     
-    private Location location, mediaLocation, currentLocation, chosenLocation;
+    private Location location;
+    private Location mediaLocation;
+    private Location currentLocation;
+    private Location chosenLocation;
     
-    private ConstraintLayout chooseBTN, metaBTN, currentBTN, chosenBTN, deleteBTN;
-    private View rootView;
-    private TextView locationTV, currentMessage, metaMessage, chosenMessage;
+    private ConstraintLayout chooseBTN;
+    private ConstraintLayout metaBTN;
+    private ConstraintLayout currentBTN;
+    private ConstraintLayout chosenBTN;
+    private ConstraintLayout deleteBTN;
+
+    private TextView locationTV;
+    private TextView currentMessage;
+    private TextView metaMessage;
+    private TextView chosenMessage;
     private FloatingActionButton confirmFAB;
-    private Animation popupAnimation, popoutAnimation;
+    private Animation popupAnimation;
+    private Animation popoutAnimation;
     
     private float alpha;
     private static int NEW_LOCATION_REQUEST = 1;
@@ -52,7 +63,7 @@ public class NewReportLocationFragment extends Fragment implements NewLocationMa
     
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        rootView = inflater.inflate(R.layout.fragment_new_report_location, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_new_report_location, container, false);
         
         if (ZeroUtil.isZero(alpha, 0.0000000001)) {
             alpha = rootView.findViewById(R.id.location_BTN_delete).getAlpha();

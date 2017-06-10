@@ -12,10 +12,10 @@ import com.android.volley.toolbox.JsonArrayRequest;
 import com.svenwesterlaken.gemeentebreda.data.database.DatabaseHandler;
 import com.svenwesterlaken.gemeentebreda.domain.Report;
 import com.svenwesterlaken.gemeentebreda.domain.User;
+import com.svenwesterlaken.gemeentebreda.logic.util.ApiUtil;
 
 import org.json.JSONArray;
 
-import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -43,12 +43,7 @@ public class AddReportRequest implements Response.Listener<JSONArray>, Response.
         JsonArrayRequest postRequest = new JsonArrayRequest(Request.Method.POST, url, new JSONArray(), this, this) {
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
-                HashMap<String, String> headers = new HashMap<>();
-                headers.put("Cache-Control", "no-cache");
-                headers.put("Content-Type", "application/json; charset=utf-8");
-                headers.put("Server", "Microsoft-ISS/8.5");
-
-                return headers;
+                return ApiUtil.getPostHeaders();
             }
         };
 

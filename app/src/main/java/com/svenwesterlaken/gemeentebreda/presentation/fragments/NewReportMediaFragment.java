@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityOptionsCompat;
@@ -31,18 +30,6 @@ import java.io.File;
 import static android.app.Activity.RESULT_OK;
 
 public class NewReportMediaFragment extends Fragment implements View.OnClickListener {
-    private MediaChangedListener mListener;
-    private MediaManager mManager;
-
-    private Media media;
-
-    private ImageView image;
-    private FloatingActionButton confirmFAB;
-    private ConstraintLayout photoBTN, videoBTN, selectBTN, removeBTN;
-
-    private Animation popupAnimation, popoutAnimation;
-
-
     private final static int CAMERA_REQUEST = 1;
     private final static int VIDEOCAMERA_REQUEST = 2;
     private final static int MEDIA_REQUEST = 3;
@@ -50,6 +37,19 @@ public class NewReportMediaFragment extends Fragment implements View.OnClickList
     private final static int MEDIA_PICTURE = 1;
     private final static int MEDIA_VIDEO = 2;
 
+    private MediaChangedListener mListener;
+    private MediaManager mManager;
+    private Media media;
+
+    private ImageView image;
+    private FloatingActionButton confirmFAB;
+    private ConstraintLayout photoBTN;
+    private ConstraintLayout videoBTN;
+    private ConstraintLayout selectBTN;
+    private ConstraintLayout removeBTN;
+
+    private Animation popupAnimation;
+    private Animation popoutAnimation;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -94,7 +94,7 @@ public class NewReportMediaFragment extends Fragment implements View.OnClickList
         } else if (v.getId() == R.id.media_BTN_mediaSelect) {
             mManager.dispatchChooseMediaIntent(MEDIA_REQUEST);
         } else if (v.getId() == R.id.media_BTN_delete) {
-
+            media = null;
         } else if (v.getId() == R.id.media_IV_thumbnail) {
             if(media != null) {
                 if(media.getType() == MEDIA_PICTURE) {
@@ -205,13 +205,6 @@ public class NewReportMediaFragment extends Fragment implements View.OnClickList
 
     public interface MediaChangedListener {
         void setMedia(Media m);
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-
-//        if (grantResults[0] != PackageManager.PERMISSION_GRANTED) {}
     }
 
 }

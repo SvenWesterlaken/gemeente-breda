@@ -11,7 +11,9 @@ import com.arlib.floatingsearchview.suggestions.model.SearchSuggestion;
 
 public class PlaceSearchSuggestion implements SearchSuggestion {
     private String placeID;
-    private CharSequence primaryText, secondaryText, fullText;
+    private CharSequence primaryText;
+    private CharSequence secondaryText;
+    private CharSequence fullText;
 
     public PlaceSearchSuggestion() {}
 
