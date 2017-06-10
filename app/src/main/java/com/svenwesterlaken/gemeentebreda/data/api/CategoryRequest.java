@@ -11,12 +11,8 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.svenwesterlaken.gemeentebreda.data.database.DatabaseHandler;
 import com.svenwesterlaken.gemeentebreda.domain.Category;
-import com.svenwesterlaken.gemeentebreda.domain.Location;
-import com.svenwesterlaken.gemeentebreda.domain.Report;
 import com.svenwesterlaken.gemeentebreda.domain.ServiceCategory;
-import com.svenwesterlaken.gemeentebreda.domain.ServiceReport;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -38,7 +34,7 @@ public class CategoryRequest {
 	 *
 	 */
 	public CategoryRequest(Context context) {
-		this.context = context;
+		this.context = context.getApplicationContext();
 		GsonBuilder gbuilder = new GsonBuilder();
 		gson = gbuilder.create();
 		handler = new DatabaseHandler(context);

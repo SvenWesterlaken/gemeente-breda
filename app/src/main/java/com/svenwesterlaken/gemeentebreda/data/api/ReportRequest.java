@@ -1,32 +1,22 @@
 package com.svenwesterlaken.gemeentebreda.data.api;
 
-import android.app.Service;
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.util.Log;
 
-import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.google.gson.Gson;
-import com.svenwesterlaken.gemeentebreda.R;
+import com.google.gson.GsonBuilder;
 import com.svenwesterlaken.gemeentebreda.data.database.DatabaseHandler;
 import com.svenwesterlaken.gemeentebreda.domain.Location;
 import com.svenwesterlaken.gemeentebreda.domain.Report;
 import com.svenwesterlaken.gemeentebreda.domain.ServiceReport;
-import com.google.gson.GsonBuilder;
-
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Created by lukab on 6-6-2017.
@@ -49,7 +39,7 @@ public class ReportRequest {
 	 * @param context
 	 */
 	public ReportRequest(Context context) {
-		this.context = context;
+		this.context = context.getApplicationContext();
 //		this.listener = listener;
 		GsonBuilder gbuilder = new GsonBuilder();
 		gson = gbuilder.create();
@@ -66,7 +56,7 @@ public class ReportRequest {
 			@Override
 			public void onResponse(String response) {
 				// Succesvol response
-				Log.i(TAG, response.toString());
+				Log.i(TAG, response);
 				
 				List<ServiceReport> serviceReports = Arrays.asList(gson.fromJson(response, ServiceReport[].class));;
 				Log.i("Reports", serviceReports.size() + "reports loaded");

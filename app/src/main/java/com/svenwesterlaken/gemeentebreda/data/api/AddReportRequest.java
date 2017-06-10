@@ -9,27 +9,15 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
-import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.StringRequest;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.google.gson.JsonObject;
 import com.svenwesterlaken.gemeentebreda.data.database.DatabaseHandler;
-import com.svenwesterlaken.gemeentebreda.domain.Location;
 import com.svenwesterlaken.gemeentebreda.domain.Report;
-import com.svenwesterlaken.gemeentebreda.domain.ServiceReport;
 import com.svenwesterlaken.gemeentebreda.domain.User;
 
 import org.json.JSONArray;
-import org.json.JSONObject;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
-import java.nio.charset.Charset;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -45,12 +33,7 @@ public class AddReportRequest {
 		
 		// De aanroepende class implementeert deze interface.
 		private DatabaseHandler handler;
-		
-		/**
-		 * Constructor
-		 *
-		 * @param context
-		 */
+
 		public AddReportRequest(Context context) {
 			this.context = context;
 			GsonBuilder gbuilder = new GsonBuilder();

@@ -17,20 +17,14 @@ import com.android.volley.toolbox.HurlStack;
 
 public class ReportRequestQueue {
         
-         private static ReportRequestQueue mInstance;
-         private RequestQueue mRequestQueue;
-         private static Context mCtx;
- 
-         /**
-         * private constructor - kan niet van 'buiten af' worden aangeroepen
-         * Deze constructie hoort bij het Singleton pattern.
-         *
-         * @param context
-         */
-        private ReportRequestQueue(Context context) {
-            mCtx = context;
-            mRequestQueue = getRequestQueue();
-        }
+    private static ReportRequestQueue mInstance;
+    private RequestQueue mRequestQueue;
+    private static Context mCtx;
+
+    private ReportRequestQueue(Context context) {
+        mCtx = context.getApplicationContext();
+        mRequestQueue = getRequestQueue();
+    }
     
     /**
      * Static methode die één enkele instantie van deze class beheert.
