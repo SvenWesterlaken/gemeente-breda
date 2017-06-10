@@ -10,7 +10,6 @@ import android.support.v7.app.AppCompatActivity;
 
 import com.svenwesterlaken.gemeentebreda.R;
 import com.svenwesterlaken.gemeentebreda.data.api.CategoryRequest;
-import com.svenwesterlaken.gemeentebreda.data.api.ReportRequest;
 
 import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
@@ -32,13 +31,11 @@ public class LoadingActivity extends AppCompatActivity {
         new CountDownTimer(1500, 1000) {
 
             @Override
-            public void onTick(long millisUntilFinished) {
-                getCategories();
-                getReports();
-            }
+            public void onTick(long millisUntilFinished) {}
 
             @Override
             public void onFinish() {
+                getCategories();
                 SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
                 String name = preferences.getString("pref_name", null);
                 String email = preferences.getString("pref_email", null);
@@ -75,14 +72,7 @@ public class LoadingActivity extends AppCompatActivity {
         super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
     }
     
-    private void getReports(){
-    
-        ReportRequest request = new ReportRequest(getApplicationContext());
-        request.handleGetAllReports();
-    }
-    
     private void getCategories(){
-        
         CategoryRequest request = new CategoryRequest(getApplicationContext());
         request.handleGetCategories();
     }

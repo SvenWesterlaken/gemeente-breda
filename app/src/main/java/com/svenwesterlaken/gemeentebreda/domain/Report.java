@@ -20,11 +20,12 @@ public class Report implements Parcelable {
     Media media;
     Category category;
     String status;
-
+    int upvotes;
+    
     public Report() {
     }
 
-    public Report(int reportID, User user, Location location, String description, Category category, int locationID, String status) {
+    public Report(int reportID, User user, Location location, String description, Category category, int locationID, String status, int upvotes) {
         this.reportID = reportID;
         this.category = category;
         this.user = user;
@@ -33,13 +34,19 @@ public class Report implements Parcelable {
         this.category = category;
         this.locationID = locationID;
         this.status = status;
+        this.upvotes = upvotes;
+       
     }
 
 
 
     //getters
-
-
+    
+    
+    public int getUpvotes() {
+        return upvotes;
+    }
+    
     public int getLocationID() {
         return locationID;
     }
@@ -118,7 +125,11 @@ public class Report implements Parcelable {
     }
     
     public void setStatus(String status) { this.status = status; }
-
+    
+    public void setUpvotes(int upvotes) {
+        this.upvotes = upvotes;
+    }
+    
     @Override
     public int describeContents() {
         return 0;
@@ -136,6 +147,7 @@ public class Report implements Parcelable {
         dest.writeParcelable(this.media, flags);
         dest.writeParcelable(this.category, flags);
         dest.writeString(this.status);
+        dest.writeInt(this.upvotes);
        
     }
 
@@ -150,6 +162,7 @@ public class Report implements Parcelable {
         this.media = in.readParcelable(Media.class.getClassLoader());
         this.category = in.readParcelable(Category.class.getClassLoader());
         this.status = in.readString();
+        this.upvotes = in.readInt();
     }
 
     public static final Parcelable.Creator<Report> CREATOR = new Parcelable.Creator<Report>() {

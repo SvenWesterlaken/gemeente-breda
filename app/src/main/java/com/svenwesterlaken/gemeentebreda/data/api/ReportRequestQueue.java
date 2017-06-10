@@ -41,12 +41,8 @@ public class ReportRequestQueue {
     
     public RequestQueue getRequestQueue() {
         if (mRequestQueue == null) {
-            // getApplicationContext() is key, it keeps you from leaking the
-            // Activity or BroadcastReceiver if someone passes one in.
-            
             Cache cache = new DiskBasedCache(mCtx.getCacheDir(), 10 * 1024 * 1024);
             Network network = new BasicNetwork(new HurlStack());
-            // mRequestQueue = Volley.newRequestQueue(mCtx.getApplicationContext());
             mRequestQueue = new RequestQueue(cache, network);
             mRequestQueue.start();
         }

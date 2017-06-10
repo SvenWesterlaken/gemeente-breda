@@ -4,100 +4,41 @@ import android.Manifest;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.support.design.widget.TabLayout;
+import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-
-import android.support.v4.app.ListFragment;
-import android.support.v4.view.PagerAdapter;
-
+import android.support.design.widget.TabLayout;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
-
-import android.support.v7.app.AlertDialog;
-
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
-
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.Spinner;
-import android.widget.TextView;
-import android.widget.Toast;
-
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.svenwesterlaken.gemeentebreda.R;
-import com.svenwesterlaken.gemeentebreda.data.api.CategoryRequest;
-import com.svenwesterlaken.gemeentebreda.data.api.ReportRequest;
-import com.svenwesterlaken.gemeentebreda.data.database.DatabaseHandler;
-import com.svenwesterlaken.gemeentebreda.domain.Category;
-import com.svenwesterlaken.gemeentebreda.domain.Location;
-import com.svenwesterlaken.gemeentebreda.domain.Report;
-import com.svenwesterlaken.gemeentebreda.domain.ServiceCategory;
-import com.svenwesterlaken.gemeentebreda.domain.ServiceReport;
-import com.svenwesterlaken.gemeentebreda.domain.User;
 import com.svenwesterlaken.gemeentebreda.logic.adapters.ReportPagerAdapter;
 import com.svenwesterlaken.gemeentebreda.presentation.fragments.ReportListFragment;
 import com.svenwesterlaken.gemeentebreda.presentation.fragments.ReportMapFragment;
-import com.svenwesterlaken.gemeentebreda.presentation.partials.NotImplementedListener;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Random;
 
 
 public class ReportActivity extends MenuActivity  {
 
-    private PagerAdapter mSectionsPagerAdapter;
-    private ArrayList<Report> reports ;
-    private ViewPager mViewPager;
-    private ReportMapFragment mapFragment;
-    private ReportListFragment listFragment;
-
     private static final int MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 1;
-    DatabaseHandler handler;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_report);
-
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        
-        
-        
         super.onCreateDrawer(toolbar, this);
-        handler = new DatabaseHandler(getApplicationContext());
-    
-    
-        mapFragment = new ReportMapFragment();
-        listFragment = new ReportListFragment();
-        mSectionsPagerAdapter = new ReportPagerAdapter(getSupportFragmentManager(), 2, getApplicationContext(), mapFragment, listFragment);
-        
 
-        // Set up the ViewPager with the sections adapter.
-        mViewPager = (ViewPager) findViewById(R.id.container);
+        PagerAdapter mSectionsPagerAdapter = new ReportPagerAdapter(getSupportFragmentManager(), 2, getApplicationContext(), new ReportMapFragment(),  new ReportListFragment());
+
+        ViewPager mViewPager = (ViewPager) findViewById(R.id.container);
         mViewPager.setAdapter(mSectionsPagerAdapter);
 
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
@@ -110,6 +51,7 @@ public class ReportActivity extends MenuActivity  {
 
                 Intent i = new Intent(getApplicationContext(), NewReportActivity.class);
                 startActivity(i);
+                finish();
 
 
             }
@@ -178,18 +120,15 @@ public class ReportActivity extends MenuActivity  {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_report, menu);
-
         menu.findItem(R.id.action_filter);
-
+        //TODO: Add listener to go to filter activity
         return true;
     }
 
 
     @Override
-    public void onRequestPermissionsResult(int requestCode,
-                                           String permissions[], int[] grantResults) {
+    public void onRequestPermissionsResult(int requestCode, @NonNull String permissions[], @NonNull int[] grantResults) {
 
         switch (requestCode) {
 
@@ -210,25 +149,11 @@ public class ReportActivity extends MenuActivity  {
                     Log.i("LOCATION_PERMISSION", "DENIED");
 
                 }
-                return;
             }
 
             // other 'case' lines to check for other
             // permissions this app might request
         }
     }
-    
-
-        public void onRestart(){
-            super.onRestart();
-            recreate();
-        }
-        
-        @Override
-        public  void onBackPressed(){
-            Log.i("LOG", "Not possible");
-        }
-
-
 }
 

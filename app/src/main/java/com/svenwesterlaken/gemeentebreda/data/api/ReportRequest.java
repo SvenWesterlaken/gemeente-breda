@@ -14,93 +14,78 @@ import com.svenwesterlaken.gemeentebreda.domain.Location;
 import com.svenwesterlaken.gemeentebreda.domain.Report;
 import com.svenwesterlaken.gemeentebreda.domain.ServiceReport;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
+import static android.content.ContentValues.TAG;
 
 /**
  * Created by lukab on 6-6-2017.
  */
 
-public class ReportRequest {
+public class ReportRequest implements Response.Listener<String>, Response.ErrorListener {
 	private Context context;
-	public final String TAG = this.getClass().getSimpleName();
-	private static final String ENDPOINTADD = "http://37.34.59.50/breda/CitySDK/services.json";
-	private static final String ENDPOINT2 = "http://37.34.59.50/breda/CitySDK/requests.json/?service_code=OV";
 	private Gson gson;
-	
-	// De aanroepende class implementeert deze interface.
-//	private ReportRequest.ReportListener listener;
+	private ReportRequest.ReportListener listener;
 	private DatabaseHandler handler;
-	
-	/**
-	 * Constructor
-	 *
-	 * @param context
-	 */
-	public ReportRequest(Context context) {
+
+	public ReportRequest(Context context, ReportListener listener) {
 		this.context = context.getApplicationContext();
-//		this.listener = listener;
-		GsonBuilder gbuilder = new GsonBuilder();
-		gson = gbuilder.create();
+		this.listener = listener;
+		gson = new GsonBuilder().create();
 		handler = new DatabaseHandler(context);
 	}
-	
+
 	/**
 	 * Verstuur een GET request om alle reports op te halen
 	 */
 	public void handleGetAllReports() {
-		
-		Log.i(TAG, "handleGetAllReports");
-		StringRequest ReportsRequest = new StringRequest(Request.Method.GET, ENDPOINT2, new Response.Listener<String>() {
-			@Override
-			public void onResponse(String response) {
-				// Succesvol response
-				Log.i(TAG, response);
-				
-				List<ServiceReport> serviceReports = Arrays.asList(gson.fromJson(response, ServiceReport[].class));;
-				Log.i("Reports", serviceReports.size() + "reports loaded");
-				handler.deleteAllReports();
-				handler.removeAllLocations();
-				
-				
-				ArrayList<Report> reports = new ArrayList<>();
-					for (ServiceReport report : serviceReports) {
-						Log.i("Reports", report.address + report.serviceName);
-						Report report1 = new Report();
-						report1.setReportID(handler.getAllReports().size() + 1);
-						Location location = new Location(report.address, report1.getReportID(), report.latitude, report.longitude);
-						handler.addLocation(location);
-						report1.setLocation(location);
-						report1.setCategory(handler.getCategory(1)); //ff aanpassen nog
-						report1.setDescription(report.description);
-						report1.setStatus(report.statusGemeente);
-						
-						handler.addReport(report1);
-						reports.add(report1);
-						
-				}
-//				listener.onReportsAvailable(reports);
-			} } ,              new Response.ErrorListener() {
-						@Override
-						public void onErrorResponse(VolleyError error) {
-							// handleErrorResponse(error);
-							Log.e(TAG, error.toString());
-						}
-					});
-		
+		StringRequest ReportsRequest = new StringRequest(Request.Method.GET, ApiUtil.getReportRequestURL(), this, this);
 		ReportRequestQueue.getInstance(context).addToRequestQueue(ReportsRequest);
 	}
-	
-	
-	//
-	// Callback interface - implemented by the calling class (MainActivity in our case).
-	//
-//	public interface ReportListener {
-//		// Callback function to return a fresh list of ToDos
-//		void onReportsAvailable(ArrayList<Report> reports);
-//
-//	}
+
+	@Override
+	public void onResponse(String response) {
+		List<ServiceReport> serviceReports = Arrays.asList(gson.fromJson(response, ServiceReport[].class));
+		Log.i("Reports", serviceReports.size() + " reports loaded");
+		handler.deleteAllReports();
+		handler.removeAllLocations();
+
+
+		for (ServiceReport serviceReport : serviceReports) {
+			Log.i("Reports", serviceReport.address + serviceReport.serviceName);
+
+			Report report = new Report();
+			report.setReportID(Integer.parseInt(serviceReport.id));
+
+			Location location = new Location(serviceReport.address, report.getReportID(), serviceReport.latitude, serviceReport.longitude);
+			handler.addLocation(location);
+
+			report.setLocation(location);
+			report.setCategory(handler.getCategory(1)); //ff aanpassen nog
+			report.setDescription(serviceReport.description);
+			report.setStatus(serviceReport.statusGemeente);
+			report.setUpvotes( Integer.parseInt(serviceReport.upvotes.substring(0,1)));
+
+			handler.addReport(report);
+            listener.onReportsAvailable(report);
+		}
+
+		listener.onFinished();
+
+
+	}
+
+	@Override
+	public void onErrorResponse(VolleyError error) {
+		Log.e(TAG, error.getMessage());
+	}
+
+	public interface ReportListener {
+		void onReportsAvailable(Report report);
+        void onFinished();
+
+	}
 	
 	
 	

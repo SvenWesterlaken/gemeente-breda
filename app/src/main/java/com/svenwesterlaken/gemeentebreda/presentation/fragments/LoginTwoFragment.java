@@ -122,15 +122,11 @@ public class LoginTwoFragment extends Fragment {
             if (!TextUtils.isEmpty(phone.getText())) {
                 editor.putString("pref_phone", phone.getText().toString());
             }
-            
-            else {
-                editor.putString("pref_phone", "empty");
-            }
 
-            editor.commit();
+            editor.apply();
 
 
-            DatabaseHandler  handler = new DatabaseHandler(getContext());;
+            DatabaseHandler  handler = new DatabaseHandler(getContext());
             User user = new User();
             user.setName(preferences.getString("pref_name", ""));
             user.setEmailaddress(preferences.getString("pref_email", ""));
@@ -141,6 +137,7 @@ public class LoginTwoFragment extends Fragment {
             Intent i = new Intent(getActivity().getApplicationContext(), ReportActivity.class);
             i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivity(i);
+            getActivity().finish();
            
         }
     }

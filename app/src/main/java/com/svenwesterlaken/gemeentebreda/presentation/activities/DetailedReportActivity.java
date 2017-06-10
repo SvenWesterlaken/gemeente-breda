@@ -11,6 +11,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.svenwesterlaken.gemeentebreda.R;
+import com.svenwesterlaken.gemeentebreda.data.api.AddReportRequest;
+import com.svenwesterlaken.gemeentebreda.data.api.UpvoteRequest;
 import com.svenwesterlaken.gemeentebreda.data.database.DatabaseHandler;
 import com.svenwesterlaken.gemeentebreda.domain.Report;
 import com.svenwesterlaken.gemeentebreda.domain.User;
@@ -20,7 +22,6 @@ public class DetailedReportActivity extends BaseActivity  {
 
     Report report;
     DatabaseHandler handler;
-    User user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,7 +46,9 @@ public class DetailedReportActivity extends BaseActivity  {
         ImageView icon = (ImageView) findViewById(R.id.report_IV_icon);
         ImageView status = (ImageView) findViewById(R.id.report_IV_status);
         ImageView upvotes = (ImageView) findViewById(R.id.report_IV_upvotes);
-
+        final TextView upvotesTxt = (TextView) findViewById(R.id.report_TV_upvotes);
+        
+        upvotesTxt.setText(report.getUpvotes() + " upvotes");
         category.setText(report.getCategory().getCategoryName());
 
         address.setText(report.getLocation().getStreet());
@@ -89,6 +92,33 @@ public class DetailedReportActivity extends BaseActivity  {
         final User user = handler.getUser(1);
 
         button3.setImageResource(R.drawable.star_outline);
+    
+    
+        if (!(handler.searchUpvote(report, user) == null)){
+            button3.setColorFilter(ContextCompat.getColor(getApplicationContext(), R.color.colorAccent));
+            button3.setClickable(false);
+        }
+        
+        button3.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+    
+                if (handler.searchUpvote(report, user) == null) {
+                    AddUpvote(report);
+                    button3.setColorFilter(ContextCompat.getColor(getApplicationContext(), R.color.colorAccent));
+                    upvotesTxt.setText(report.getUpvotes()+1 + " upvotes");
+                  
+                    
+                }
+                
+                // delete kan pas als dat ook via API kan
+    
+//                else {
+////                    handler.deleteUpvote(report);
+//                    button3.setColorFilter(null);
+//                }
+            }
+        });
         final ImageView button4 = (ImageView) findViewById(R.id.detailed_IV_button4);
         button4.setImageResource(R.drawable.bookmark_outline);
 
@@ -138,6 +168,12 @@ public class DetailedReportActivity extends BaseActivity  {
     public boolean onSupportNavigateUp() {
         onBackPressed();
         return true;
+    }
+    
+    public void AddUpvote(Report report){
+        
+        UpvoteRequest request = new UpvoteRequest(getApplicationContext());
+        request.addAUpvote(report);
     }
 
 }
