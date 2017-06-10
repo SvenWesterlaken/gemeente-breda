@@ -1,5 +1,6 @@
 package com.svenwesterlaken.gemeentebreda.presentation.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
@@ -161,6 +162,12 @@ public class DetailedReportActivity extends BaseActivity  {
         
         UpvoteRequest request = new UpvoteRequest(getApplicationContext());
         request.addAUpvote(report);
+    }
+    
+    @Override
+    public  void onBackPressed(){
+        Intent i = new Intent(getApplicationContext(), ReportActivity.class);
+        startActivity(i);
     }
 
 }

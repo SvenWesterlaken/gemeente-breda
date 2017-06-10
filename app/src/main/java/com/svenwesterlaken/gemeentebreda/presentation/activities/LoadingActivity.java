@@ -33,11 +33,14 @@ public class LoadingActivity extends AppCompatActivity {
         new CountDownTimer(1500, 1000) {
 
             @Override
-            public void onTick(long millisUntilFinished) {}
+            public void onTick(long millisUntilFinished) {
+                getCategories()
+                
+                ;}
 
             @Override
             public void onFinish() {
-                getCategories();
+               
                 SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
                 String name = preferences.getString("pref_name", null);
                 String email = preferences.getString("pref_email", null);
@@ -79,3 +82,5 @@ public class LoadingActivity extends AppCompatActivity {
         request.handleGetCategories();
     }
 }
+
+

@@ -53,7 +53,7 @@ public class ReportAdapter extends RecyclerView.Adapter<ReportAdapter.ReportView
         viewholder.title.setText(report.getCategory().getCategoryName());
         viewholder.address.setText(report.getLocation().getStreet() );
         viewholder.description.setText(description);
-        viewholder.upvotes.setText(String.format("", report.getUpvotes()));
+        viewholder.upvotes.setText("" + report.getUpvotes());
 
 
         viewholder.icon.setImageResource( R.drawable.lightbulb);

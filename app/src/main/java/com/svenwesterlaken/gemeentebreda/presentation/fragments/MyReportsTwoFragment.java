@@ -32,7 +32,7 @@ public class MyReportsTwoFragment extends Fragment implements PullRefreshLayout.
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         //Select view & cardView to inflate
-        View rootView = inflater.inflate(R.layout.fragment_my_report_one, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_my_report_two, container, false);
         RecyclerView reportList = (RecyclerView) rootView.findViewById(R.id.myreport_RV_two);
         reportList.setItemAnimator(new FadeInUpAnimator());
         reportList.getItemAnimator().setAddDuration(300);
