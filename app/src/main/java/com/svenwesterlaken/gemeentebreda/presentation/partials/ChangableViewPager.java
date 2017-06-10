@@ -3,6 +3,7 @@ package com.svenwesterlaken.gemeentebreda.presentation.partials;
 import android.content.Context;
 import android.support.v4.view.ViewPager;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
@@ -68,7 +69,7 @@ public class ChangableViewPager extends ViewPager {
             scroller.setAccessible(true);
             scroller.set(this, new MyScroller(getContext()));
         } catch (Exception e) {
-            e.printStackTrace();
+            Log.e("SCROLLER", e.getMessage());
         }
     }
 

@@ -58,7 +58,7 @@ public class ReportMapFragment extends Fragment {
         try {
             MapsInitializer.initialize(getActivity().getApplicationContext());
         } catch (Exception e) {
-            e.printStackTrace();
+            Log.e("MAPSINITIALIZER", e.getMessage());
         }
 
         mMapView.getMapAsync(new OnMapReadyCallback() {
