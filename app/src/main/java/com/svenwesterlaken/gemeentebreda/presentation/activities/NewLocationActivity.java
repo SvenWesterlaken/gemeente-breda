@@ -8,11 +8,16 @@ import android.location.Criteria;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.view.animation.DecelerateInterpolator;
+import android.view.animation.TranslateAnimation;
 import android.widget.TextView;
 
 import com.arlib.floatingsearchview.FloatingSearchView;
@@ -32,6 +37,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.svenwesterlaken.gemeentebreda.R;
 import com.svenwesterlaken.gemeentebreda.domain.Location;
 import com.svenwesterlaken.gemeentebreda.logic.managers.NewLocationManager;
+import com.svenwesterlaken.gemeentebreda.logic.util.SizeUtil;
 import com.svenwesterlaken.gemeentebreda.presentation.fragments.SettingsFragment;
 
 import static com.google.android.gms.maps.GoogleMap.OnMapClickListener;
@@ -46,16 +52,33 @@ public class NewLocationActivity extends BaseActivity implements OnQueryChangeLi
     private TextView streetTV;
     private TextView postalTV;
     private Location selectedLocation;
+    private FloatingActionButton confirmBTN;
     private FloatingSearchView mSearchView;
+    private ConstraintLayout container;
+
+    private boolean alreadyVisible;
+
+    private Animation popupAnimation;
+    private Animation slideupAnimation;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_new_location);
         lManager = new NewLocationManager(this, getApplicationContext(), this);
 
+        container = (ConstraintLayout) findViewById(R.id.newLocation_CL_locationContainer);
+        hideInformation();
+
+        popupAnimation = AnimationUtils.loadAnimation(this, R.anim.popup_animation);
+        slideupAnimation = new TranslateAnimation(0, 0, 0, -1 * SizeUtil.convertDPtoPX(this, 70));
+        slideupAnimation.setFillAfter(true);
+        slideupAnimation.setDuration(300);
+        slideupAnimation.setInterpolator(new DecelerateInterpolator());
+
         mSearchView = (FloatingSearchView) findViewById(R.id.newLocation_FSV_searchbar);
-        FloatingActionButton confirmBTN = (FloatingActionButton) findViewById(R.id.newLocation_FAB_confirm);
+        confirmBTN = (FloatingActionButton) findViewById(R.id.newLocation_FAB_confirm);
         
         streetTV = (TextView) findViewById(R.id.newLocation_TV_adress);
         postalTV = (TextView) findViewById(R.id.newLocation_TV_postalCode);
@@ -159,17 +182,37 @@ public class NewLocationActivity extends BaseActivity implements OnQueryChangeLi
         lManager.getSelectedLocation(point);
         placedMarker = map.addMarker(new MarkerOptions().position(point).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
     }
+
+    private void hideInformation() {
+        alreadyVisible = false;
+    }
+
+    public void showInformation() {
+        confirmBTN.setVisibility(View.VISIBLE);
+        confirmBTN.startAnimation(popupAnimation);
+        container.startAnimation(slideupAnimation);
+
+        if(!alreadyVisible) {
+            alreadyVisible = true;
+        }
+
+    }
     
     @Override
     public void setSelectedLocation(Location l) {
         selectedLocation = l;
         streetTV.setText(l.getStreet());
         postalTV.setText(l.getPostalCode() + " " + l.getCity());
+
+        if(!alreadyVisible) {
+            showInformation();
+        }
     }
     
     @Override
     public void onClick(View v) {
         if(selectedLocation != null) {
+            alreadyVisible = false;
             Intent intent = new Intent();
             intent.putExtra("location", selectedLocation);
             setResult(RESULT_OK, intent);

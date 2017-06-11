@@ -33,6 +33,7 @@
         android:layout_marginEnd="16dp"
         android:layout_marginRight="16dp"
         android:clickable="true"
+        android:visibility="invisible"
         app:elevation="3dp"
         app:fabSize="normal"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -44,10 +45,11 @@
     <android.support.constraint.ConstraintLayout
         android:id="@+id/newLocation_CL_locationContainer"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="70dp"
         android:layout_gravity="bottom"
-        android:elevation="2dp"
-        android:background="?attr/colorBackgroundFloating">
+        android:background="?attr/colorBackgroundFloating"
+        android:translationY="70dp"
+        android:elevation="2dp">
 
 
         <TextView
@@ -70,16 +72,16 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="16dp"
             android:layout_marginLeft="16dp"
+            android:layout_marginRight="0dp"
             android:layout_marginTop="0dp"
             android:text="Straat"
             android:textColor="?android:attr/textColorSecondary"
             app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/newLocation_TV_adress"
-            android:layout_marginRight="0dp"
-            app:layout_constraintVertical_bias="1.0"
             app:layout_constraintRight_toRightOf="@+id/newLocation_TV_adress"
-            app:layout_constraintHorizontal_bias="0.0" />
+            app:layout_constraintTop_toBottomOf="@+id/newLocation_TV_adress"
+            app:layout_constraintVertical_bias="1.0" />
 
     </android.support.constraint.ConstraintLayout>
 

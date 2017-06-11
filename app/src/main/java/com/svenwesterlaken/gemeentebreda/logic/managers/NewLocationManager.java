@@ -54,7 +54,7 @@ public class NewLocationManager implements GoogleApiClient.ConnectionCallbacks, 
     }
 
     /**
-     * Only used for NewLocationActivity     *
+     * Only used for NewLocationActivity
      * @param a
      * @param c
      * @param listener
@@ -128,6 +128,7 @@ public class NewLocationManager implements GoogleApiClient.ConnectionCallbacks, 
     public interface LocationManagerListener {
         void setReceivedLocation(Location l, int type);
         void disableButton(int type);
+        void setBoolean(int type, boolean value);
     }
 
     public interface SelectedLocationListener {

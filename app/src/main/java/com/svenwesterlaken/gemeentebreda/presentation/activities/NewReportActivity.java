@@ -220,6 +220,20 @@ public class NewReportActivity extends BaseActivity implements ViewPager.OnPageC
     }
 
     @Override
+    public  void onBackPressed(){
+        Intent i = new Intent(getApplicationContext(), ReportActivity.class);
+        i.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+        startActivity(i);
+        finish();
+    }
+
+    @Override
+    public boolean onSupportNavigateUp() {
+        onBackPressed();
+        return true;
+    }
+
+    @Override
     public void setLocation(Location t) {
         newReport.setLocation(t);
     }
@@ -237,13 +251,5 @@ public class NewReportActivity extends BaseActivity implements ViewPager.OnPageC
     public interface SummaryFragmentListener {
         void fragmentBecameVisible();
     }
-    
-    @Override
-    public  void onBackPressed(){
-        Intent i = new Intent(getApplicationContext(), ReportActivity.class);
-        startActivity(i);
-        finish();
-    }
-
 
 }

@@ -172,7 +172,14 @@ public class NewReportLocationFragment extends Fragment implements NewLocationMa
             tv.setText(R.string.location_error);
         }
     }
-    
+
+    @Override
+    public void setBoolean(int type, boolean value) {
+        if(type == 1) {
+            //TODO: add boolean system to enable and disable the right buttons for unsetting etc.
+        }
+    }
+
     private void enableConfirmButton() {
         confirmFAB.setVisibility(View.VISIBLE);
         confirmFAB.startAnimation(popupAnimation);
