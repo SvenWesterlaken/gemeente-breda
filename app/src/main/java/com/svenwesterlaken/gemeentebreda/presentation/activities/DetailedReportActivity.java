@@ -1,5 +1,6 @@
 package com.svenwesterlaken.gemeentebreda.presentation.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
@@ -139,28 +140,24 @@ public class DetailedReportActivity extends BaseActivity  {
         });
 
     }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-        if(id == android.R.id.home) {
-            super.onBackPressed();
-            return true;
-        } else {
-            return super.onOptionsItemSelected(item);
-        }
-    }
-
-    @Override
-    public boolean onSupportNavigateUp() {
-        onBackPressed();
-        return true;
-    }
     
     public void addUpvote(Report report){
         
         UpvoteRequest request = new UpvoteRequest(getApplicationContext());
         request.addAUpvote(report);
+    }
+    
+    @Override
+    public  void onBackPressed(){
+        Intent i = new Intent(getApplicationContext(), ReportActivity.class);
+        startActivity(i);
+        finish();
+    }
+    
+    @Override
+    public boolean onSupportNavigateUp() {
+        onBackPressed();
+        return true;
     }
 
 }

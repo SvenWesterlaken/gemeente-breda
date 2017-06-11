@@ -35,7 +35,7 @@ public class DatabaseHandler extends SQLiteAssetHelper {
         String name = user.getName();
         String phone = user.getMobileNumber();
         String email = user.getEmailaddress();
-        int userId = 1;
+        int userId = user.getUserID();
 
         SQLiteDatabase db = this.getWritableDatabase();
 
@@ -270,9 +270,8 @@ public class DatabaseHandler extends SQLiteAssetHelper {
             report.setDescription( cursor.getString(cursor.getColumnIndex("description")));
 //            report.setMediaId(cursor.getInt(cursor.getColumnIndex(REPORT_COLUMN_MEDIAID)));
             report.setLocation( getLocation(cursor.getInt(cursor.getColumnIndex("locationId"))));
-
-            report.setUpvotes(report.getUpvotes());
-
+            report.setUpvotes( cursor.getInt(cursor.getColumnIndex("upvotes")));
+            report.setStatus( cursor.getString(cursor.getColumnIndex("status")));
 
 
             reports.add(report);
@@ -424,7 +423,24 @@ public class DatabaseHandler extends SQLiteAssetHelper {
         
         db.close();
     }
-
+    
+    
+    public int getLastReportId(){
+        SQLiteDatabase db = this.getReadableDatabase();
+        String query = "SELECT Max(reportId) AS id FROM Report";
+        Cursor cursor = db.rawQuery(query, null);
+        int id = 0;
+        
+        while(cursor.moveToNext() ) {
+        
+            id = cursor.getInt(cursor.getColumnIndex("id"));
+        }
+        
+        return id;
+        
+        
+        
+    }
 
 
 
