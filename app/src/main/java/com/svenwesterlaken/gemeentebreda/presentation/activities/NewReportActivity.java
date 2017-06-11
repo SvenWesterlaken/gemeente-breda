@@ -3,6 +3,7 @@ package com.svenwesterlaken.gemeentebreda.presentation.activities;
 
 import android.Manifest;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
@@ -235,6 +236,13 @@ public class NewReportActivity extends BaseActivity implements ViewPager.OnPageC
 
     public interface SummaryFragmentListener {
         void fragmentBecameVisible();
+    }
+    
+    @Override
+    public  void onBackPressed(){
+        Intent i = new Intent(getApplicationContext(), ReportActivity.class);
+        startActivity(i);
+        finish();
     }
 
 

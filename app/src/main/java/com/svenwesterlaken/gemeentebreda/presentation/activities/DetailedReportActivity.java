@@ -140,23 +140,6 @@ public class DetailedReportActivity extends BaseActivity  {
         });
 
     }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-        if(id == android.R.id.home) {
-            super.onBackPressed();
-            return true;
-        } else {
-            return super.onOptionsItemSelected(item);
-        }
-    }
-
-    @Override
-    public boolean onSupportNavigateUp() {
-        onBackPressed();
-        return true;
-    }
     
     public void addUpvote(Report report){
         
@@ -168,6 +151,13 @@ public class DetailedReportActivity extends BaseActivity  {
     public  void onBackPressed(){
         Intent i = new Intent(getApplicationContext(), ReportActivity.class);
         startActivity(i);
+        finish();
+    }
+    
+    @Override
+    public boolean onSupportNavigateUp() {
+        onBackPressed();
+        return true;
     }
 
 }
