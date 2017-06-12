@@ -62,6 +62,18 @@ public class ReportListFragment extends Fragment implements PullRefreshLayout.On
     public void onReportsAvailable(Report report) {
         reports.add(report);
         reportAdapter.notifyItemInserted(reports.size());
+
+            for (Fragment fragment : getFragmentManager().getFragments())
+            {
+                if (fragment instanceof ReportMapFragment)
+                {
+                    ReportMapFragment reportMapFragment = ((ReportMapFragment) fragment);
+                    ArrayList<Report> reportArrayList= new ArrayList<>();
+                    reportArrayList.add(report);
+                    reportMapFragment.placeMarkers(reportArrayList);
+                }
+            }
+
     }
 
     @Override
