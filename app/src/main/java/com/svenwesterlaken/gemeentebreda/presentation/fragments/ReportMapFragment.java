@@ -28,7 +28,6 @@ import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.svenwesterlaken.gemeentebreda.R;
-import com.svenwesterlaken.gemeentebreda.data.api.ReportRequest;
 import com.svenwesterlaken.gemeentebreda.data.database.DatabaseHandler;
 import com.svenwesterlaken.gemeentebreda.domain.Report;
 
@@ -42,12 +41,11 @@ import static android.content.Context.LOCATION_SERVICE;
  * Created by Koen Kamman on 5-5-2017.
  */
 
-public class ReportMapFragment extends Fragment implements ReportRequest.ReportListener{
+public class ReportMapFragment extends Fragment {
 
     MapView mMapView;
     private GoogleMap map;
     private Marker placedMarker;
-    ArrayList<Report> reports;
 
     @Override
     public View onCreateView(LayoutInflater layoutInflater, ViewGroup viewGroup, Bundle bundle) {
@@ -56,9 +54,6 @@ public class ReportMapFragment extends Fragment implements ReportRequest.ReportL
         mMapView = (MapView) v.findViewById(R.id.mapView);
         mMapView.onCreate(bundle);
         mMapView.onResume();
-
-        reports = new ArrayList<>();
-        getReports();
 
         try {
             MapsInitializer.initialize(getActivity().getApplicationContext());
@@ -137,9 +132,9 @@ public class ReportMapFragment extends Fragment implements ReportRequest.ReportL
                 }
 
                 // Add markers
-//                mMap.addMarker(new MarkerOptions().position(hogeschool).title("Hogeschoollaan 1").snippet("Avans Locatie Hogeschoollaan"));
-//
-//                placeMarkers(getAllReports());
+                mMap.addMarker(new MarkerOptions().position(hogeschool).title("Hogeschoollaan 1").snippet("Avans Locatie Hogeschoollaan"));
+
+                placeMarkers(getAllReports());
 
 
                 map.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
@@ -161,29 +156,21 @@ public class ReportMapFragment extends Fragment implements ReportRequest.ReportL
         return v;
     }
 
-//    public List<Report> getAllReports() {
-//        DatabaseHandler handler = new DatabaseHandler(getContext());
-//        ArrayList<Report> reports;
-//        reports = handler.getAllReports();
-//
-//        for (Report report : reports){
-//            com.svenwesterlaken.gemeentebreda.domain.Location location = handler.getLocation(report.getLocationID());
-//            report.setLocation(location);
-//        }
-//
-//        handler.close();
-//        return reports;
-//    }
+    public List<Report> getAllReports() {
+        DatabaseHandler handler = new DatabaseHandler(getContext());
+        ArrayList<Report> reports;
+        reports = handler.getAllReports();
 
-    private void getReports(){
-        ReportRequest request = new ReportRequest(getContext(), this);
-        request.handleGetAllReports();
+        for (Report report : reports){
+            com.svenwesterlaken.gemeentebreda.domain.Location location = handler.getLocation(report.getLocationID());
+            report.setLocation(location);
+        }
+
+        handler.close();
+        return reports;
     }
 
     public void placeMarkers(List<Report> reports) {
-
-        ReportRequest request = new ReportRequest(getContext(), this);
-        request.handleGetAllReports();
 
         for(Report report : reports) {
             if (report.getLocation() != null) {
@@ -228,14 +215,4 @@ public class ReportMapFragment extends Fragment implements ReportRequest.ReportL
         mMapView.onLowMemory();
     }
 
-    @Override
-    public void onReportsAvailable(Report report) {
-        reports.add(report);
-        placeMarkers(reports);
-    }
-
-    @Override
-    public void onFinished() {
-
-    }
 }
