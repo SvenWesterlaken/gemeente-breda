@@ -116,7 +116,7 @@ public class ReportMapFragment extends Fragment {
                     LatLng latLng = new LatLng(latitude, longitude);
 
                     // Add a marker at users initial position
-                    mMap.addMarker(new MarkerOptions().position(latLng).title("Current Location").snippet("You are here!"));
+                    mMap.addMarker(new MarkerOptions().position(latLng).title("Current Location").snippet("You are here!").icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
 
                     // Move camera
                     mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 17));
@@ -132,23 +132,23 @@ public class ReportMapFragment extends Fragment {
                 }
 
                 // Add markers
-                mMap.addMarker(new MarkerOptions().position(hogeschool).title("Hogeschoollaan 1").snippet("Avans Locatie Hogeschoollaan"));
+//                mMap.addMarker(new MarkerOptions().position(hogeschool).title("Hogeschoollaan 1").snippet("Avans Locatie Hogeschoollaan"));
+//
+//                placeMarkers(getAllReports());
 
-                placeMarkers(getAllReports());
 
-
-                map.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
-
-                    @Override
-                    public void onMapClick(LatLng point) {
-                        //Remove the previously placed marker
-                        if (placedMarker != null) {
-                            placedMarker.remove();
-                        }
-                        //Place a new marker at the location of the tap
-                        placedMarker = map.addMarker(new MarkerOptions().position(point).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
-                    }
-                });
+//                map.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
+//
+//                    @Override
+//                    public void onMapClick(LatLng point) {
+//                        //Remove the previously placed marker
+//                        if (placedMarker != null) {
+//                            placedMarker.remove();
+//                        }
+//                        //Place a new marker at the location of the tap
+//                        placedMarker = map.addMarker(new MarkerOptions().position(point).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
+//                    }
+//                });
 
             }
         });
@@ -156,19 +156,19 @@ public class ReportMapFragment extends Fragment {
         return v;
     }
 
-    public List<Report> getAllReports() {
-        DatabaseHandler handler = new DatabaseHandler(getContext());
-        ArrayList<Report> reports;
-        reports = handler.getAllReports();
-
-        for (Report report : reports){
-            com.svenwesterlaken.gemeentebreda.domain.Location location = handler.getLocation(report.getLocationID());
-            report.setLocation(location);
-        }
-
-        handler.close();
-        return reports;
-    }
+//    public List<Report> getAllReports() {
+//        DatabaseHandler handler = new DatabaseHandler(getContext());
+//        ArrayList<Report> reports;
+//        reports = handler.getAllReports();
+//
+//        for (Report report : reports){
+//            com.svenwesterlaken.gemeentebreda.domain.Location location = handler.getLocation(report.getLocationID());
+//            report.setLocation(location);
+//        }
+//
+//        handler.close();
+//        return reports;
+//    }
 
     public void placeMarkers(List<Report> reports) {
 
