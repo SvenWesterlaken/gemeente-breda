@@ -216,6 +216,7 @@ public class DatabaseHandler extends SQLiteAssetHelper {
             report.setLocation(getLocation(cursor.getInt(cursor.getColumnIndex("locationId"))));
             report.setCategory(getCategory(cursor.getInt(cursor.getColumnIndex("categoryId"))));
             report.setUpvotes(cursor.getInt(cursor.getColumnIndex("upvotes")));
+            report.setStatus(cursor.getString(cursor.getColumnIndex("status")));
 
         }
 
