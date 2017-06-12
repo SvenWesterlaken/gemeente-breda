@@ -437,9 +437,6 @@ public class DatabaseHandler extends SQLiteAssetHelper {
         }
         
         return id;
-        
-        
-        
     }
     
 	
@@ -475,6 +472,7 @@ public class DatabaseHandler extends SQLiteAssetHelper {
 		
 		
 	}
+
 
 
 

@@ -21,6 +21,7 @@ import com.bumptech.glide.Glide;
 import com.svenwesterlaken.gemeentebreda.R;
 import com.svenwesterlaken.gemeentebreda.domain.Media;
 import com.svenwesterlaken.gemeentebreda.logic.managers.MediaManager;
+import com.svenwesterlaken.gemeentebreda.logic.util.ZeroUtil;
 import com.svenwesterlaken.gemeentebreda.presentation.activities.ImageActivity;
 import com.svenwesterlaken.gemeentebreda.presentation.activities.NewReportActivity;
 import com.svenwesterlaken.gemeentebreda.presentation.activities.VideoActivity;
@@ -47,6 +48,9 @@ public class NewReportMediaFragment extends Fragment implements View.OnClickList
     private ConstraintLayout videoBTN;
     private ConstraintLayout selectBTN;
     private ConstraintLayout removeBTN;
+
+    private float alphaDisabled;
+    private float alphaEnabled = 1.0f;
 
     private Animation popupAnimation;
     private Animation popoutAnimation;
@@ -82,6 +86,12 @@ public class NewReportMediaFragment extends Fragment implements View.OnClickList
         image = (ImageView) rootView.findViewById(R.id.media_IV_thumbnail);
         image.setOnClickListener(this);
 
+        if (ZeroUtil.isZero(alphaDisabled, 0.0000000001)) {
+            alphaDisabled = removeBTN.getAlpha();
+        }
+
+        enableMediaButtons();
+
         return rootView;
     }
 
@@ -95,6 +105,9 @@ public class NewReportMediaFragment extends Fragment implements View.OnClickList
             mManager.dispatchChooseMediaIntent(MEDIA_REQUEST);
         } else if (v.getId() == R.id.media_BTN_delete) {
             media = null;
+            disableConfirmButton();
+            enableMediaButtons();
+            Glide.with(getContext()).load(R.color.colorImageBackground).into(image);
         } else if (v.getId() == R.id.media_IV_thumbnail) {
             if(media != null) {
                 if(media.getType() == MEDIA_PICTURE) {
@@ -130,6 +143,10 @@ public class NewReportMediaFragment extends Fragment implements View.OnClickList
             } else if (media.getType() == MEDIA_VIDEO) {
                 Glide.with(getContext()).load(media.getUri()).into(image);
             }
+
+            disableMediaButtons();
+        } else {
+            enableMediaButtons();
         }
     }
 
@@ -137,53 +154,87 @@ public class NewReportMediaFragment extends Fragment implements View.OnClickList
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        media = new Media();
+
         Uri uri = null;
         int type = 0;
         String path = null;
 
-        if (requestCode == CAMERA_REQUEST && resultCode == RESULT_OK) {
-            path = data.getDataString();
-            type = MEDIA_PICTURE;
-            uri = Uri.fromFile( new File( path ));
+        if (resultCode == RESULT_OK) {
+            media = new Media();
 
-        } else if (requestCode == VIDEOCAMERA_REQUEST && resultCode == RESULT_OK) {
-            path = data.getDataString().substring(7);
-            uri = Uri.fromFile( new File( path ));
-            type = MEDIA_VIDEO;
-
-        } else if (requestCode == MEDIA_REQUEST && resultCode == RESULT_OK) {
-
-            if(mManager.isVideo(data)) {
-                uri = mManager.processMedia(data);
-                path = data.getDataString().substring(7);
-                type = MEDIA_VIDEO;
-
-            } else if (mManager.isImage(data)) {
-                uri = mManager.processMedia(data);
+            if (requestCode == CAMERA_REQUEST) {
                 path = data.getDataString();
                 type = MEDIA_PICTURE;
+                uri = Uri.fromFile( new File( path ));
+
+            } else if (requestCode == VIDEOCAMERA_REQUEST) {
+                path = data.getDataString().substring(7);
+                uri = Uri.fromFile( new File( path ));
+                type = MEDIA_VIDEO;
+
+            } else if (requestCode == MEDIA_REQUEST) {
+
+                if(mManager.isVideo(data)) {
+                    uri = mManager.processMedia(data);
+                    path = data.getDataString().substring(7);
+                    type = MEDIA_VIDEO;
+
+                } else if (mManager.isImage(data)) {
+                    uri = mManager.processMedia(data);
+                    path = data.getDataString();
+                    type = MEDIA_PICTURE;
+                }
             }
-        }
 
-        if (type == MEDIA_PICTURE) {
-            Glide.with(getContext()).load(path).into(image);
-        } else if (type == MEDIA_VIDEO) {
-            Glide.with(getContext()).load(uri).into(image);
-        }
+            if (type == MEDIA_PICTURE) {
+                Glide.with(getContext()).load(path).into(image);
+            } else if (type == MEDIA_VIDEO) {
+                Glide.with(getContext()).load(uri).into(image);
+            }
 
-        if (resultCode == RESULT_OK) {
             media.setFilePath(path);
             media.setUri(uri);
             media.setType(type);
             enableConfirmButton();
+            disableMediaButtons();
+
         }
     }
 
     private void enableConfirmButton() {
+        confirmFAB.setEnabled(true);
         confirmFAB.setVisibility(View.VISIBLE);
         confirmFAB.startAnimation(popupAnimation);
     }
+
+    private void disableConfirmButton() {
+        confirmFAB.startAnimation(popoutAnimation);
+        confirmFAB.setEnabled(false);
+        confirmFAB.setVisibility(View.INVISIBLE);
+    }
+
+    private void disableMediaButtons() {
+        removeBTN.setEnabled(true);
+        removeBTN.setAlpha(alphaEnabled);
+        photoBTN.setEnabled(false);
+        photoBTN.setAlpha(alphaDisabled);
+        videoBTN.setEnabled(false);
+        videoBTN.setAlpha(alphaDisabled);
+        selectBTN.setEnabled(false);
+        selectBTN.setAlpha(alphaDisabled);
+    }
+
+    private void enableMediaButtons() {
+        removeBTN.setEnabled(false);
+        removeBTN.setAlpha(alphaDisabled);
+        photoBTN.setEnabled(true);
+        photoBTN.setAlpha(alphaEnabled);
+        videoBTN.setEnabled(true);
+        videoBTN.setAlpha(alphaEnabled);
+        selectBTN.setEnabled(true);
+        selectBTN.setAlpha(alphaEnabled);
+    }
+
 
 
     @Override

@@ -96,7 +96,11 @@ public class ApiUtil {
     }
 
     private static String replaceSpaces(String str){
-        return str.replaceAll(" ", "%20");
+        if(str == null || str.isEmpty()) {
+            return "";
+        } else {
+            return str.replaceAll(" ", "%20");
+        }
     }
 
 }

@@ -128,12 +128,14 @@ public class LoginTwoFragment extends Fragment {
 
 
             DatabaseHandler  handler = new DatabaseHandler(getContext());
-            User user = new User();
-            user.setName(preferences.getString("pref_name", ""));
-            user.setEmailaddress(preferences.getString("pref_email", ""));
-            user.setMobileNumber(preferences.getString("pref_phone", ""));
-            user.setUserID(1);
-            handler.addUser( user);
+            if (handler.getUser(1) == null) {
+                User user = new User();
+                user.setName(preferences.getString("pref_name", ""));
+                user.setEmailaddress(preferences.getString("pref_email", ""));
+                user.setMobileNumber(preferences.getString("pref_phone", ""));
+                user.setUserID(1);
+                handler.addUser(user);
+            }
 
             Intent i = new Intent(getActivity().getApplicationContext(), ReportActivity.class);
             i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);

@@ -34,9 +34,8 @@ public class LoadingActivity extends AppCompatActivity {
 
             @Override
             public void onTick(long millisUntilFinished) {
-                getCategories()
-                
-                ;}
+
+            }
 
             @Override
             public void onFinish() {
@@ -46,6 +45,8 @@ public class LoadingActivity extends AppCompatActivity {
                 String email = preferences.getString("pref_email", null);
                 String phone = preferences.getString("pref_phone", null);
                 Intent i = null;
+
+                getCategories();
 
 
                 //Start login activity when no name, email and phonenumber is specified (First time using the app)

@@ -1,7 +1,6 @@
 package com.svenwesterlaken.gemeentebreda.data.api;
 
 import android.content.Context;
-import android.util.Log;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.DefaultRetryPolicy;
@@ -27,10 +26,12 @@ public class AddReportRequest implements Response.Listener<JSONArray>, Response.
     private Context context;
     private Report report;
     private DatabaseHandler handler;
+    private onReportAddedListener listener;
 
-    public AddReportRequest(Context context) {
+    public AddReportRequest(Context context, onReportAddedListener listener) {
         this.context = context;
         handler = new DatabaseHandler(context);
+        this.listener = listener;
     }
 
     public void addAReport(Report report) {
@@ -56,12 +57,18 @@ public class AddReportRequest implements Response.Listener<JSONArray>, Response.
     @Override
     public void onErrorResponse(VolleyError error) {
         error.getMessage();
+        listener.onError();
     }
 
     @Override
     public void onResponse(JSONArray response) {
-        Log.i("ADDREPORT" , response.toString());
         handler.addReport(report);
         handler.addReportUser(report);
+        listener.onSucces();
+    }
+
+    public interface onReportAddedListener {
+        void onSucces();
+        void onError();
     }
 }

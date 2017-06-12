@@ -18,7 +18,6 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.svenwesterlaken.gemeentebreda.R;
-import com.svenwesterlaken.gemeentebreda.data.api.AddReportRequest;
 import com.svenwesterlaken.gemeentebreda.data.database.DatabaseHandler;
 import com.svenwesterlaken.gemeentebreda.domain.Category;
 import com.svenwesterlaken.gemeentebreda.domain.Location;
@@ -35,6 +34,8 @@ public class NewReportSummaryFragment extends Fragment implements NewReportActiv
     private final static int MEDIA_VIDEO = 2;
 
     private static String defaultUserValue = "Onbekend";
+
+    private DatabaseHandler handler;
 
     private Media media;
     private Button sendBTN;
@@ -58,7 +59,7 @@ public class NewReportSummaryFragment extends Fragment implements NewReportActiv
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_new_report_summary, container, false);
         sendBTN = (Button) rootView.findViewById(R.id.summary_BTN_send);
-        final DatabaseHandler handler = new DatabaseHandler(getActivity().getApplicationContext());
+        handler = new DatabaseHandler(getActivity().getApplicationContext());
 
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
         name = preferences.getString("pref_name", null);
@@ -77,26 +78,7 @@ public class NewReportSummaryFragment extends Fragment implements NewReportActiv
             @Override
             public void onClick(View v) {
                 Intent i = new Intent(getActivity(), ConfirmationActivity.class);
-
-                Report report = ((NewReportActivity)getActivity()).getNewReport();
-
-                User user = handler.getUser(1);
-
-                if (user == null) {
-                    user = new User(1, name, email, phone);
-                    handler.addUser(user);
-                }
-
-                Location location = report.getLocation();
-                Category category = report.getCategory();
-                
-
-                Report reportNew = new Report( handler.getLastReportId() + 1, user, location, report.getDescription(), category, report.getLocationID(), "open", 1);
-            
-                
-                addReport(reportNew);
-                i.putExtra("REPORT", reportNew);
-
+                i.putExtra("REPORT", createNewReport());
                 getActivity().finish();
                 startActivity(i);
             }
@@ -123,6 +105,22 @@ public class NewReportSummaryFragment extends Fragment implements NewReportActiv
         });
 
         return rootView;
+    }
+
+    private Report createNewReport() {
+        Report report = ((NewReportActivity)getActivity()).getNewReport();
+
+        User user = handler.getUser(1);
+
+        if (user == null) {
+            user = new User(1, name, email, phone);
+            handler.addUser(user);
+        }
+
+        Location location = report.getLocation();
+        Category category = report.getCategory();
+
+        return new Report( handler.getLastReportId() + 1, user, location, report.getDescription(), category, report.getLocationID(), "open", 1);
     }
 
     private void processDescription(String d) {
@@ -163,7 +161,7 @@ public class NewReportSummaryFragment extends Fragment implements NewReportActiv
     private void processLocation(Location l, Activity a) {
         if (l != null) {
 
-            locationTV.setText(l.getStreet());
+            locationTV.setText(l.getStreet() + ", " + l.getCity());
 
             locationTV.setTextColor(descriptionTV.getTextColors().getDefaultColor());
         } else {
@@ -214,10 +212,7 @@ public class NewReportSummaryFragment extends Fragment implements NewReportActiv
         }
     }
     
-    public void addReport(Report report){
-        AddReportRequest reportRequest = new AddReportRequest(getActivity().getApplicationContext());
-        reportRequest.addAReport(report);
-    }
+
 
 
 }

@@ -18,12 +18,14 @@ import com.svenwesterlaken.gemeentebreda.R;
 import com.svenwesterlaken.gemeentebreda.domain.Location;
 import com.svenwesterlaken.gemeentebreda.domain.Media;
 import com.svenwesterlaken.gemeentebreda.logic.managers.NewLocationManager;
-import com.svenwesterlaken.gemeentebreda.logic.services.FetchAddressIntentService;
 import com.svenwesterlaken.gemeentebreda.logic.util.ZeroUtil;
 import com.svenwesterlaken.gemeentebreda.presentation.activities.NewLocationActivity;
 import com.svenwesterlaken.gemeentebreda.presentation.activities.NewReportActivity;
 
 import static android.app.Activity.RESULT_OK;
+import static com.svenwesterlaken.gemeentebreda.logic.services.FetchAddressIntentService.CHOOSE_LOCATION;
+import static com.svenwesterlaken.gemeentebreda.logic.services.FetchAddressIntentService.CURRENT_LOCATION;
+import static com.svenwesterlaken.gemeentebreda.logic.services.FetchAddressIntentService.MEDIA_LOCATION;
 
 
 public class NewReportLocationFragment extends Fragment implements NewLocationManager.LocationManagerListener {
@@ -48,8 +50,14 @@ public class NewReportLocationFragment extends Fragment implements NewLocationMa
     private FloatingActionButton confirmFAB;
     private Animation popupAnimation;
     private Animation popoutAnimation;
+
+    private boolean curLocAvailable;
+    private boolean metaLocAvailable;
+    private boolean chosenLocAvailable;
     
-    private float alpha;
+    private float alphaDisabled;
+    private float alphaEnabled = 1.0f;
+
     private static int NEW_LOCATION_REQUEST = 1;
     
     @Override
@@ -65,8 +73,8 @@ public class NewReportLocationFragment extends Fragment implements NewLocationMa
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_new_report_location, container, false);
         
-        if (ZeroUtil.isZero(alpha, 0.0000000001)) {
-            alpha = rootView.findViewById(R.id.location_BTN_delete).getAlpha();
+        if (ZeroUtil.isZero(alphaDisabled, 0.0000000001)) {
+            alphaDisabled = rootView.findViewById(R.id.location_BTN_delete).getAlpha();
         }
         
         chooseBTN = (ConstraintLayout) rootView.findViewById(R.id.location_BTN_choose);
@@ -115,6 +123,13 @@ public class NewReportLocationFragment extends Fragment implements NewLocationMa
             
             
         });
+        deleteBTN.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                disableConfirmButton();
+                setAddress(null);
+            }
+        });
         
         
         confirmFAB = (FloatingActionButton) rootView.findViewById(R.id.location_FAB_confirm);
@@ -135,13 +150,13 @@ public class NewReportLocationFragment extends Fragment implements NewLocationMa
     public void setReceivedLocation(Location l, int type) {
         TextView text = null;
         
-        if(type == FetchAddressIntentService.CURRENT_LOCATION) {
+        if(type == CURRENT_LOCATION) {
             text = currentMessage;
             currentLocation = l;
-        } else if (type == FetchAddressIntentService.MEDIA_LOCATION) {
+        } else if (type == MEDIA_LOCATION) {
             text = metaMessage;
             mediaLocation = l;
-        } else if (type == FetchAddressIntentService.CHOOSE_LOCATION) {
+        } else if (type == CHOOSE_LOCATION) {
             text = chosenMessage;
             chosenLocation = l;
         }
@@ -152,46 +167,116 @@ public class NewReportLocationFragment extends Fragment implements NewLocationMa
         }
         
     }
+
+    public void disableLocationButtons() {
+        if(curLocAvailable) {
+            currentBTN.setEnabled(false);
+            currentBTN.setAlpha(alphaDisabled);
+        }
+
+        if(metaLocAvailable) {
+            metaBTN.setEnabled(false);
+            metaBTN.setAlpha(alphaDisabled);
+        }
+
+        chosenBTN.setEnabled(false);
+        chosenBTN.setAlpha(alphaDisabled);
+        chooseBTN.setEnabled(false);
+        chooseBTN.setAlpha(alphaDisabled);
+        deleteBTN.setEnabled(true);
+        deleteBTN.setAlpha(alphaEnabled);
+    }
+
+    public void enableLocationButtons() {
+        if(curLocAvailable) {
+            currentBTN.setEnabled(true);
+            currentBTN.setAlpha(alphaEnabled);
+        }
+
+        if(metaLocAvailable) {
+            metaBTN.setEnabled(true);
+            metaBTN.setAlpha(alphaEnabled);
+        }
+
+        if(chosenLocAvailable) {
+            chosenBTN.setEnabled(true);
+            chosenBTN.setAlpha(alphaEnabled);
+        }
+
+        chooseBTN.setEnabled(true);
+        chooseBTN.setAlpha(alphaEnabled);
+        deleteBTN.setEnabled(false);
+        deleteBTN.setAlpha(alphaDisabled);
+    }
+
     
     @Override
     public void disableButton(int type) {
         ConstraintLayout btn = null;
         TextView tv = null;
         
-        if(type == FetchAddressIntentService.CURRENT_LOCATION) {
+        if(type == CURRENT_LOCATION) {
             btn = currentBTN;
             tv = currentMessage;
-        } else if (type == FetchAddressIntentService.MEDIA_LOCATION) {
+        } else if (type == MEDIA_LOCATION) {
             btn = metaBTN;
             tv = metaMessage;
-        }
-        
-        if (btn != null && tv != null) {
-            btn.setEnabled(false);
-            btn.setAlpha(alpha);
-            tv.setText(R.string.location_error);
-        }
-    }
-    
-    private void enableConfirmButton() {
-        confirmFAB.setVisibility(View.VISIBLE);
-        confirmFAB.startAnimation(popupAnimation);
-    }
-    
-    private void enableButton(int type) {
-        ConstraintLayout btn = null;
-        
-        if(type == FetchAddressIntentService.CURRENT_LOCATION) {
-            btn = currentBTN;
-        } else if(type == FetchAddressIntentService.MEDIA_LOCATION) {
-            btn = metaBTN;
-        } else if (type == FetchAddressIntentService.CHOOSE_LOCATION) {
+        } else if (type == CHOOSE_LOCATION) {
             btn = chosenBTN;
         }
         
         if (btn != null) {
-            btn.setEnabled(true);
-            btn.setAlpha(1.0f);
+            btn.setEnabled(false);
+            btn.setAlpha(alphaDisabled);
+            if (tv != null) {
+                tv.setText(R.string.location_error);
+            }
+        }
+    }
+
+    @Override
+    public void setBoolean(int type, boolean value) {
+        if(type == CURRENT_LOCATION) {
+            curLocAvailable = value;
+        } else if (type == MEDIA_LOCATION) {
+            metaLocAvailable = value;
+        } else if (type == CHOOSE_LOCATION) {
+            chosenLocAvailable = value;
+        }
+    }
+
+    private void enableConfirmButton() {
+        confirmFAB.setEnabled(true);
+        confirmFAB.setVisibility(View.VISIBLE);
+        confirmFAB.startAnimation(popupAnimation);
+    }
+
+    private void disableConfirmButton() {
+        confirmFAB.startAnimation(popoutAnimation);
+        confirmFAB.setEnabled(false);
+        confirmFAB.setVisibility(View.INVISIBLE);
+    }
+    
+    private void enableButton(int type) {
+        ConstraintLayout btn = null;
+        boolean available = false;
+        
+        if(type == CURRENT_LOCATION) {
+            btn = currentBTN;
+            available = curLocAvailable;
+        } else if(type == MEDIA_LOCATION) {
+            btn = metaBTN;
+            available = metaLocAvailable;
+        } else if (type == CHOOSE_LOCATION) {
+            btn = chosenBTN;
+            available = chosenLocAvailable;
+        }
+        
+        if (btn != null) {
+            if(available) {
+                btn.setEnabled(true);
+                btn.setAlpha(1.0f);
+            }
         }
     }
     
@@ -200,7 +285,11 @@ public class NewReportLocationFragment extends Fragment implements NewLocationMa
         this.location = l;
         
         if (l != null) {
+            disableLocationButtons();
             locationTV.setText(l.getStreet() + ", " + l.getCity());
+        } else {
+            enableLocationButtons();
+            locationTV.setText(R.string.location_notselected);
         }
     }
     
@@ -212,10 +301,10 @@ public class NewReportLocationFragment extends Fragment implements NewLocationMa
                 Location temploc = extras.getParcelable("location");
                 
                 if (temploc != null) {
+                    setBoolean(CHOOSE_LOCATION, true);
+                    setReceivedLocation(temploc, CHOOSE_LOCATION);
                     enableConfirmButton();
                     setAddress(temploc);
-                    enableButton(FetchAddressIntentService.CHOOSE_LOCATION);
-                    setReceivedLocation(temploc, FetchAddressIntentService.CHOOSE_LOCATION);
                 }
                 
             }
@@ -265,11 +354,11 @@ public class NewReportLocationFragment extends Fragment implements NewLocationMa
     public void onResume() {
         if (location != null) {
             setAddress(location);
+            disableLocationButtons();
         }
         
         if (chosenLocation != null) {
-            setReceivedLocation(chosenLocation, FetchAddressIntentService.CHOOSE_LOCATION);
-            enableButton(FetchAddressIntentService.CHOOSE_LOCATION);
+            setReceivedLocation(chosenLocation, CHOOSE_LOCATION);
         }
         super.onResume();
     }

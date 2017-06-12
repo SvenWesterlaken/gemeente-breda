@@ -1,12 +1,10 @@
 package com.svenwesterlaken.gemeentebreda.presentation.activities;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -44,10 +42,9 @@ public class DetailedReportActivity extends BaseActivity  {
         TextView descriptionTV = (TextView) findViewById(R.id.report_TV_description);
         ImageView icon = (ImageView) findViewById(R.id.report_IV_icon);
         ImageView status = (ImageView) findViewById(R.id.report_IV_status);
-        ImageView upvotes = (ImageView) findViewById(R.id.report_IV_upvotes);
         final TextView upvotesTxt = (TextView) findViewById(R.id.report_TV_upvotes);
         
-        upvotesTxt.setText(report.getUpvotes() + " upvotes");
+        upvotesTxt.setText(getString(R.string.detailed_upvotes, report.getUpvotes()));
         category.setText(report.getCategory().getCategoryName());
 
         address.setText(report.getLocation().getStreet());
@@ -62,15 +59,11 @@ public class DetailedReportActivity extends BaseActivity  {
 
         icon.setImageResource( R.drawable.lightbulb);
         
-        if (report.getStatus() == "open") {
+        if (report.getStatus().equals("open")) {
            status.setImageResource(R.drawable.eye_off);
-        }
-        
-        else {
+        } else {
             status.setImageResource(R.drawable.check);
         }
-        
-        upvotes.setImageResource(R.drawable.star);
 
         RecyclerView reportComments = (RecyclerView) findViewById(R.id.detailed_RV_comments);
         LinearLayoutManager layoutManager2 = new LinearLayoutManager(this.getApplicationContext());
@@ -142,21 +135,13 @@ public class DetailedReportActivity extends BaseActivity  {
     }
     
     public void addUpvote(Report report){
-        
         UpvoteRequest request = new UpvoteRequest(getApplicationContext());
         request.addAUpvote(report);
     }
     
     @Override
-    public  void onBackPressed(){
-        Intent i = new Intent(getApplicationContext(), ReportActivity.class);
-        startActivity(i);
-        finish();
-    }
-    
-    @Override
     public boolean onSupportNavigateUp() {
-        onBackPressed();
+        super.onBackPressed();
         return true;
     }
 

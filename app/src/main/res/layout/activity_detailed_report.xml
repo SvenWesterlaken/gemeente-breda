@@ -82,7 +82,7 @@
                             app:layout_constraintBottom_toBottomOf="@+id/report_TV_address"
                             app:layout_constraintLeft_toLeftOf="parent"
                             app:layout_constraintTop_toTopOf="@+id/report_TV_title"
-                            app:srcCompat="@color/cast_intro_overlay_button_background_color" />
+                            app:srcCompat="@drawable/image_broken_variant" />
 
                         <TextView
                             android:id="@+id/report_TV_address"
@@ -156,7 +156,7 @@
                             app:layout_constraintLeft_toRightOf="@+id/report_TV_seenNotifier"
                             app:layout_constraintRight_toLeftOf="@+id/report_TV_upvotes"
                             app:layout_constraintTop_toBottomOf="@+id/report_D_header"
-                            app:srcCompat="@color/clear_btn_color" />
+                            app:srcCompat="@drawable/star" />
 
                         <TextView
                             android:id="@+id/report_TV_upvotes"
@@ -227,7 +227,7 @@
                             app:layout_constraintRight_toRightOf="parent"
                             app:layout_constraintTop_toBottomOf="@+id/report_TV_description"
                             app:layout_constraintVertical_bias="0.0"
-                            app:srcCompat="@color/cast_intro_overlay_button_background_color" />
+                            app:srcCompat="@color/colorImageBackground" />
 
                     </android.support.constraint.ConstraintLayout>
 
@@ -239,6 +239,7 @@
                     android:layout_height="1dp"
                     android:layout_marginTop="16dp"
                     android:background="?attr/colorAccent"
+                    android:visibility="gone"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintRight_toRightOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/detailed_CV_report" />
@@ -250,6 +251,7 @@
                     android:layout_marginTop="8dp"
                     android:text="@string/detailed_comments_title"
                     android:textAppearance="@style/TextAppearanceSettingsCategory"
+                    android:visibility="gone"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintRight_toRightOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/detailed_D_sections" />
@@ -259,6 +261,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"
+                    android:visibility="gone"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintRight_toRightOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/detailed_TV_commentsTitle" />
