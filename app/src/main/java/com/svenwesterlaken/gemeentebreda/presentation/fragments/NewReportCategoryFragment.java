@@ -21,11 +21,6 @@ public class NewReportCategoryFragment extends Fragment {
     private CategoryChangedListener mListener;
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-    }
-
-    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         View rootView = inflater.inflate(R.layout.fragment_new_report_category, container, false);
@@ -46,6 +41,7 @@ public class NewReportCategoryFragment extends Fragment {
         return rootView;
     }
 
+    @Override
     public void onAttach(Context context) {
         super.onAttach(context);
 

@@ -26,9 +26,12 @@ import com.svenwesterlaken.gemeentebreda.presentation.activities.ReportActivity;
  */
 
 public class LoginTwoFragment extends Fragment {
-    private TextInputLayout inputLayoutUsername, inputLayoutEmail, inputLayoutPhone;
-    private EditText email, username, phone;
-    private Button submitBTN;
+    private TextInputLayout inputLayoutUsername;
+    private TextInputLayout inputLayoutEmail;
+    private TextInputLayout inputLayoutPhone;
+    private EditText email;
+    private EditText username;
+    private EditText phone;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -47,7 +50,7 @@ public class LoginTwoFragment extends Fragment {
         email.addTextChangedListener(new LoginTextWatcher(email));
         phone.addTextChangedListener(new LoginTextWatcher(phone));
 
-        submitBTN = (Button) rootView.findViewById(R.id.login_btn_submit);
+        Button submitBTN = (Button) rootView.findViewById(R.id.login_btn_submit);
         submitBTN.setOnClickListener(new RegisterClickListener());
 
         return rootView;
@@ -84,12 +87,10 @@ public class LoginTwoFragment extends Fragment {
         String regex = "(^\\+[0-9]{2}|^\\+[0-9]{2}\\(0\\)|^\\(\\+[0-9]{2}\\)\\(0\\)|^00[0-9]{2}|^0)([0-9]{9}$|[0-9\\-\\s]{9}$)";
         String str = phone.getText().toString().trim();
 
-        if (!str.isEmpty()) {
-            if(!str.matches(regex)) {
+        if (!str.isEmpty() && !str.matches(regex)) {
                 inputLayoutPhone.setError(getString(R.string.login_error_phone));
                 requestFocus(phone);
                 return false;
-            }
         }
 
         inputLayoutPhone.setErrorEnabled(false);
@@ -123,19 +124,24 @@ public class LoginTwoFragment extends Fragment {
                 editor.putString("pref_phone", phone.getText().toString());
             }
 
-            editor.commit();
+            editor.apply();
 
 
-            DatabaseHandler  handler = new DatabaseHandler(getContext());;
-            User user = new User();
-            user.setName(preferences.getString("pref_name", ""));
-            user.setEmailaddress(preferences.getString("pref_email", ""));
-            user.setUserID(1);
-            handler.addUser( user);
+            DatabaseHandler  handler = new DatabaseHandler(getContext());
+            if (handler.getUser(1) == null) {
+                User user = new User();
+                user.setName(preferences.getString("pref_name", ""));
+                user.setEmailaddress(preferences.getString("pref_email", ""));
+                user.setMobileNumber(preferences.getString("pref_phone", ""));
+                user.setUserID(1);
+                handler.addUser(user);
+            }
 
             Intent i = new Intent(getActivity().getApplicationContext(), ReportActivity.class);
             i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivity(i);
+            getActivity().finish();
+           
         }
     }
 
@@ -147,8 +153,12 @@ public class LoginTwoFragment extends Fragment {
             this.view = view;
         }
 
-        public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
-        public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
+        public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            //No need for this
+        }
+        public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            //No need for this
+        }
 
         public void afterTextChanged(Editable editable) {
             switch (view.getId()) {
@@ -160,6 +170,8 @@ public class LoginTwoFragment extends Fragment {
                     break;
                 case R.id.login_ET_phone:
                     validatePhone();
+                    break;
+                default:
                     break;
             }
         }

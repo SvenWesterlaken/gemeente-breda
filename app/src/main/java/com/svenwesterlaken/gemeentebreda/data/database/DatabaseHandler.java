@@ -12,6 +12,7 @@ import com.svenwesterlaken.gemeentebreda.domain.Report;
 import com.svenwesterlaken.gemeentebreda.domain.User;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Luka Brinkman
@@ -38,7 +39,9 @@ public class DatabaseHandler extends SQLiteAssetHelper {
 
         SQLiteDatabase db = this.getWritableDatabase();
 
-        String query = "INSERT INTO user VALUES (" + userId +  " , '" + name + "' , " + phone + " , '" + email + "' );";
+
+        String query = "INSERT INTO user VALUES (" + userId +  " , '" + name + "' ,  '" + phone + "', '" + email + "');";
+
         db.execSQL(query);
 
         Log.i("TAG", "added user");
@@ -67,8 +70,8 @@ public class DatabaseHandler extends SQLiteAssetHelper {
         int categoryId = report.getCategory().getCategoryID();
         String description = report.getDescription();
 
-        String query = "INSERT INTO report(reportId, locationId, categoryId, description) VALUES (" + reportId + " , " +
-                locationId + " , " + categoryId + " , '" + description + "');";
+        String query = "INSERT INTO Report(reportId, locationId, categoryId, description, status, upvotes) VALUES (" + reportId + " , " +
+                locationId + " , " + categoryId + " , '" + description + "', '" + report.getStatus() + "', " + report.getUpvotes() + ");";
         db.execSQL(query);
         db.close();
     }
@@ -78,39 +81,34 @@ public class DatabaseHandler extends SQLiteAssetHelper {
 
         SQLiteDatabase db = this.getWritableDatabase();
 
-        String query = "INSERT INTO location(locationId, latitude, longitude, street, streetnr, postalcode, city) VALUES (" +
+        String query = "INSERT INTO location(locationId, latitude, longitude, street, city) VALUES (" +
                 location.getLocationID() + " , " + location.getLatitude() + " , " + location.getLongitude() + " , '" +
-                location.getStreet() +  "' , '"+ location.getHouseNumber() + "' , '" + location.getPostalCode() + "' , '" +
-                location.getCity() + "');";
+                location.getStreet() +  "', '" + location.getCity() + "');";
         db.execSQL(query);
         Log.i("TAG", "added location");
         db.close();
     }
 
 
-    public void addReportUser(Report report, User user){
+    public void addReportUser(Report report){
 
         SQLiteDatabase db = this.getWritableDatabase();
-        String query = "INSERT INTO user_report VALUES (" + user.getUserID() + " , " + report.getReportID() + ");";
+        String query = "INSERT INTO user_report VALUES (" + 1 + " , " + report.getReportID() + ");";
         db.execSQL(query);
         db.close();
     }
 
-    public ArrayList<Report> getReportUser(User user) {
+    public List<Report> getReportUser(User user) {
         SQLiteDatabase db = this.getReadableDatabase();
         String query = "SELECT * FROM user_report WHERE userId = " + user.getUserID();
         Cursor cursor = db.rawQuery(query, null);
 
-        //cursor.moveToFirst();
         Log.i("TAG", "before while");
         ArrayList<Report> reports = new ArrayList<>();
 
         while(cursor.moveToNext() ) {
-            Report report = new Report();
             int reportId = cursor.getInt(cursor.getColumnIndex("reportId"));
-            report = getReport(reportId);
-
-            reports.add(report);
+            reports.add(getReport(reportId));
             Log.i("TAG", "got user");
         };
 
@@ -120,6 +118,16 @@ public class DatabaseHandler extends SQLiteAssetHelper {
         return reports;
     }
 
+    public void addUpvote(Report report) {
+        
+        SQLiteDatabase db = this.getWritableDatabase();
+        String query = "INSERT INTO upvote(ReportID, UserID) VALUES (" + report.getReportID()  + ", 1);";
+        
+        db.execSQL(query);
+        db.close();
+        
+        
+    }
     //ADD CATEGORIES
     public void addCategory(Category category){
 
@@ -130,41 +138,11 @@ public class DatabaseHandler extends SQLiteAssetHelper {
         db.close();
     }
 
-
-//    //ADD MEDIA
-//    public void addMedia(Media media){
-//        ContentValues values = new ContentValues();
-//        values.put(MEDIA_COLUMN_ID, media.getMediaId());
-//
-//        SQLiteDatabase db = this.getWritableDatabase();
-//        db.insert(MEDIA_TABLE_NAME, null, values);
-//        db.close();
-//    }
-//    //ADD PHOTO
-//    public void addPhoto(Photo photo){
-//        ContentValues values = new ContentValues();
-//        values.put(MEDIA_COLUMN_ID, photo.getMediaId());
-//
-//        SQLiteDatabase db = this.getWritableDatabase();
-//        db.insert(PHOTO_TABLE_NAME, null, values);
-//        db.close();
-//    }
-//
-//    //ADD VIDEO
-//    public void addVideo(Video video){
-//        ContentValues values = new ContentValues();
-//        values.put(VIDEO_COLUMN_ID, video.getMediaId());
-//
-//        SQLiteDatabase db = this.getWritableDatabase();
-//        db.insert(VIDEO_TABLE_NAME, null, values);
-//        db.close();
-//    }
-
     //GET USERS
     public User getUser(int userID){
         User user = null;
 
-        String query = "SELECT name" + " FROM user WHERE userId = " + userID;
+        String query = "SELECT *" + " FROM user WHERE userId = " + userID;
 
         SQLiteDatabase db = this.getReadableDatabase();
 
@@ -176,7 +154,9 @@ public class DatabaseHandler extends SQLiteAssetHelper {
         while(cursor.moveToNext() ) {
             user = new User();
             user.setName(cursor.getString(cursor.getColumnIndex("name")));
-            Log.i("TAG", "got user");
+            user.setUserID(1);
+            user.setEmailaddress(cursor.getString(cursor.getColumnIndex("email")));
+            user.setMobileNumber(cursor.getString(cursor.getColumnIndex("phone")));
         };
 
         cursor.close();
@@ -200,9 +180,9 @@ public class DatabaseHandler extends SQLiteAssetHelper {
 
         while(cursor.moveToNext() ) {
             location = new Location();
-            location.setCity(cursor.getString(cursor.getColumnIndex("city")));
+            location.setLocationID(locationID);
+	        location.setCity(cursor.getString(cursor.getColumnIndex("city")));
             location.setStreet(cursor.getString(cursor.getColumnIndex("street")));
-            location.setHouseNumber(cursor.getInt(cursor.getColumnIndex("streetnr")));
             location.setLatitude(cursor.getDouble(cursor.getColumnIndex("latitude")));
             location.setLongitude(cursor.getDouble(cursor.getColumnIndex("longitude")));
             Log.i("TAG", "got location " + cursor.getDouble(cursor.getColumnIndex("longitude")) + " " + cursor.getDouble(cursor.getColumnIndex("latitude")));
@@ -235,6 +215,8 @@ public class DatabaseHandler extends SQLiteAssetHelper {
 //            report.setMediaId(cursor.getInt(cursor.getColumnIndex(REPORT_COLUMN_MEDIAID)));
             report.setLocation(getLocation(cursor.getInt(cursor.getColumnIndex("locationId"))));
             report.setCategory(getCategory(cursor.getInt(cursor.getColumnIndex("categoryId"))));
+            report.setUpvotes(cursor.getInt(cursor.getColumnIndex("upvotes")));
+            report.setStatus(cursor.getString(cursor.getColumnIndex("status")));
 
         }
 
@@ -289,8 +271,8 @@ public class DatabaseHandler extends SQLiteAssetHelper {
             report.setDescription( cursor.getString(cursor.getColumnIndex("description")));
 //            report.setMediaId(cursor.getInt(cursor.getColumnIndex(REPORT_COLUMN_MEDIAID)));
             report.setLocation( getLocation(cursor.getInt(cursor.getColumnIndex("locationId"))));
-
-
+            report.setUpvotes( cursor.getInt(cursor.getColumnIndex("upvotes")));
+            report.setStatus( cursor.getString(cursor.getColumnIndex("status")));
 
 
             reports.add(report);
@@ -360,6 +342,14 @@ public class DatabaseHandler extends SQLiteAssetHelper {
         return reports;
 
     }
+    
+    public void deleteUpvote(Report report){
+        SQLiteDatabase db = this.getWritableDatabase();
+        String query = "DELETE FROM upvote WHERE ReportID = " + report.getReportID() + ";";
+        db.execSQL(query);
+        
+        db.close();
+    }
 
     public void deleteCategory(){
         SQLiteDatabase db = this.getWritableDatabase();
@@ -377,6 +367,26 @@ public class DatabaseHandler extends SQLiteAssetHelper {
         db.execSQL(query);
         db.close();
 
+    }
+    
+    public  Report searchUpvote(Report report, User user) {
+    
+        SQLiteDatabase db = this.getReadableDatabase();
+        String query = "SELECT * FROM upvote  WHERE ReportID = " + report.getReportID() + " AND UserID = " + user.getUserID();
+        Cursor cursor = db.rawQuery(query, null);
+        Report report1 = null;
+    
+        while(cursor.moveToNext() ) {
+        
+            int reportId = cursor.getInt(cursor.getColumnIndex("ReportID"));
+            //int userId = cursor.getInt(cursor.getColumnIndex("userId"));
+            report1 = getReport(reportId);
+        }
+    
+        cursor.close();
+        db.close();
+    
+        return  report1;
     }
 
     public  Report searchFavourite(Report report, User user) {
@@ -398,6 +408,71 @@ public class DatabaseHandler extends SQLiteAssetHelper {
 
         return  report1;
     }
+    
+    public void deleteAllReports(){
+        SQLiteDatabase db = this.getWritableDatabase();
+        String query = "DELETE FROM Report";
+        db.execSQL(query);
+        
+        db.close();
+        
+    }
+    public void removeAllLocations(){
+        SQLiteDatabase db = this.getWritableDatabase();
+        String query = "DELETE FROM location";
+        db.execSQL(query);
+        
+        db.close();
+    }
+    
+    
+    public int getLastReportId(){
+        SQLiteDatabase db = this.getReadableDatabase();
+        String query = "SELECT Max(reportId) AS id FROM Report";
+        Cursor cursor = db.rawQuery(query, null);
+        int id = 0;
+        
+        while(cursor.moveToNext() ) {
+        
+            id = cursor.getInt(cursor.getColumnIndex("id"));
+        }
+        
+        return id;
+    }
+    
+	
+	public ArrayList<Report> getFilterReports(String extra){
+		
+		
+		ArrayList reports = new ArrayList();
+		SQLiteDatabase db = getReadableDatabase();
+		String query = "SELECT * FROM Report ORDER BY " + extra + ";" ;
+		Cursor cursor = db.rawQuery(query, null);
+
+		while(cursor.moveToNext() ) {
+			
+			Report report = new Report();
+			
+			report.setCategory(getCategory(cursor.getInt(cursor.getColumnIndex("categoryId"))));
+			
+			report.setReportID( cursor.getInt(cursor.getColumnIndex("reportId")));
+			report.setDescription( cursor.getString(cursor.getColumnIndex("description")));
+//            report.setMediaId(cursor.getInt(cursor.getColumnIndex(REPORT_COLUMN_MEDIAID)));
+			report.setLocation( getLocation(cursor.getInt(cursor.getColumnIndex("locationId"))));
+			report.setUpvotes( cursor.getInt(cursor.getColumnIndex("upvotes")));
+			report.setStatus( cursor.getString(cursor.getColumnIndex("status")));
+			
+			
+			reports.add(report);
+		}
+		
+		cursor.close();
+		db.close();
+		
+		return reports;
+		
+		
+	}
 
 
 

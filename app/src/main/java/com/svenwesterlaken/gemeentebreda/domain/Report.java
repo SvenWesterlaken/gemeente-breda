@@ -1,11 +1,6 @@
 package com.svenwesterlaken.gemeentebreda.domain;
 
-import android.icu.util.ULocale;
 import android.os.Parcelable;
-
-import org.parceler.Parcel;
-
-import java.io.Serializable;
 
 /**
  * Created by lukab on 9-5-2017.
@@ -13,17 +8,22 @@ import java.io.Serializable;
 
 public class Report implements Parcelable {
 
-    int reportID, locationID, categoryID, userID;
+    int reportID;
+    int locationID;
+    int categoryID;
+    int userID;
     User user;
     Location location;
     String description;
     Media media;
     Category category;
-
+    String status;
+    int upvotes;
+    
     public Report() {
     }
 
-    public Report(int reportID, User user, Location location, String description, Category category, int locationID) {
+    public Report(int reportID, User user, Location location, String description, Category category, int locationID, String status, int upvotes) {
         this.reportID = reportID;
         this.category = category;
         this.user = user;
@@ -31,13 +31,14 @@ public class Report implements Parcelable {
         this.description = description;
         this.category = category;
         this.locationID = locationID;
+        this.status = status;
+        this.upvotes = upvotes;
     }
-
-
-
-    //getters
-
-
+    
+    public int getUpvotes() {
+        return upvotes;
+    }
+    
     public int getLocationID() {
         return locationID;
     }
@@ -73,6 +74,8 @@ public class Report implements Parcelable {
     public Category getCategory() {
         return category;
     }
+    
+    public String getStatus() { return status; }
 
     //setters
 
@@ -112,7 +115,13 @@ public class Report implements Parcelable {
     public void setCategory(Category category) {
         this.category = category;
     }
-
+    
+    public void setStatus(String status) { this.status = status; }
+    
+    public void setUpvotes(int upvotes) {
+        this.upvotes = upvotes;
+    }
+    
     @Override
     public int describeContents() {
         return 0;
@@ -129,6 +138,9 @@ public class Report implements Parcelable {
         dest.writeString(this.description);
         dest.writeParcelable(this.media, flags);
         dest.writeParcelable(this.category, flags);
+        dest.writeString(this.status);
+        dest.writeInt(this.upvotes);
+       
     }
 
     protected Report(android.os.Parcel in) {
@@ -141,6 +153,8 @@ public class Report implements Parcelable {
         this.description = in.readString();
         this.media = in.readParcelable(Media.class.getClassLoader());
         this.category = in.readParcelable(Category.class.getClassLoader());
+        this.status = in.readString();
+        this.upvotes = in.readInt();
     }
 
     public static final Parcelable.Creator<Report> CREATOR = new Parcelable.Creator<Report>() {

@@ -9,16 +9,20 @@ import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 
 import com.svenwesterlaken.gemeentebreda.R;
+import com.svenwesterlaken.gemeentebreda.data.api.CategoryRequest;
 
 import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class LoadingActivity extends AppCompatActivity {
 
+    private static String defaultSettingValue = "Onbekend";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_loading);
+
 
         CalligraphyConfig.initDefault(new CalligraphyConfig.Builder()
                 .setDefaultFontPath("fonts/Roboto-Regular.ttf")
@@ -29,15 +33,20 @@ public class LoadingActivity extends AppCompatActivity {
         new CountDownTimer(1500, 1000) {
 
             @Override
-            public void onTick(long millisUntilFinished) {}
+            public void onTick(long millisUntilFinished) {
+
+            }
 
             @Override
             public void onFinish() {
+               
                 SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
                 String name = preferences.getString("pref_name", null);
                 String email = preferences.getString("pref_email", null);
                 String phone = preferences.getString("pref_phone", null);
                 Intent i = null;
+
+                getCategories();
 
 
                 //Start login activity when no name, email and phonenumber is specified (First time using the app)
@@ -45,20 +54,22 @@ public class LoadingActivity extends AppCompatActivity {
                 if (name == null && email == null && phone == null) {
                     i = new Intent(getApplicationContext(), LoginActivity.class);
                 } else if (name != null && email != null && phone != null) {
-                    if (name.equals("Onbekend") && email.equals("Onbekend") && phone.equals("Onbekend")) {
+                    if (name.equals(defaultSettingValue) && email.equals(defaultSettingValue) && phone.equals(defaultSettingValue)) {
                         i = new Intent(getApplicationContext(), LoginActivity.class);
+                    } else {
+                        i = new Intent(getApplicationContext(), ReportActivity.class);
                     }
-                } else {
-                    i = new Intent(getApplicationContext(), ReportActivity.class);
                 }
 
-                if (i != null) {
+
+                if(i != null) {
                     i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     startActivity(i);
                     finish();
                     overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
                 }
             }
+            
         }.start();
     }
 
@@ -66,4 +77,11 @@ public class LoadingActivity extends AppCompatActivity {
     protected void attachBaseContext(Context newBase) {
         super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
     }
+    
+    private void getCategories(){
+        CategoryRequest request = new CategoryRequest(getApplicationContext());
+        request.handleGetCategories();
+    }
 }
+
+

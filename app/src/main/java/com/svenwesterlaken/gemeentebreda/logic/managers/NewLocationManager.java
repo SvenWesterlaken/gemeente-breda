@@ -35,6 +35,12 @@ public class NewLocationManager implements GoogleApiClient.ConnectionCallbacks, 
     private GoogleApiClient mGoogleApiClient;
     private MediaLocationHandler mlHandler;
 
+    /**
+     * Only used for NewReportLocationFragment
+     * @param a
+     * @param c
+     * @param mListener
+     */
     public NewLocationManager(Activity a, Context c, LocationManagerListener mListener) {
         this.activity = a;
         this.context = c;
@@ -46,6 +52,13 @@ public class NewLocationManager implements GoogleApiClient.ConnectionCallbacks, 
             newGoogleApiClient();
         }
     }
+
+    /**
+     * Only used for NewLocationActivity
+     * @param a
+     * @param c
+     * @param listener
+     */
 
     public NewLocationManager(Activity a, Context c, SelectedLocationListener listener) {
         this.sListener = listener;
@@ -64,6 +77,7 @@ public class NewLocationManager implements GoogleApiClient.ConnectionCallbacks, 
             startGeoService(latlong.latitude, latlong.longitude, FetchAddressIntentService.MEDIA_LOCATION);
         } catch (NoLocationMetaException e) {
             mListener.disableButton(FetchAddressIntentService.MEDIA_LOCATION);
+            mListener.setBoolean(FetchAddressIntentService.MEDIA_LOCATION, false);
         }
     }
 
@@ -91,7 +105,10 @@ public class NewLocationManager implements GoogleApiClient.ConnectionCallbacks, 
     @Override
     public void onConnected(@Nullable Bundle bundle) {
         if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            mListener.disableButton(FetchAddressIntentService.CURRENT_LOCATION);
+            if(mListener != null) {
+                mListener.disableButton(FetchAddressIntentService.CURRENT_LOCATION);
+                mListener.setBoolean(FetchAddressIntentService.CURRENT_LOCATION, false);
+            }
         } else {
             android.location.Location mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
             if (mLastLocation != null) {
@@ -103,22 +120,24 @@ public class NewLocationManager implements GoogleApiClient.ConnectionCallbacks, 
     @Override
     public void onConnectionSuspended(int i) {
         mListener.disableButton(FetchAddressIntentService.CURRENT_LOCATION);
+        mListener.setBoolean(FetchAddressIntentService.CURRENT_LOCATION, false);
     }
 
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
         mListener.disableButton(FetchAddressIntentService.CURRENT_LOCATION);
+        mListener.setBoolean(FetchAddressIntentService.CURRENT_LOCATION, false);
     }
 
     public interface LocationManagerListener {
         void setReceivedLocation(Location l, int type);
         void disableButton(int type);
+        void setBoolean(int type, boolean value);
     }
 
     public interface SelectedLocationListener {
         void setSelectedLocation(Location l);
     }
-
 
     public class AddressResultReceiver extends ResultReceiver {
 
@@ -138,6 +157,7 @@ public class NewLocationManager implements GoogleApiClient.ConnectionCallbacks, 
                     } else {
                         if(mListener != null) {
                             mListener.setReceivedLocation(receivedLocation, type);
+                            mListener.setBoolean(type, true);
                         }
                     }
                 }

@@ -1,6 +1,5 @@
 package com.svenwesterlaken.gemeentebreda.presentation.fragments;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -18,7 +17,6 @@ import android.widget.Toast;
 
 import com.svenwesterlaken.gemeentebreda.BuildConfig;
 import com.svenwesterlaken.gemeentebreda.R;
-import com.svenwesterlaken.gemeentebreda.presentation.activities.MenuActivity;
 import com.svenwesterlaken.gemeentebreda.presentation.activities.SettingsActivity;
 
 import static android.preference.PreferenceManager.getDefaultSharedPreferences;
@@ -74,7 +72,7 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
             if (preference instanceof ListPreference) {
                 ListPreference listPreference = (ListPreference) preference;
 
-                if (key.equals("pref_theme") && listPreference.getEntry() == null) {
+                if (key.equals(KEY_PREF_THEME) && listPreference.getEntry() == null) {
                     listPreference.setValueIndex(0);
                 }
 
@@ -98,7 +96,7 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
     private void updatePreference(Preference preference, String key) {
         if(preference != null) {
             if (preference instanceof ListPreference) {
-                if (key.equals("pref_theme")) {
+                if (key.equals(KEY_PREF_THEME)) {
                     SettingsActivity activity = (SettingsActivity) getActivity();
                     activity.finish();
                     final Intent intent = activity.getIntent();

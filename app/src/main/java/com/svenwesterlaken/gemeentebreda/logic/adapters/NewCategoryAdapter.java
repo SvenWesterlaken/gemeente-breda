@@ -14,7 +14,6 @@ import com.svenwesterlaken.gemeentebreda.domain.Category;
 import com.svenwesterlaken.gemeentebreda.presentation.activities.NewReportActivity;
 import com.svenwesterlaken.gemeentebreda.presentation.fragments.NewReportCategoryFragment;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -28,7 +27,7 @@ public class NewCategoryAdapter extends RecyclerView.Adapter<NewCategoryAdapter.
     private NewReportCategoryFragment.CategoryChangedListener mListener;
 
 
-    public NewCategoryAdapter(ArrayList<Category> categories, Activity activity, RecyclerView rv, NewReportCategoryFragment.CategoryChangedListener mListener){
+    public NewCategoryAdapter(List<Category> categories, Activity activity, RecyclerView rv, NewReportCategoryFragment.CategoryChangedListener mListener){
         this.categories = categories;
         this.activity = (NewReportActivity) activity;
         this.rv = rv;
@@ -63,7 +62,8 @@ public class NewCategoryAdapter extends RecyclerView.Adapter<NewCategoryAdapter.
     }
 
     public static class CategoryViewHolder extends RecyclerView.ViewHolder {
-        private TextView name, summary;
+        private TextView name;
+        private TextView summary;
         private ImageView icon;
         private View layout;
 

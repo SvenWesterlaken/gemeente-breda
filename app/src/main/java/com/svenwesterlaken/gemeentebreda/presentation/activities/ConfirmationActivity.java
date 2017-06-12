@@ -1,8 +1,6 @@
 package com.svenwesterlaken.gemeentebreda.presentation.activities;
 
 import android.content.Intent;
-import android.os.CountDownTimer;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.view.animation.Animation;
@@ -13,12 +11,23 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.svenwesterlaken.gemeentebreda.R;
+import com.svenwesterlaken.gemeentebreda.data.api.AddReportRequest;
 import com.svenwesterlaken.gemeentebreda.domain.Report;
 
-import org.parceler.Parcel;
-import org.parceler.Parcels;
+public class ConfirmationActivity extends BaseActivity implements AddReportRequest.onReportAddedListener, View.OnClickListener{
 
-public class ConfirmationActivity extends BaseActivity {
+    private ProgressBar loader;
+    private TextView message;
+    private ImageView succes;
+    private ImageView error;
+    private Animation popupAnimation;
+    private Animation fadeinAnimation;
+
+    private Report report;
+
+    private Button homeBtn;
+    private Button reportBtn;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,73 +35,81 @@ public class ConfirmationActivity extends BaseActivity {
 
         setContentView(R.layout.activity_confirmation);
 
-        final Button homeBtn = (Button) findViewById(R.id.confirmation_BTN_home);
-        final Button reportBtn = (Button) findViewById(R.id.confirmation_BTN_report);
+        Bundle extras = getIntent().getExtras();
+        report = extras.getParcelable("REPORT");
+
+        homeBtn = (Button) findViewById(R.id.confirmation_BTN_home);
+        reportBtn = (Button) findViewById(R.id.confirmation_BTN_report);
 
         homeBtn.setEnabled(false);
         reportBtn.setEnabled(false);
 
-        final ProgressBar loader = (ProgressBar) findViewById(R.id.confirmation_PB_sending);
+        homeBtn.setOnClickListener(this);
+        reportBtn.setOnClickListener(this);
 
-        final TextView message = (TextView) findViewById(R.id.confirmation_TV_message);
+        loader = (ProgressBar) findViewById(R.id.confirmation_PB_sending);
 
-        final ImageView succes = (ImageView) findViewById(R.id.confirmation_IV_succesIcon);
-        final ImageView error = (ImageView) findViewById(R.id.confirmation_IV_errorIcon);
+        message = (TextView) findViewById(R.id.confirmation_TV_message);
 
-        final Animation popupAnimation = AnimationUtils.loadAnimation(this, R.anim.popup_animation);
-        final Animation fadeinAnimation = AnimationUtils.loadAnimation(this, R.anim.fadein_animation);
+        succes = (ImageView) findViewById(R.id.confirmation_IV_succesIcon);
+        error = (ImageView) findViewById(R.id.confirmation_IV_errorIcon);
 
-        new CountDownTimer(1500, 1000) {
+        popupAnimation = AnimationUtils.loadAnimation(this, R.anim.popup_animation);
+        fadeinAnimation = AnimationUtils.loadAnimation(this, R.anim.fadein_animation);
 
-            @Override
-            public void onTick(long millisUntilFinished) {}
+        addReport(report);
+    }
 
-            @Override
-            public void onFinish() {
-                succes.setVisibility(View.VISIBLE);
-                succes.startAnimation(popupAnimation);
-                loader.setVisibility(View.INVISIBLE);
-                message.startAnimation(fadeinAnimation);
-                message.setVisibility(View.VISIBLE);
-                homeBtn.setEnabled(true);
-                reportBtn.setEnabled(true);
+    public void addReport(Report report){
+        AddReportRequest reportRequest = new AddReportRequest(getApplicationContext(), this);
+        reportRequest.addAReport(report);
+    }
+    
+    @Override
+    public  void onBackPressed(){
+        Intent i = new Intent(getApplicationContext(), ReportActivity.class);
+        i.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+        startActivity(i);
+        finish();
+    }
 
-                //Error
-//                error.setVisibility(View.VISIBLE);
-//                error.startAnimation(popupAnimation);
-//                loader.setVisibility(View.INVISIBLE);
-//                message.setText(getString(R.string.confirmation_error_message));
-//                message.startAnimation(fadeinAnimation);
-//                message.setVisibility(View.VISIBLE);
-//                homeBtn.setEnabled(true);
+    @Override
+    public void onSucces() {
+        succes.setVisibility(View.VISIBLE);
+        succes.startAnimation(popupAnimation);
+        loader.setVisibility(View.INVISIBLE);
+        message.startAnimation(fadeinAnimation);
+        message.setVisibility(View.VISIBLE);
+        homeBtn.setEnabled(true);
+        reportBtn.setEnabled(true);
+    }
 
-            }
-        }.start();
+    @Override
+    public void onError() {
+        error.setVisibility(View.VISIBLE);
+        error.startAnimation(popupAnimation);
+        loader.setVisibility(View.INVISIBLE);
+        message.setText(getString(R.string.confirmation_error_message));
+        message.startAnimation(fadeinAnimation);
+        message.setVisibility(View.VISIBLE);
+        homeBtn.setEnabled(true);
+    }
 
-        homeBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent i = new Intent(getApplicationContext(), ReportActivity.class);
-                startActivity(i);
-            }
-        });
+    @Override
+    public void onClick(View v) {
+        Intent i = null;
 
-        reportBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        if(v.getId() == R.id.confirmation_BTN_report) {
+            i = new Intent(getApplicationContext(), DetailedReportActivity.class);
+            report.setUpvotes(0);
+            i.putExtra("REPORT", report);
+        } else if (v.getId() == R.id.confirmation_BTN_home) {
+            i = new Intent(getApplicationContext(), ReportActivity.class);
+        }
 
-                Report report;
-
-                Bundle extras = getIntent().getExtras();
-                report = extras.getParcelable("REPORT");
-
-                Intent intent = new Intent(getApplicationContext(), DetailedReportActivity.class);
-                intent.putExtra("REPORT", report);
-
-                finish();
-                startActivity(intent);
-
-            }
-        });
+        if(i != null) {
+            finish();
+            startActivity(i);
+        }
     }
 }

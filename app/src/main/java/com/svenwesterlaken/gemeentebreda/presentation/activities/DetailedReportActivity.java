@@ -5,22 +5,20 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.svenwesterlaken.gemeentebreda.R;
+import com.svenwesterlaken.gemeentebreda.data.api.UpvoteRequest;
 import com.svenwesterlaken.gemeentebreda.data.database.DatabaseHandler;
 import com.svenwesterlaken.gemeentebreda.domain.Report;
 import com.svenwesterlaken.gemeentebreda.domain.User;
-import com.svenwesterlaken.gemeentebreda.logic.adapters.DetailedCommentAdapter;
 
 public class DetailedReportActivity extends BaseActivity  {
 
     Report report;
     DatabaseHandler handler;
-    User user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,10 +42,12 @@ public class DetailedReportActivity extends BaseActivity  {
         TextView descriptionTV = (TextView) findViewById(R.id.report_TV_description);
         ImageView icon = (ImageView) findViewById(R.id.report_IV_icon);
         ImageView status = (ImageView) findViewById(R.id.report_IV_status);
-        ImageView upvotes = (ImageView) findViewById(R.id.report_IV_upvotes);
-
+        final TextView upvotesTxt = (TextView) findViewById(R.id.report_TV_upvotes);
+        
+        upvotesTxt.setText(getString(R.string.detailed_upvotes, report.getUpvotes()));
         category.setText(report.getCategory().getCategoryName());
-        address.setText(report.getLocation().getStreet() + " " + report.getLocation().getHouseNumber());
+
+        address.setText(report.getLocation().getStreet());
 
         String description = report.getDescription();
 
@@ -56,20 +56,19 @@ public class DetailedReportActivity extends BaseActivity  {
         }
 
         descriptionTV.setText(description);
+
         icon.setImageResource( R.drawable.lightbulb);
-        status.setImageResource( R.drawable.eye_off);
-        upvotes.setImageResource(R.drawable.star);
+        
+        if (report.getStatus().equals("open")) {
+           status.setImageResource(R.drawable.eye_off);
+        } else {
+            status.setImageResource(R.drawable.check);
+        }
 
         RecyclerView reportComments = (RecyclerView) findViewById(R.id.detailed_RV_comments);
         LinearLayoutManager layoutManager2 = new LinearLayoutManager(this.getApplicationContext());
         layoutManager2.setOrientation(LinearLayoutManager.VERTICAL);
         reportComments.setLayoutManager(layoutManager2);
-
-
-        final DetailedCommentAdapter adapter2 = new DetailedCommentAdapter();
-
-        reportComments.setAdapter(adapter2);
-        adapter2.notifyDataSetChanged();
 
         ImageView button1 = (ImageView) findViewById(R.id.detailed_IV_button1);
         button1.setImageResource(R.drawable.comment_alert_outline);
@@ -79,10 +78,37 @@ public class DetailedReportActivity extends BaseActivity  {
         final User user = handler.getUser(1);
 
         button3.setImageResource(R.drawable.star_outline);
+    
+    
+        if (handler.searchUpvote(report, user) != null){
+            button3.setColorFilter(ContextCompat.getColor(getApplicationContext(), R.color.colorAccent));
+            button3.setClickable(false);
+        }
+        
+        button3.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+    
+                if (handler.searchUpvote(report, user) == null) {
+                    addUpvote(report);
+                    button3.setColorFilter(ContextCompat.getColor(getApplicationContext(), R.color.colorAccent));
+                    upvotesTxt.setText(report.getUpvotes()+1 + " upvotes");
+                  
+                    
+                }
+                
+                // delete kan pas als dat ook via API kan
+    
+//                else {
+//                    handler.deleteUpvote(report);
+//                    button3.setColorFilter(null);
+//                }
+            }
+        });
         final ImageView button4 = (ImageView) findViewById(R.id.detailed_IV_button4);
         button4.setImageResource(R.drawable.bookmark_outline);
 
-        if (!(handler.searchFavourite(report, user) == null)){
+        if (handler.searchFavourite(report, user) != null){
             button4.setColorFilter(ContextCompat.getColor(getApplicationContext(), R.color.colorAccent));
         }
 
@@ -107,26 +133,15 @@ public class DetailedReportActivity extends BaseActivity  {
         });
 
     }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-        switch(id) {
-            case android.R.id.home:
-                onBackPressed();
-                return true;
-        }
-        return super.onOptionsItemSelected(item);
+    
+    public void addUpvote(Report report){
+        UpvoteRequest request = new UpvoteRequest(getApplicationContext());
+        request.addAUpvote(report);
     }
-
-    @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-    }
-
+    
     @Override
     public boolean onSupportNavigateUp() {
-        onBackPressed();
+        super.onBackPressed();
         return true;
     }
 

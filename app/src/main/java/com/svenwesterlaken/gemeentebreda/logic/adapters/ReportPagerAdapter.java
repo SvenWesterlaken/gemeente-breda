@@ -62,6 +62,7 @@ public class ReportPagerAdapter extends FragmentPagerAdapter {
      * @param position the position of the tab
      * @return the title that belongs to the tab
      */
+    @Override
     public CharSequence getPageTitle(int position){
         switch (position) {
             case 0:

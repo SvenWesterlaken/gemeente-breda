@@ -15,6 +15,7 @@ import com.svenwesterlaken.gemeentebreda.domain.Report;
 import com.svenwesterlaken.gemeentebreda.presentation.activities.DetailedReportActivity;
 
 import java.util.List;
+import java.util.Locale;
 
 public class ReportAdapter extends RecyclerView.Adapter<ReportAdapter.ReportViewHolder>  {
 
@@ -53,21 +54,22 @@ public class ReportAdapter extends RecyclerView.Adapter<ReportAdapter.ReportView
         viewholder.title.setText(report.getCategory().getCategoryName());
         viewholder.address.setText(report.getLocation().getStreet() );
         viewholder.description.setText(description);
+        viewholder.upvotes.setText(String.format(Locale.GERMAN, "%d", report.getUpvotes()));
 
 
         viewholder.icon.setImageResource( R.drawable.lightbulb);
-        viewholder.status.setImageResource( R.drawable.eye_off);
+        if (report.getStatus().equals("open")) {
+            viewholder.status.setImageResource(R.drawable.eye_off);
+        } else {
+            viewholder.status.setImageResource(R.drawable.check);
+        }
 
 
         viewholder.layout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-
                 Intent intent = new Intent(v.getContext(), DetailedReportActivity.class);
-
                 intent.putExtra("REPORT", reports.get(i));
-
                 v.getContext().startActivity(intent);
             }
         });
@@ -75,7 +77,10 @@ public class ReportAdapter extends RecyclerView.Adapter<ReportAdapter.ReportView
     }
 
     public static class ReportViewHolder extends RecyclerView.ViewHolder  {
-        private TextView title, address, description, upvotes;
+        private TextView title;
+        private TextView address;
+        private TextView description;
+        private TextView upvotes;
         private ImageView icon, status;
         private View layout;
 

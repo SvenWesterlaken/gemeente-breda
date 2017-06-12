@@ -2,7 +2,6 @@ package com.svenwesterlaken.gemeentebreda.presentation.activities;
 
 
 import android.Manifest;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
@@ -26,7 +25,6 @@ import com.svenwesterlaken.gemeentebreda.presentation.fragments.NewReportMediaFr
 import com.svenwesterlaken.gemeentebreda.presentation.partials.ChangableViewPager;
 
 import me.relex.circleindicator.CircleIndicator;
-import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class NewReportActivity extends BaseActivity implements ViewPager.OnPageChangeListener, NewReportDescriptionFragment.DescriptionChangedListener, NewReportMediaFragment.MediaChangedListener, NewReportLocationFragment.LocationChangedListener, NewReportCategoryFragment.CategoryChangedListener{
 
@@ -54,10 +52,10 @@ public class NewReportActivity extends BaseActivity implements ViewPager.OnPageC
 
         mViewPager = (ChangableViewPager) findViewById(R.id.container);
         mViewPager.addOnPageChangeListener(this);
-        CircleIndicator page_indicator = (CircleIndicator) findViewById(R.id.pageIndicator);
+        CircleIndicator pageIndicator = (CircleIndicator) findViewById(R.id.pageIndicator);
         mViewPager.setAdapter(mSectionsPagerAdapter);
         mViewPager.setCurrentItem(0);
-        page_indicator.setViewPager(mViewPager);
+        pageIndicator.setViewPager(mViewPager);
         requestPermissions();
     }
 
@@ -176,17 +174,13 @@ public class NewReportActivity extends BaseActivity implements ViewPager.OnPageC
     }
 
     @Override
-    protected void attachBaseContext(Context newBase) {
-        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
-    }
-
-    @Override
     public void setDescription(String t) {
         newReport.setDescription(t);
     }
 
     @Override
     public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+        //No need for this
     }
 
     @Override
@@ -220,7 +214,14 @@ public class NewReportActivity extends BaseActivity implements ViewPager.OnPageC
     }
 
     @Override
-    public void onPageScrollStateChanged(int state) {}
+    public void onPageScrollStateChanged(int state) {
+        //No need for this
+    }
+    @Override
+    public boolean onSupportNavigateUp() {
+        super.onBackPressed();
+        return true;
+    }
 
     @Override
     public void setLocation(Location t) {
@@ -240,6 +241,5 @@ public class NewReportActivity extends BaseActivity implements ViewPager.OnPageC
     public interface SummaryFragmentListener {
         void fragmentBecameVisible();
     }
-
 
 }

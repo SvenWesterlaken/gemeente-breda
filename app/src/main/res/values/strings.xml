@@ -2,6 +2,7 @@
     <string name="app_name">Gemeente Breda</string>
     <string name="action_settings">Settings</string>
     <string name="title_activity_report">Meldingen</string>
+    <string name="title_activity_filter">Filteren</string>
 
     <string name="report_activity_title_map">Kaart</string>
     <string name="report_activity_title_list">Overzicht</string>
@@ -60,7 +61,6 @@
     <string name="login_error_phone">Voer een geldig nummer in</string>
 
     <string name="title_activity_new_report">Nieuwe Melding</string>
-    <string name="hello_blank_fragment">Hello blank fragment</string>
 
     <string name="new_report_title_media">Media Toevoegen</string>
     <string name="media_photo">Foto maken</string>
@@ -73,8 +73,11 @@
     <string name="location_meta">Locatie van foto</string>
     <string name="location_chosen">Gekozen locatie</string>
     <string name="location_choose">Locatie kiezen</string>
+    <string name="location_delete">Locatie verwijderen</string>
     <string name="location_unavailable">Niet gevonden</string>
     <string name="location_error">Niet mogelijk</string>
+    <string name="location_notselected">Nog niet gekozen</string>
+    <string name="location_empty">Nog geen locatie gekozen</string>
 
     <string name="new_report_title_category">Categorie Toevoegen</string>
 
@@ -104,9 +107,27 @@
 
     <string name="detailed_comments_title">Opmerkingen</string>
 
+
+    <string name="filter_order_title">Volgorde</string>
+    <string name="filter_type_title">Type melding</string>
+
+
+    <string name="detailed_upvotes">%1$d upvotes</string>
+
+
+    <string-array name="report_filter_array">
+        <item>Meeste upvotes</item>
+        <item>Minste upvotes</item>
+        <item>Recent</item>
+        <item>ABC</item>
+        <item>XYZ</item>
+
+    </string-array>
+
     <string name="camera_stillshot_confirm">GEBRUIK FOTO</string>
     <string name="camera_video_confirm">GEBRUIK VIDEO</string>
     <string name="camera_retry">OPNIEUW</string>
+
 
 
 </resources>

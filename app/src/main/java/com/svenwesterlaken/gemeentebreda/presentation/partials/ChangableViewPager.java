@@ -3,6 +3,7 @@ package com.svenwesterlaken.gemeentebreda.presentation.partials;
 import android.content.Context;
 import android.support.v4.view.ViewPager;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
@@ -43,20 +44,14 @@ public class ChangableViewPager extends ViewPager {
 
     @Override
     public boolean onInterceptTouchEvent(MotionEvent event) {
-        if(swipeable) {
-            return super.onInterceptTouchEvent(event) && mGestureDetector.onTouchEvent(event);
-        }
+        return swipeable && super.onInterceptTouchEvent(event) && mGestureDetector.onTouchEvent(event);
 
-        return false;
     }
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        if(swipeable) {
-            return super.onTouchEvent(event);
-        }
+        return swipeable && super.onTouchEvent(event);
 
-        return false;
     }
 
     public void enableSwiping() {
@@ -74,11 +69,11 @@ public class ChangableViewPager extends ViewPager {
             scroller.setAccessible(true);
             scroller.set(this, new MyScroller(getContext()));
         } catch (Exception e) {
-            e.printStackTrace();
+            Log.e("SCROLLER", e.getMessage());
         }
     }
 
-    class MyScroller extends Scroller {
+    private class MyScroller extends Scroller {
         MyScroller(Context context) {
             super(context, new AccelerateDecelerateInterpolator());
         }
@@ -89,13 +84,10 @@ public class ChangableViewPager extends ViewPager {
         }
     }
 
-    class XScrollDetector extends GestureDetector.SimpleOnGestureListener {
+    private class XScrollDetector extends GestureDetector.SimpleOnGestureListener {
         @Override
         public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
-            if (Math.abs(distanceY) < Math.abs(distanceX)) {
-                return true;
-            }
-            return false;
+            return Math.abs(distanceY) < Math.abs(distanceX);
         }
     }
 }

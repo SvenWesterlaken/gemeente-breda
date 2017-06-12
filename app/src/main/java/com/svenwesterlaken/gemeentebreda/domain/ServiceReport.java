@@ -23,8 +23,12 @@ public class ServiceReport {
     public String mediaUrl;
     @SerializedName("service_request_id")
     public String id;
-
-    public ServiceReport(String address, String statusGemeente, String addressnr, String serviceName, int latitude, int longitude, String mediaUrl, String id) {
+    @SerializedName("description")
+    public String description;
+    @SerializedName("upvotes")
+    public String upvotes;
+    
+    public ServiceReport(String address, String statusGemeente, String addressnr, String serviceName, int latitude, int longitude, String description,String mediaUrl, String id) {
         this.address = address;
         this.statusGemeente = statusGemeente;
         this.addressnr = addressnr;
@@ -33,11 +37,15 @@ public class ServiceReport {
         this.longitude = longitude;
         this.mediaUrl = mediaUrl;
         this.id = id;
+        this.description = description;
+        this.upvotes = upvotes;
     }
 
     public String getAddress() {
         return address;
     }
+    
+    public String getUpvotes() { return upvotes; }
 
     public String getStatusGemeente() {
         return statusGemeente;
@@ -66,6 +74,8 @@ public class ServiceReport {
     public String getId() {
         return id;
     }
+    
+    public  String getDescription() { return description; }
 }
 //
 // "service_request_id": "16",

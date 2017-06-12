@@ -3,15 +3,15 @@ package com.svenwesterlaken.gemeentebreda.domain;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import java.io.Serializable;
-
 /**
  * Created by lukab on 9-5-2017.
  */
 
 public class User implements Parcelable {
     int userID;
-    String name, emailaddress, mobileNumber;
+    String name;
+    String emailaddress;
+    String mobileNumber;
 
 
     public User() {

@@ -2,10 +2,7 @@ package com.svenwesterlaken.gemeentebreda.presentation.activities;
 
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Handler;
-import android.widget.ImageView;
 
-import com.google.android.exoplayer2.ExoPlayer;
 import com.google.android.exoplayer2.ExoPlayerFactory;
 import com.google.android.exoplayer2.SimpleExoPlayer;
 import com.google.android.exoplayer2.extractor.DefaultExtractorsFactory;
@@ -22,10 +19,7 @@ import com.google.android.exoplayer2.upstream.DataSource;
 import com.google.android.exoplayer2.upstream.DefaultBandwidthMeter;
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
 import com.google.android.exoplayer2.util.Util;
-import com.squareup.picasso.Picasso;
 import com.svenwesterlaken.gemeentebreda.R;
-
-import java.io.File;
 
 /**
  * Created by Sven Westerlaken on 2-6-2017.
@@ -42,7 +36,6 @@ public class VideoActivity extends BaseActivity {
 
 
         // 1. Create a default TrackSelector
-        Handler mainHandler = new Handler();
         BandwidthMeter bandwidthMeter = new DefaultBandwidthMeter();
         TrackSelection.Factory videoTrackSelectionFactory = new AdaptiveTrackSelection.Factory(bandwidthMeter);
         TrackSelector trackSelector = new DefaultTrackSelector(videoTrackSelectionFactory);

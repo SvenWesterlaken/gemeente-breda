@@ -23,19 +23,14 @@ public class CompatScrollView extends ScrollView{
 
     @Override
     public boolean onInterceptTouchEvent(MotionEvent ev) {
-        return super.onInterceptTouchEvent(ev)
-                && mGestureDetector.onTouchEvent(ev);
+        return super.onInterceptTouchEvent(ev) && mGestureDetector.onTouchEvent(ev);
     }
 
     // Return false if we're scrolling in the x direction
-    class YScrollDetector extends GestureDetector.SimpleOnGestureListener {
+    private class YScrollDetector extends GestureDetector.SimpleOnGestureListener {
         @Override
-        public boolean onScroll(MotionEvent e1, MotionEvent e2,
-                                float distanceX, float distanceY) {
-            if (Math.abs(distanceY) > Math.abs(distanceX)) {
-                return true;
-            }
-            return false;
+        public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
+            return Math.abs(distanceY) > Math.abs(distanceX);
         }
     }
 }

@@ -72,14 +72,19 @@ public class MediaManager {
     public boolean isVideo(Intent data) {
         boolean result = false;
         String mime = fragment.getContext().getContentResolver().getType(data.getData());
-        if (mime != null) { if (mime.contains("video")) { result = true; } }
+        if (mime != null && mime.contains("video")) {
+            result = true;
+        }
+
         return result;
     }
 
     public boolean isImage(Intent data) {
         boolean result = false;
         String mime = fragment.getContext().getContentResolver().getType(data.getData());
-        if (mime != null) { if (mime.contains("image")) { result = true; } }
+        if (mime != null && mime.contains("image")) {
+            result = true;
+        }
         return result;
     }
 

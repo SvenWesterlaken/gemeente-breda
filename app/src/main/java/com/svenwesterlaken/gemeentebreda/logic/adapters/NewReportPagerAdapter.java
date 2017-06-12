@@ -1,6 +1,5 @@
 package com.svenwesterlaken.gemeentebreda.logic.adapters;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.Fragment;

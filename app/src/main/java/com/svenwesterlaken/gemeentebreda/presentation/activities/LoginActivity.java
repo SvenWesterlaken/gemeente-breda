@@ -14,22 +14,18 @@ import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class LoginActivity extends AppCompatActivity {
-
-    private LoginPagerAdapter mSectionsPagerAdapter;
-    private ViewPager mViewPager;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        mSectionsPagerAdapter = new LoginPagerAdapter(getSupportFragmentManager());
+        LoginPagerAdapter mSectionsPagerAdapter = new LoginPagerAdapter(getSupportFragmentManager());
 
-        mViewPager = (ViewPager) findViewById(R.id.container);
-        CircleIndicator page_indicator = (CircleIndicator) findViewById(R.id.pageIndicator);
+        ViewPager mViewPager = (ViewPager) findViewById(R.id.container);
+        CircleIndicator pageIndicator = (CircleIndicator) findViewById(R.id.pageIndicator);
         mViewPager.setAdapter(mSectionsPagerAdapter);
         mViewPager.setCurrentItem(0);
-        page_indicator.setViewPager(mViewPager);
+        pageIndicator.setViewPager(mViewPager);
 
         CalligraphyConfig.initDefault(new CalligraphyConfig.Builder()
                 .setDefaultFontPath("fonts/Roboto-Regular.ttf")
