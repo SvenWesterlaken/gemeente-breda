@@ -10,7 +10,6 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
-import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
@@ -27,6 +26,8 @@ import com.svenwesterlaken.gemeentebreda.presentation.fragments.ReportMapFragmen
 public class ReportActivity extends MenuActivity  {
 
     private static final int MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 1;
+    private ViewPager mViewPager;
+    private ReportPagerAdapter mSectionsPagerAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,9 +37,9 @@ public class ReportActivity extends MenuActivity  {
         setSupportActionBar(toolbar);
         super.onCreateDrawer(toolbar, this);
 
-        PagerAdapter mSectionsPagerAdapter = new ReportPagerAdapter(getSupportFragmentManager(), 2, getApplicationContext(), new ReportMapFragment(),  new ReportListFragment());
+        mSectionsPagerAdapter = new ReportPagerAdapter(getSupportFragmentManager(), 2, getApplicationContext(), new ReportMapFragment(),  new ReportListFragment());
 
-        ViewPager mViewPager = (ViewPager) findViewById(R.id.container);
+        mViewPager = (ViewPager) findViewById(R.id.container);
         mViewPager.setAdapter(mSectionsPagerAdapter);
 
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
@@ -145,5 +146,13 @@ public class ReportActivity extends MenuActivity  {
             }
         }
     }
+
+    @Override
+    public void onRestart(){
+        super.onRestart();
+        ((ReportMapFragment) mSectionsPagerAdapter.getItem(0)).getReports();
+        ((ReportListFragment) mSectionsPagerAdapter.getItem(1)).getReports();
+    }
+
 }
 

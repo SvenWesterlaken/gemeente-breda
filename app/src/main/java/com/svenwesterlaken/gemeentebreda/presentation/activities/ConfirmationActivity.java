@@ -35,6 +35,9 @@ public class ConfirmationActivity extends BaseActivity implements AddReportReque
 
         setContentView(R.layout.activity_confirmation);
 
+        Bundle extras = getIntent().getExtras();
+        report = extras.getParcelable("REPORT");
+
         homeBtn = (Button) findViewById(R.id.confirmation_BTN_home);
         reportBtn = (Button) findViewById(R.id.confirmation_BTN_report);
 
@@ -53,9 +56,6 @@ public class ConfirmationActivity extends BaseActivity implements AddReportReque
 
         popupAnimation = AnimationUtils.loadAnimation(this, R.anim.popup_animation);
         fadeinAnimation = AnimationUtils.loadAnimation(this, R.anim.fadein_animation);
-
-        Bundle extras = getIntent().getExtras();
-        final Report report = extras.getParcelable("REPORT");
 
         addReport(report);
     }
@@ -101,6 +101,7 @@ public class ConfirmationActivity extends BaseActivity implements AddReportReque
 
         if(v.getId() == R.id.confirmation_BTN_report) {
             i = new Intent(getApplicationContext(), DetailedReportActivity.class);
+            report.setUpvotes(0);
             i.putExtra("REPORT", report);
         } else if (v.getId() == R.id.confirmation_BTN_home) {
             i = new Intent(getApplicationContext(), ReportActivity.class);

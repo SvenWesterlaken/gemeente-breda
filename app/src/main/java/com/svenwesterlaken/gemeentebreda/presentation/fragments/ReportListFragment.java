@@ -62,18 +62,6 @@ public class ReportListFragment extends Fragment implements PullRefreshLayout.On
     public void onReportsAvailable(Report report) {
         reports.add(report);
         reportAdapter.notifyItemInserted(reports.size());
-
-            for (Fragment fragment : getFragmentManager().getFragments())
-            {
-                if (fragment instanceof ReportMapFragment)
-                {
-                    ReportMapFragment reportMapFragment = ((ReportMapFragment) fragment);
-                    ArrayList<Report> reportArrayList= new ArrayList<>();
-                    reportArrayList.add(report);
-                    reportMapFragment.placeMarkers(reportArrayList);
-                }
-            }
-
     }
 
     @Override
@@ -84,14 +72,16 @@ public class ReportListFragment extends Fragment implements PullRefreshLayout.On
 
     @Override
     public void onRefresh() {
-        int size = reports.size();
-        reports.clear();
-        reportAdapter.notifyItemRangeRemoved(0, size);
         getReports();
     }
     
     
-    private void getReports(){
+    public void getReports(){
+        if(!reports.isEmpty()) {
+            int size = reports.size();
+            reports.clear();
+            reportAdapter.notifyItemRangeRemoved(0, size);
+        }
         ReportRequest request = new ReportRequest(getContext(), this);
         request.handleGetAllReports();
     }

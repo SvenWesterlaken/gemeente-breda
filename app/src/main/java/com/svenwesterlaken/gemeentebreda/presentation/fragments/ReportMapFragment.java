@@ -28,7 +28,7 @@ import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.svenwesterlaken.gemeentebreda.R;
-import com.svenwesterlaken.gemeentebreda.data.database.DatabaseHandler;
+import com.svenwesterlaken.gemeentebreda.data.api.ReportRequest;
 import com.svenwesterlaken.gemeentebreda.domain.Report;
 
 import java.util.ArrayList;
@@ -41,15 +41,17 @@ import static android.content.Context.LOCATION_SERVICE;
  * Created by Koen Kamman on 5-5-2017.
  */
 
-public class ReportMapFragment extends Fragment {
+public class ReportMapFragment extends Fragment implements ReportRequest.ReportListener {
 
     MapView mMapView;
     private GoogleMap map;
-    private Marker placedMarker;
+    private List<Marker> markers;
 
     @Override
     public View onCreateView(LayoutInflater layoutInflater, ViewGroup viewGroup, Bundle bundle) {
         View v = layoutInflater.inflate(R.layout.fragment_reportmap, viewGroup, false);
+
+        markers = new ArrayList<>();
 
         mMapView = (MapView) v.findViewById(R.id.mapView);
         mMapView.onCreate(bundle);
@@ -130,65 +132,46 @@ public class ReportMapFragment extends Fragment {
                     map.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
 
                 }
-
-                // Add markers
-//                mMap.addMarker(new MarkerOptions().position(hogeschool).title("Hogeschoollaan 1").snippet("Avans Locatie Hogeschoollaan"));
-//
-//                placeMarkers(getAllReports());
-
-
-//                map.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
-//
-//                    @Override
-//                    public void onMapClick(LatLng point) {
-//                        //Remove the previously placed marker
-//                        if (placedMarker != null) {
-//                            placedMarker.remove();
-//                        }
-//                        //Place a new marker at the location of the tap
-//                        placedMarker = map.addMarker(new MarkerOptions().position(point).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
-//                    }
-//                });
-
             }
         });
+
+        getReports();
 
         return v;
     }
 
-//    public List<Report> getAllReports() {
-//        DatabaseHandler handler = new DatabaseHandler(getContext());
-//        ArrayList<Report> reports;
-//        reports = handler.getAllReports();
-//
-//        for (Report report : reports){
-//            com.svenwesterlaken.gemeentebreda.domain.Location location = handler.getLocation(report.getLocationID());
-//            report.setLocation(location);
-//        }
-//
-//        handler.close();
-//        return reports;
-//    }
-
-    public void placeMarkers(List<Report> reports) {
-
-        for(Report report : reports) {
-            if (report.getLocation() != null) {
-                com.svenwesterlaken.gemeentebreda.domain.Location location = report.getLocation();
-                LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
-                MarkerOptions markerOptions = new MarkerOptions().position(latLng).title(report.getCategory().getCategoryName()).snippet(report.getDescription());
-                map.addMarker(markerOptions);
-
+    public void getReports(){
+        if(!markers.isEmpty()) {
+            for(int i=0; i < markers.size(); i++) {
+                markers.get(i).remove();
             }
+            markers.clear();
         }
 
+        ReportRequest request = new ReportRequest(getContext(), this);
+        request.handleGetAllReports();
     }
 
     public void enableMyLocation(){
-        if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION)
-                == PackageManager.PERMISSION_GRANTED) {
+        if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             map.setMyLocationEnabled(true);
         }
+    }
+
+    @Override
+    public void onReportsAvailable(Report report) {
+        if (report.getLocation() != null) {
+            com.svenwesterlaken.gemeentebreda.domain.Location location = report.getLocation();
+            LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
+            MarkerOptions markerOptions = new MarkerOptions().position(latLng).title(report.getCategory().getCategoryName()).snippet(report.getDescription());
+            Marker marker = map.addMarker(markerOptions);
+            markers.add(marker);
+        }
+    }
+
+    @Override
+    public void onFinished() {
+        //Not needed
     }
 
     @Override
@@ -214,5 +197,4 @@ public class ReportMapFragment extends Fragment {
         super.onLowMemory();
         mMapView.onLowMemory();
     }
-
 }
