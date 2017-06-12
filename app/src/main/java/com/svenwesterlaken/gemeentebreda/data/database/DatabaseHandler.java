@@ -216,6 +216,7 @@ public class DatabaseHandler extends SQLiteAssetHelper {
             report.setLocation(getLocation(cursor.getInt(cursor.getColumnIndex("locationId"))));
             report.setCategory(getCategory(cursor.getInt(cursor.getColumnIndex("categoryId"))));
             report.setUpvotes(cursor.getInt(cursor.getColumnIndex("upvotes")));
+            report.setStatus(cursor.getString(cursor.getColumnIndex("status")));
 
         }
 
@@ -438,6 +439,40 @@ public class DatabaseHandler extends SQLiteAssetHelper {
         
         return id;
     }
+    
+	
+	public ArrayList<Report> getFilterReports(String extra){
+		
+		
+		ArrayList reports = new ArrayList();
+		SQLiteDatabase db = getReadableDatabase();
+		String query = "SELECT * FROM Report ORDER BY " + extra + ";" ;
+		Cursor cursor = db.rawQuery(query, null);
+
+		while(cursor.moveToNext() ) {
+			
+			Report report = new Report();
+			
+			report.setCategory(getCategory(cursor.getInt(cursor.getColumnIndex("categoryId"))));
+			
+			report.setReportID( cursor.getInt(cursor.getColumnIndex("reportId")));
+			report.setDescription( cursor.getString(cursor.getColumnIndex("description")));
+//            report.setMediaId(cursor.getInt(cursor.getColumnIndex(REPORT_COLUMN_MEDIAID)));
+			report.setLocation( getLocation(cursor.getInt(cursor.getColumnIndex("locationId"))));
+			report.setUpvotes( cursor.getInt(cursor.getColumnIndex("upvotes")));
+			report.setStatus( cursor.getString(cursor.getColumnIndex("status")));
+			
+			
+			reports.add(report);
+		}
+		
+		cursor.close();
+		db.close();
+		
+		return reports;
+		
+		
+	}
 
 
 

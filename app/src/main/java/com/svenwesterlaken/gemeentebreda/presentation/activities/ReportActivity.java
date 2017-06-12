@@ -15,6 +15,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 
 import com.svenwesterlaken.gemeentebreda.R;
@@ -120,8 +121,15 @@ public class ReportActivity extends MenuActivity  {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_report, menu);
-        menu.findItem(R.id.action_filter);
-        //TODO: Add listener to go to filter activity
+        menu.findItem(R.id.action_filter).setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+	        @Override
+	        public boolean onMenuItemClick(MenuItem item) {
+		        
+		        Intent intent = new Intent(getApplicationContext(), FilterActivity.class);
+		        startActivity(intent);
+		        return false;
+	        }
+        });
         return true;
     }
 
