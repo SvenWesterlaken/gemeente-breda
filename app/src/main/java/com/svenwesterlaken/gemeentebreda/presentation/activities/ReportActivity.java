@@ -51,8 +51,6 @@ public class ReportActivity extends MenuActivity  {
 
                 Intent i = new Intent(getApplicationContext(), NewReportActivity.class);
                 startActivity(i);
-                finish();
-
 
             }
         });

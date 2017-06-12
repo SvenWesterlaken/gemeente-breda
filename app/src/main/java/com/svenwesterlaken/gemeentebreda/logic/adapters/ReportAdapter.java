@@ -15,6 +15,7 @@ import com.svenwesterlaken.gemeentebreda.domain.Report;
 import com.svenwesterlaken.gemeentebreda.presentation.activities.DetailedReportActivity;
 
 import java.util.List;
+import java.util.Locale;
 
 public class ReportAdapter extends RecyclerView.Adapter<ReportAdapter.ReportViewHolder>  {
 
@@ -53,15 +54,13 @@ public class ReportAdapter extends RecyclerView.Adapter<ReportAdapter.ReportView
         viewholder.title.setText(report.getCategory().getCategoryName());
         viewholder.address.setText(report.getLocation().getStreet() );
         viewholder.description.setText(description);
-        viewholder.upvotes.setText("" + report.getUpvotes());
+        viewholder.upvotes.setText(String.format(Locale.GERMAN, "%d", report.getUpvotes()));
 
 
         viewholder.icon.setImageResource( R.drawable.lightbulb);
-        if (report.getStatus() == "open") {
+        if (report.getStatus().equals("open")) {
             viewholder.status.setImageResource(R.drawable.eye_off);
-        }
-    
-        else {
+        } else {
             viewholder.status.setImageResource(R.drawable.check);
         }
 
@@ -69,12 +68,8 @@ public class ReportAdapter extends RecyclerView.Adapter<ReportAdapter.ReportView
         viewholder.layout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-
                 Intent intent = new Intent(v.getContext(), DetailedReportActivity.class);
-
                 intent.putExtra("REPORT", reports.get(i));
-
                 v.getContext().startActivity(intent);
             }
         });

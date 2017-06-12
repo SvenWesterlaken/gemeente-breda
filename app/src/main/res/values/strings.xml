@@ -105,7 +105,7 @@
     <string name="confirmation_btn_report">Melding bekijken</string>
 
     <string name="detailed_comments_title">Opmerkingen</string>
-
+    <string name="detailed_upvotes">%1$d upvotes</string>
 
     <string-array name="report_filter_array">
         <item>ID</item>
@@ -119,6 +119,7 @@
     <string name="camera_stillshot_confirm">GEBRUIK FOTO</string>
     <string name="camera_video_confirm">GEBRUIK VIDEO</string>
     <string name="camera_retry">OPNIEUW</string>
+
 
 
 </resources>
