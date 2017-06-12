@@ -154,47 +154,50 @@ public class NewReportMediaFragment extends Fragment implements View.OnClickList
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        media = new Media();
+
         Uri uri = null;
         int type = 0;
         String path = null;
 
-        if (requestCode == CAMERA_REQUEST && resultCode == RESULT_OK) {
-            path = data.getDataString();
-            type = MEDIA_PICTURE;
-            uri = Uri.fromFile( new File( path ));
+        if (resultCode == RESULT_OK) {
+            media = new Media();
 
-        } else if (requestCode == VIDEOCAMERA_REQUEST && resultCode == RESULT_OK) {
-            path = data.getDataString().substring(7);
-            uri = Uri.fromFile( new File( path ));
-            type = MEDIA_VIDEO;
-
-        } else if (requestCode == MEDIA_REQUEST && resultCode == RESULT_OK) {
-
-            if(mManager.isVideo(data)) {
-                uri = mManager.processMedia(data);
-                path = data.getDataString().substring(7);
-                type = MEDIA_VIDEO;
-
-            } else if (mManager.isImage(data)) {
-                uri = mManager.processMedia(data);
+            if (requestCode == CAMERA_REQUEST) {
                 path = data.getDataString();
                 type = MEDIA_PICTURE;
+                uri = Uri.fromFile( new File( path ));
+
+            } else if (requestCode == VIDEOCAMERA_REQUEST) {
+                path = data.getDataString().substring(7);
+                uri = Uri.fromFile( new File( path ));
+                type = MEDIA_VIDEO;
+
+            } else if (requestCode == MEDIA_REQUEST) {
+
+                if(mManager.isVideo(data)) {
+                    uri = mManager.processMedia(data);
+                    path = data.getDataString().substring(7);
+                    type = MEDIA_VIDEO;
+
+                } else if (mManager.isImage(data)) {
+                    uri = mManager.processMedia(data);
+                    path = data.getDataString();
+                    type = MEDIA_PICTURE;
+                }
             }
-        }
 
-        if (type == MEDIA_PICTURE) {
-            Glide.with(getContext()).load(path).into(image);
-        } else if (type == MEDIA_VIDEO) {
-            Glide.with(getContext()).load(uri).into(image);
-        }
+            if (type == MEDIA_PICTURE) {
+                Glide.with(getContext()).load(path).into(image);
+            } else if (type == MEDIA_VIDEO) {
+                Glide.with(getContext()).load(uri).into(image);
+            }
 
-        if (resultCode == RESULT_OK) {
             media.setFilePath(path);
             media.setUri(uri);
             media.setType(type);
             enableConfirmButton();
             disableMediaButtons();
+
         }
     }
 
