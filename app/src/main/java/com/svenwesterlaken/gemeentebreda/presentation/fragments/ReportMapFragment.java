@@ -2,6 +2,7 @@ package com.svenwesterlaken.gemeentebreda.presentation.fragments;
 
 
 import android.Manifest;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.location.Criteria;
@@ -9,6 +10,7 @@ import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
@@ -30,8 +32,11 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.svenwesterlaken.gemeentebreda.R;
 import com.svenwesterlaken.gemeentebreda.data.api.ReportRequest;
 import com.svenwesterlaken.gemeentebreda.domain.Report;
+import com.svenwesterlaken.gemeentebreda.presentation.activities.DetailedReportActivity;
+import com.svenwesterlaken.gemeentebreda.presentation.activities.FilterActivity;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import static android.content.Context.LOCATION_SERVICE;
@@ -41,15 +46,32 @@ import static android.content.Context.LOCATION_SERVICE;
  * Created by Koen Kamman on 5-5-2017.
  */
 
-public class ReportMapFragment extends Fragment implements ReportRequest.ReportListener {
+public class ReportMapFragment extends Fragment implements ReportRequest.ReportListener, GoogleMap.OnMarkerClickListener {
 
     MapView mMapView;
     private GoogleMap map;
     private List<Marker> markers;
 
+    private FloatingActionButton fab;
+    private HashMap<Marker, Report> reportHashMap = new HashMap<>();
+    private Marker selectedMarker;
+
     @Override
     public View onCreateView(LayoutInflater layoutInflater, ViewGroup viewGroup, Bundle bundle) {
         View v = layoutInflater.inflate(R.layout.fragment_reportmap, viewGroup, false);
+
+        fab = (FloatingActionButton) v.findViewById(R.id.fabInfo);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (selectedMarker != null && reportHashMap.containsKey(selectedMarker)) {
+                    Report report = reportHashMap.get(selectedMarker);
+                    Intent intent = new Intent(getContext(), DetailedReportActivity.class);
+                    intent.putExtra("REPORT", report);
+                    startActivity(intent);
+                }
+            }
+        });
 
         markers = new ArrayList<>();
 
@@ -105,9 +127,9 @@ public class ReportMapFragment extends Fragment implements ReportRequest.ReportL
                 }
 
                 // Locations
-                LatLng hogeschool = new LatLng(51.5843682,4.795152);
+                LatLng hogeschool = new LatLng(51.5843682, 4.795152);
 
-                if (myLocation != null){
+                if (myLocation != null) {
                     // Get latitude of the current location
                     double latitude = myLocation.getLatitude();
 
@@ -132,6 +154,9 @@ public class ReportMapFragment extends Fragment implements ReportRequest.ReportL
                     map.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
 
                 }
+
+                setMarkerClickListener();
+
             }
         });
 
@@ -140,9 +165,13 @@ public class ReportMapFragment extends Fragment implements ReportRequest.ReportL
         return v;
     }
 
-    public void getReports(){
-        if(!markers.isEmpty()) {
-            for(int i=0; i < markers.size(); i++) {
+    public void setMarkerClickListener() {
+        map.setOnMarkerClickListener(this);
+    }
+
+    public void getReports() {
+        if (!markers.isEmpty()) {
+            for (int i = 0; i < markers.size(); i++) {
                 markers.get(i).remove();
             }
             markers.clear();
@@ -152,7 +181,7 @@ public class ReportMapFragment extends Fragment implements ReportRequest.ReportL
         request.handleGetAllReports();
     }
 
-    public void enableMyLocation(){
+    public void enableMyLocation() {
         if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             map.setMyLocationEnabled(true);
         }
@@ -166,7 +195,14 @@ public class ReportMapFragment extends Fragment implements ReportRequest.ReportL
             MarkerOptions markerOptions = new MarkerOptions().position(latLng).title(report.getCategory().getCategoryName()).snippet(report.getDescription());
             Marker marker = map.addMarker(markerOptions);
             markers.add(marker);
+            reportHashMap.put(marker, report);
         }
+    }
+
+    @Override
+    public boolean onMarkerClick(Marker marker) {
+        selectedMarker = marker;
+        return false;
     }
 
     @Override
