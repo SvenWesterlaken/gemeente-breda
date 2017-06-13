@@ -155,7 +155,7 @@ public class ReportMapFragment extends Fragment implements ReportRequest.ReportL
 
                 }
 
-                setMarkerClickListener();
+                map.setOnMarkerClickListener(ReportMapFragment.this);
 
             }
         });
@@ -163,10 +163,6 @@ public class ReportMapFragment extends Fragment implements ReportRequest.ReportL
         getReports();
 
         return v;
-    }
-
-    public void setMarkerClickListener() {
-        map.setOnMarkerClickListener(this);
     }
 
     public void getReports() {
