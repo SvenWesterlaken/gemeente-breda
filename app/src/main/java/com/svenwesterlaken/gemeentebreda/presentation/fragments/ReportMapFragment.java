@@ -47,31 +47,16 @@ import static android.content.Context.LOCATION_SERVICE;
  * Created by Koen Kamman on 5-5-2017.
  */
 
-public class ReportMapFragment extends Fragment implements ReportRequest.ReportListener, GoogleMap.OnMarkerClickListener {
+public class ReportMapFragment extends Fragment implements ReportRequest.ReportListener, GoogleMap.OnInfoWindowClickListener {
 
     MapView mMapView;
     private GoogleMap map;
     private List<Marker> markers;
-    private FloatingActionButton fab;
     private HashMap<Marker, Report> reportHashMap = new HashMap<>();
-    private Marker selectedMarker;
 
     @Override
     public View onCreateView(LayoutInflater layoutInflater, ViewGroup viewGroup, Bundle bundle) {
         View v = layoutInflater.inflate(R.layout.fragment_reportmap, viewGroup, false);
-
-        fab = (FloatingActionButton) v.findViewById(R.id.fabInfo);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (selectedMarker != null && reportHashMap.containsKey(selectedMarker)) {
-                    Report report = reportHashMap.get(selectedMarker);
-                    Intent intent = new Intent(getContext(), DetailedReportActivity.class);
-                    intent.putExtra("REPORT", report);
-                    startActivity(intent);
-                }
-            }
-        });
 
         markers = new ArrayList<>();
 
@@ -140,7 +125,7 @@ public class ReportMapFragment extends Fragment implements ReportRequest.ReportL
                     LatLng latLng = new LatLng(latitude, longitude);
 
                     // Add a marker at users initial position
-                    mMap.addMarker(new MarkerOptions().position(latLng).title("Current Location").snippet("You are here!").icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
+                    //mMap.addMarker(new MarkerOptions().position(latLng).title("Current Location").snippet("You are here!").icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
 
                     // Move camera
                     mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 17));
@@ -155,7 +140,7 @@ public class ReportMapFragment extends Fragment implements ReportRequest.ReportL
 
                 }
 
-                map.setOnMarkerClickListener(ReportMapFragment.this);
+                map.setOnInfoWindowClickListener(ReportMapFragment.this);
 
             }
         });
@@ -196,12 +181,6 @@ public class ReportMapFragment extends Fragment implements ReportRequest.ReportL
     }
 
     @Override
-    public boolean onMarkerClick(Marker marker) {
-        selectedMarker = marker;
-        return false;
-    }
-
-    @Override
     public void onFinished() {
         //Not needed
     }
@@ -228,5 +207,13 @@ public class ReportMapFragment extends Fragment implements ReportRequest.ReportL
     public void onLowMemory() {
         super.onLowMemory();
         mMapView.onLowMemory();
+    }
+
+    @Override
+    public void onInfoWindowClick(Marker marker) {
+        Report report = reportHashMap.get(marker);
+        Intent intent = new Intent(getContext(), DetailedReportActivity.class);
+        intent.putExtra("REPORT", report);
+        startActivity(intent);
     }
 }
