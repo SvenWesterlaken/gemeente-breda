@@ -27,75 +27,81 @@ import static android.app.Activity.RESULT_OK;
 
 
 public class ReportListFragment extends Fragment implements PullRefreshLayout.OnRefreshListener, ReportRequest.ReportListener {
-    
-    ReportAdapter reportAdapter;
-    PullRefreshLayout prf;
-    ArrayList<Report> reports;
-    
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        //Select view & cardView to inflate
-        View rootView = inflater.inflate(R.layout.fragment_reportlist, container, false);
-        RecyclerView reportList = (RecyclerView) rootView.findViewById(R.id.report_RV_reports);
-        reportList.setItemAnimator(new FadeInUpAnimator());
-        reportList.getItemAnimator().setAddDuration(300);
-        reportList.getItemAnimator().setRemoveDuration(200);
-        
-        LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
-        layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-        reportList.setLayoutManager(layoutManager);
-        
-        ReportActivity activity = (ReportActivity) getActivity();
-        reports = new ArrayList<>();
-       
-        if (activity.getList() != null) {
-            reports = activity.getList();
-        }
-        
-        else {
-            getReports();
-        }
-        
-        reportAdapter = new ReportAdapter(reports, getContext());
-        reportList.setAdapter(reportAdapter);
-        
-        reportAdapter.notifyDataSetChanged();
-        
-        prf = (PullRefreshLayout) rootView.findViewById(R.id.swipeRefreshLayout);
-        prf.setColorSchemeColors(Color.argb(255, 217, 29, 73));
-        prf.setOnRefreshListener(this);
-        
-        return rootView;
-    }
-    
-    
-    @Override
-    public void onReportsAvailable(Report report) {
-        reports.add(report);
-        reportAdapter.notifyItemInserted(reports.size());
-    }
-    
-    @Override
-    public void onFinished() {
-        prf.setRefreshing(false);
-    }
-    
-    
-    @Override
-    public void onRefresh() {
-        getReports();
-    }
-    
-    
-    public void getReports() {
-        if (!reports.isEmpty()) {
-            int size = reports.size();
-            reports.clear();
-            reportAdapter.notifyItemRangeRemoved(0, size);
-        }
-        ReportRequest request = new ReportRequest(getContext(), this);
-        request.handleGetAllReports();
-    }
-    
-    }
+	
+	ReportAdapter reportAdapter;
+	PullRefreshLayout prf;
+	ArrayList<Report> reports;
+	ReportActivity activity;
+	RecyclerView reportList;
+	
+	@Override
+	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+		//Select view & cardView to inflate
+		View rootView = inflater.inflate(R.layout.fragment_reportlist, container, false);
+		reportList = (RecyclerView) rootView.findViewById(R.id.report_RV_reports);
+		reportList.setItemAnimator(new FadeInUpAnimator());
+		reportList.getItemAnimator().setAddDuration(300);
+		reportList.getItemAnimator().setRemoveDuration(200);
+		
+		LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
+		layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+		reportList.setLayoutManager(layoutManager);
+		
+		activity = (ReportActivity) getActivity();
+		
+		reports = new ArrayList<>();
+		getReports();
+		
+		reportAdapter = new ReportAdapter(reports, getContext());
+		reportList.setAdapter(reportAdapter);
+		
+		reportAdapter.notifyDataSetChanged();
+		
+		prf = (PullRefreshLayout) rootView.findViewById(R.id.swipeRefreshLayout);
+		prf.setColorSchemeColors(Color.argb(255, 217, 29, 73));
+		prf.setOnRefreshListener(this);
+		
+		return rootView;
+	}
+	
+	
+	@Override
+	public void onReportsAvailable(Report report) {
+		reports.add(report);
+		reportAdapter.notifyItemInserted(reports.size());
+	}
+	
+	@Override
+	public void onFinished() {
+		prf.setRefreshing(false);
+	}
+	
+	
+	@Override
+	public void onRefresh() {
+		getReports();
+	}
+	
+	
+	public void getReports() {
+		
+		if (!reports.isEmpty()) {
+			int size = reports.size();
+			reports.clear();
+			reportAdapter.notifyItemRangeRemoved(0, size);
+		}
+		
+		if (activity.getList() == null || activity.getList().isEmpty()) {
+			ReportRequest request = new ReportRequest(getContext(), this);
+			request.handleGetAllReports();
+		}
+		else {
+			reports = activity.getList();
+			reportAdapter = new ReportAdapter(reports, getContext());
+			reportList.setAdapter(reportAdapter);
+			reportAdapter.notifyDataSetChanged();
+		}
+	}
+	
+}
 

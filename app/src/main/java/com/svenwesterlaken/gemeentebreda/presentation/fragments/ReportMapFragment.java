@@ -2,6 +2,7 @@ package com.svenwesterlaken.gemeentebreda.presentation.fragments;
 
 
 import android.Manifest;
+import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
@@ -51,7 +52,6 @@ public class ReportMapFragment extends Fragment implements ReportRequest.ReportL
     MapView mMapView;
     private GoogleMap map;
     private List<Marker> markers;
-
     private FloatingActionButton fab;
     private HashMap<Marker, Report> reportHashMap = new HashMap<>();
     private Marker selectedMarker;

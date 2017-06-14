@@ -20,6 +20,7 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.svenwesterlaken.gemeentebreda.R;
+import com.svenwesterlaken.gemeentebreda.domain.Report;
 import com.svenwesterlaken.gemeentebreda.logic.adapters.ReportPagerAdapter;
 import com.svenwesterlaken.gemeentebreda.presentation.fragments.ReportListFragment;
 import com.svenwesterlaken.gemeentebreda.presentation.fragments.ReportMapFragment;
@@ -33,7 +34,7 @@ public class ReportActivity extends MenuActivity {
     private ViewPager mViewPager;
     private ReportPagerAdapter mSectionsPagerAdapter;
     static final int REQUEST_CODE = 1;
-    private ArrayList fragmentList;
+    private ArrayList<Report> fragmentList;
     
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -170,9 +171,15 @@ public class ReportActivity extends MenuActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        
         if (requestCode == REQUEST_CODE && resultCode == RESULT_OK) {
-            fragmentList = (ArrayList) data.getExtras().get("new_list");
+            fragmentList = (ArrayList<Report>) data.getExtras().get("new_list");
             
+        }
+        
+        if (resultCode == RESULT_CANCELED) {
+            this.onRestart();
+           
         }
     }
     

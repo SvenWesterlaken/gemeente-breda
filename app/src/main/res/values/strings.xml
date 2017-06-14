@@ -116,6 +116,7 @@
 
 
     <string-array name="report_filter_array">
+        <item>Geen filter</item>
         <item>Meeste upvotes</item>
         <item>Minste upvotes</item>
         <item>Recent</item>

@@ -27,7 +27,6 @@ public class FilterActivity extends BaseActivity implements AdapterView.OnItemSe
 	
 	ArrayList reports = new ArrayList<>();
 	DatabaseHandler handler;
-	RecyclerView reportList;
 	
 	
 	@Override
@@ -39,8 +38,6 @@ public class FilterActivity extends BaseActivity implements AdapterView.OnItemSe
 		setSupportActionBar(toolbar);
 		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 		
-		
-		reportList = (RecyclerView) findViewById(R.id.filter_RV);
 		
 		Spinner spinner = (Spinner) findViewById(R.id.spinner);
 		ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
@@ -61,45 +58,45 @@ public class FilterActivity extends BaseActivity implements AdapterView.OnItemSe
 
 		switch (position) {
 			case 0:
-				reports = handler.getFilterReports("upvotes DESC");
+				reports.clear();
 				break;
 			case 1:
-				reports = handler.getFilterReports("upvotes ASC");
+				reports = handler.getFilterReports("upvotes DESC");
 				break;
 			case 2:
-				reports = handler.getFilterReports("reportId DESC");
+				reports = handler.getFilterReports("upvotes ASC");
 				break;
 			case 3:
-				reports = handler.getFilterReports("description ASC");
+				reports = handler.getFilterReports("reportId DESC");
 				break;
 			case 4:
+				reports = handler.getFilterReports("description ASC");
+				break;
+			case 5:
 				reports = handler.getFilterReports("description DESC");
-
+				break;
+			default :
 		}
 	}
 
 	@Override
 	public void onNothingSelected(AdapterView<?> parent) {
-
+		
 	}
 	
 	@Override
 	public void finish(){
 		Intent intent = new Intent();
-		intent.putExtra("new_list", reports);
-		setResult(RESULT_OK);
+		
+		if(reports.isEmpty()) {
+			setResult(RESULT_CANCELED, intent);
+		}else {
+			intent.putExtra("new_list", reports);
+			setResult(RESULT_OK, intent);
+		}
+		
 		super.finish();
 	}
-	
-
-//
-//	public void setAdapter(ArrayList filterReports){
-//
-//		ReportAdapter reportAdapter = new ReportAdapter(filterReports, getApplication());
-//		reportList.setAdapter(reportAdapter);
-//		reportAdapter.notifyDataSetChanged();
-//		reportList.setLayoutManager(new LinearLayoutManager(this));
-//	}
 	
 	@Override
 	public void onBackPressed(){
