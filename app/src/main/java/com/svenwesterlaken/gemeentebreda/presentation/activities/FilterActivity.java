@@ -61,18 +61,19 @@ public class FilterActivity extends BaseActivity implements AdapterView.OnItemSe
 
 		switch (position) {
 			case 0:
-				setAdapter(handler.getFilterReports("upvotes DESC"));
+				reports = handler.getFilterReports("upvotes DESC");
 				break;
 			case 1:
-				setAdapter(handler.getFilterReports("upvotes ASC"));
+				reports = handler.getFilterReports("upvotes ASC");
+				break;
 			case 2:
-				setAdapter(handler.getFilterReports("reportId DESC"));
+				reports = handler.getFilterReports("reportId DESC");
 				break;
 			case 3:
-				setAdapter(handler.getFilterReports("description ASC"));
+				reports = handler.getFilterReports("description ASC");
 				break;
 			case 4:
-				setAdapter(handler.getFilterReports("description DESC"));
+				reports = handler.getFilterReports("description DESC");
 
 		}
 	}
@@ -81,20 +82,27 @@ public class FilterActivity extends BaseActivity implements AdapterView.OnItemSe
 	public void onNothingSelected(AdapterView<?> parent) {
 
 	}
-
 	
-	public void setAdapter(ArrayList filterReports){
-		
-		ReportAdapter reportAdapter = new ReportAdapter(filterReports, getApplication());
-		reportList.setAdapter(reportAdapter);
-		reportAdapter.notifyDataSetChanged();
-		reportList.setLayoutManager(new LinearLayoutManager(this));
+	@Override
+	public void finish(){
+		Intent intent = new Intent();
+		intent.putExtra("new_list", reports);
+		setResult(RESULT_OK);
+		super.finish();
 	}
+	
+
+//
+//	public void setAdapter(ArrayList filterReports){
+//
+//		ReportAdapter reportAdapter = new ReportAdapter(filterReports, getApplication());
+//		reportList.setAdapter(reportAdapter);
+//		reportAdapter.notifyDataSetChanged();
+//		reportList.setLayoutManager(new LinearLayoutManager(this));
+//	}
 	
 	@Override
 	public void onBackPressed(){
-		Intent intent = new Intent(getApplicationContext(), ReportActivity.class);
-		startActivity(intent);
 		finish();
 	}
 	
