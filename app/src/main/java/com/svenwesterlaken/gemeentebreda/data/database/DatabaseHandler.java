@@ -441,12 +441,25 @@ public class DatabaseHandler extends SQLiteAssetHelper {
     }
     
 	
-	public ArrayList<Report> getFilterReports(String extra){
+	public ArrayList<Report> getFilterReports(String extra, Category category){
 		
 		
 		ArrayList reports = new ArrayList();
+        String query = "";
+        
+        if (category != null) {
+            
+            query = "SELECT * FROM Report WHERE categoryId = " + category.getCategoryID();
+        }
+        else {
+            query = "SELECT * FROM Report";
+        }
+        
+        if (extra != "") {
+            query = query + " ORDER BY " + extra;
+        }
+        
 		SQLiteDatabase db = getReadableDatabase();
-		String query = "SELECT * FROM Report ORDER BY " + extra + ";" ;
 		Cursor cursor = db.rawQuery(query, null);
 
 		while(cursor.moveToNext() ) {

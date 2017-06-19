@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                                             xmlns:app="http://schemas.android.com/apk/res-auto"
+                                             xmlns:tools="http://schemas.android.com/tools"
+                                             android:id="@+id/layout"
+                                             android:layout_width="match_parent"
+                                             android:layout_height="wrap_content"
+                                             android:minHeight="64dp"
+                                             android:paddingEnd="?android:attr/scrollbarSize"
+                                             android:paddingRight="?android:attr/scrollbarSize"
+                                             tools:ignore="MissingPrefix">
+
+    <ImageView
+        android:id="@+id/filter_IV_icon"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_gravity="center"
+        android:layout_marginBottom="8dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintBottom_toBottomOf="@+id/constraintLayout"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/constraintLayout"
+        app:layout_constraintVertical_bias="0.5"
+        app:srcCompat="@color/cast_intro_overlay_button_background_color"/>
+
+    <android.support.constraint.ConstraintLayout
+        android:id="@+id/constraintLayout"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:layout_marginLeft="72dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="16dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/filter_TV_name"
+            fontPath="fonts/Roboto-Medium.ttf"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="0dp"
+            android:layout_marginRight="0dp"
+            android:layout_marginStart="0dp"
+            android:layout_marginTop="1dp"
+            android:ellipsize="marquee"
+            android:fadingEdge="horizontal"
+            android:maxLines="1"
+            android:textAppearance="@style/SettingsTextAppearanceMedium"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent"/>
+
+        <TextView
+            android:id="@+id/filter_TV_summary"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="0dp"
+            android:layout_marginRight="0dp"
+            android:layout_marginStart="0dp"
+            android:layout_marginTop="0dp"
+            android:ellipsize="end"
+            android:maxLines="2"
+            android:text="Category name"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:textColor="?android:attr/textColorSecondary"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/filter_TV_name"/>
+    </android.support.constraint.ConstraintLayout>
+
+    <CheckBox
+        android:id="@+id/filter_CB_category"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="16dp"
+        android:button="@drawable/selector"
+
+        android:checked="true"
+
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.6"
+        />
+
+</android.support.constraint.ConstraintLayout>
