@@ -1,5 +1,7 @@
 package com.svenwesterlaken.gemeentebreda.logic.util;
 
+import android.content.SharedPreferences;
+
 import com.svenwesterlaken.gemeentebreda.domain.Location;
 import com.svenwesterlaken.gemeentebreda.domain.Report;
 import com.svenwesterlaken.gemeentebreda.domain.User;
@@ -26,8 +28,8 @@ public class ApiUtil {
         return BASE_URL + REPORT_REQUEST_URL + REPORT_GET;
     }
 
-    public static String getReportRequestURL(Location location) {
-        return BASE_URL + REPORT_REQUEST_URL + REPORT_GET + getLatLngParameter(location) + getRadiusParameter(0.05);
+    public static String getReportRequestURL(Location location, double radius) {
+        return BASE_URL + REPORT_REQUEST_URL + REPORT_GET + getLatLngParameter(location) + getRadiusParameter(radius);
     }
 
     public static String getCategoryRequestURL() {

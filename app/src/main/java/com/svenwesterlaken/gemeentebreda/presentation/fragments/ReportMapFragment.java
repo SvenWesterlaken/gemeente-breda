@@ -3,6 +3,7 @@ package com.svenwesterlaken.gemeentebreda.presentation.fragments;
 
 import android.Manifest;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.location.Criteria;
@@ -160,14 +161,25 @@ public class ReportMapFragment extends Fragment implements ReportRequest.ReportL
         com.svenwesterlaken.gemeentebreda.domain.Location location = new com.svenwesterlaken.gemeentebreda.domain.Location();
 
         if (myLocation != null) {
-            double lat = myLocation.getLatitude();
-            double lng = myLocation.getLongitude();
-            location.setLatitude(lat);
-            location.setLongitude(lng);
-            request.handleGetAllReports(location);
-        } else {
-            request.handleGetAllReports();
+            LatLng hogeschool = new LatLng(51.5843682, 4.795152);
+            myLocation.setLatitude(hogeschool.latitude);
+            myLocation.setLongitude(hogeschool.longitude);
         }
+
+        double lat = myLocation.getLatitude();
+        double lng = myLocation.getLongitude();
+        location.setLatitude(lat);
+        location.setLongitude(lng);
+
+            SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(getContext());
+            String radius = sharedPrefs.getString("pref_radius", "");
+            if (radius.isEmpty()){
+                String[] testArray = getResources().getStringArray(R.array.radius_preference_array_values);
+                radius = testArray[2];
+            }
+            Log.i("PREFERENCE_RADIUS", radius);
+            request.handleGetAllReports(location, Double.parseDouble(radius));
+
     }
 
     public void enableMyLocation() {

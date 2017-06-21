@@ -9,8 +9,10 @@ import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceCategory;
 import android.preference.PreferenceFragment;
+import android.preference.PreferenceManager;
 import android.support.design.widget.NavigationView;
 import android.support.v4.content.IntentCompat;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -27,6 +29,7 @@ import static android.preference.PreferenceManager.getDefaultSharedPreferences;
 
 public class SettingsFragment extends PreferenceFragment implements SharedPreferences.OnSharedPreferenceChangeListener {
     public static final String KEY_PREF_THEME = "pref_theme";
+    public static final String KEY_PREF_RADIUS = "pref_radius";
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -76,6 +79,14 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
                     listPreference.setValueIndex(0);
                 }
 
+                if (key.equals(KEY_PREF_RADIUS) && listPreference.getEntry() == null) {
+                    listPreference.setValueIndex(1);
+                    SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
+                    SharedPreferences.Editor editor = preferences.edit();
+                    editor.putString("pref_radius", ((ListPreference) preference).getValue());
+                    editor.apply();
+                }
+
                 listPreference.setSummary(listPreference.getEntry());
 
             } else {
@@ -94,6 +105,9 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
     }
 
     private void updatePreference(Preference preference, String key) {
+        SharedPreferences prefs = getPreferenceManager().getSharedPreferences();
+        Log.i("PREFERENCE_RADIUS", prefs.getString("pref_radius", ""));
+
         if(preference != null) {
             if (preference instanceof ListPreference) {
                 if (key.equals(KEY_PREF_THEME)) {

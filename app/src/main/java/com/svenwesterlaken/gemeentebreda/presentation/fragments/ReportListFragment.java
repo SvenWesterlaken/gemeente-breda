@@ -2,21 +2,25 @@ package com.svenwesterlaken.gemeentebreda.presentation.fragments;
 
 
 import android.Manifest;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.baoyz.widget.PullRefreshLayout;
+import com.google.android.gms.maps.model.LatLng;
 import com.svenwesterlaken.gemeentebreda.R;
 import com.svenwesterlaken.gemeentebreda.data.api.ReportRequest;
 import com.svenwesterlaken.gemeentebreda.domain.Report;
@@ -116,15 +120,26 @@ public class ReportListFragment extends Fragment implements PullRefreshLayout.On
 		if (activity.getList() == null || activity.getList().isEmpty()) {
 			ReportRequest request = new ReportRequest(getContext(), this);
 			com.svenwesterlaken.gemeentebreda.domain.Location location = new com.svenwesterlaken.gemeentebreda.domain.Location();
+
 			if (myLocation != null) {
-				double lat = myLocation.getLatitude();
-				double lng = myLocation.getLongitude();
-				location.setLatitude(lat);
-				location.setLongitude(lng);
-				request.handleGetAllReports(location);
-			} else {
-				request.handleGetAllReports();
+				LatLng hogeschool = new LatLng(51.5843682, 4.795152);
+				myLocation.setLatitude(hogeschool.latitude);
+				myLocation.setLongitude(hogeschool.longitude);
 			}
+
+			double lat = myLocation.getLatitude();
+			double lng = myLocation.getLongitude();
+			location.setLatitude(lat);
+			location.setLongitude(lng);
+
+			SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(getContext());
+			String radius = sharedPrefs.getString("pref_radius", "");
+			if (radius.isEmpty()){
+				String[] testArray = getResources().getStringArray(R.array.radius_preference_array_values);
+				radius = testArray[2];
+			}
+			Log.i("PREFERENCE_RADIUS", radius);
+			request.handleGetAllReports(location, Double.parseDouble(radius));
 		}
 		else {
 			reports = activity.getList();

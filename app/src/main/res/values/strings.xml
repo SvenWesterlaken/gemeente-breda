@@ -43,6 +43,8 @@
     <string name="pref_value_reset">Herstel de standaardinstellingen van de app</string>
     <string name="pref_title_info">Over de app</string>
     <string name="pref_value_info">Versie</string>
+    <string name="pref_title_radius">Radius</string>
+    <string name="pref_value_radius">Selecteer de radius om meldingen op te filteren</string>
 
     <string name="report_searchview_hint">Zoeken…</string>
 
@@ -129,6 +131,26 @@
     <string name="camera_stillshot_confirm">GEBRUIK FOTO</string>
     <string name="camera_video_confirm">GEBRUIK VIDEO</string>
     <string name="camera_retry">OPNIEUW</string>
+
+    <string-array name="radius_preference_array">
+        <item>Very small</item>
+        <item>Small</item>
+        <item>Medium</item>
+        <item>Large</item>
+        <item>Very large</item>
+        <item>Extreme</item>
+
+    </string-array>
+
+    <string-array name="radius_preference_array_values">
+        <item>0.002</item>
+        <item>0.005</item>
+        <item>0.015</item>
+        <item>0.03</item>
+        <item>0.05</item>
+        <item>2</item>
+
+    </string-array>
 
 
 

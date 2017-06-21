@@ -1,6 +1,7 @@
 package com.svenwesterlaken.gemeentebreda.data.api;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.util.Log;
 
 import com.android.volley.Request;
@@ -45,8 +46,8 @@ public class ReportRequest implements Response.Listener<String>, Response.ErrorL
 		ReportRequestQueue.getInstance(context).addToRequestQueue(reportsRequest);
 	}
 
-	public void handleGetAllReports(Location location) {
-		StringRequest reportsRequest = new StringRequest(Request.Method.GET, ApiUtil.getReportRequestURL(location), this, this);
+	public void handleGetAllReports(Location location, double radius) {
+		StringRequest reportsRequest = new StringRequest(Request.Method.GET, ApiUtil.getReportRequestURL(location, radius), this, this);
 		ReportRequestQueue.getInstance(context).addToRequestQueue(reportsRequest);
 	}
 
