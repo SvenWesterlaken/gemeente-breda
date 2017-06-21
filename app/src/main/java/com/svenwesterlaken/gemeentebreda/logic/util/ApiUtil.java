@@ -12,11 +12,11 @@ import java.util.HashMap;
 
 public class ApiUtil {
 
-    private static String BASE_URL = "http://37.34.59.50/breda";
-    private static String REPORT_URL = "/CitySDK/services.json";
-    private static String REPORT_REQUEST_URL = "/CitySDK/requests.json";
-    private static String REPORT_GET =  "/?service_code=OV";
-    private static String REPORT_UPVOTE_URL = "/CitySDK/upvoteRequest.json";
+    private static final String BASE_URL = "http://37.34.59.50/breda";
+    private static final String REPORT_URL = "/CitySDK/services.json";
+    private static final String REPORT_REQUEST_URL = "/CitySDK/requests.json";
+    private static final String REPORT_GET =  "/?service_code=OV";
+    private static final String REPORT_UPVOTE_URL = "/CitySDK/upvoteRequest.json";
 
     private ApiUtil() {
         throw new IllegalStateException("Utility class");
@@ -24,6 +24,10 @@ public class ApiUtil {
 
     public static String getReportRequestURL() {
         return BASE_URL + REPORT_REQUEST_URL + REPORT_GET;
+    }
+
+    public static String getReportRequestURL(Location location) {
+        return BASE_URL + REPORT_REQUEST_URL + REPORT_GET + getLatLngParameter(location) + getRadiusParameter(0.05);
     }
 
     public static String getCategoryRequestURL() {
@@ -66,6 +70,10 @@ public class ApiUtil {
 
     private static String getLatLngParameter(Location l) {
         return "&lat=" + l.getLatitude() + "&long=" + l.getLongitude();
+    }
+
+    private static String getRadiusParameter(double radius) {
+        return "&radius=" + radius;
     }
 
     private static String getStreetParameter(Location l) {

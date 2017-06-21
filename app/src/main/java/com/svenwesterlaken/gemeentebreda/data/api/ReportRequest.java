@@ -45,6 +45,11 @@ public class ReportRequest implements Response.Listener<String>, Response.ErrorL
 		ReportRequestQueue.getInstance(context).addToRequestQueue(reportsRequest);
 	}
 
+	public void handleGetAllReports(Location location) {
+		StringRequest reportsRequest = new StringRequest(Request.Method.GET, ApiUtil.getReportRequestURL(location), this, this);
+		ReportRequestQueue.getInstance(context).addToRequestQueue(reportsRequest);
+	}
+
 	@Override
 	public void onResponse(String response) {
 		List<ServiceReport> serviceReports = Arrays.asList(gson.fromJson(response, ServiceReport[].class));

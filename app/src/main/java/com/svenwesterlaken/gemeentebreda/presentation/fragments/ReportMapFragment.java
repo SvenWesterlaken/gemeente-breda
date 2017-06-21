@@ -2,7 +2,6 @@ package com.svenwesterlaken.gemeentebreda.presentation.fragments;
 
 
 import android.Manifest;
-import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
@@ -11,7 +10,6 @@ import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
@@ -24,7 +22,6 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MapStyleOptions;
@@ -34,7 +31,6 @@ import com.svenwesterlaken.gemeentebreda.R;
 import com.svenwesterlaken.gemeentebreda.data.api.ReportRequest;
 import com.svenwesterlaken.gemeentebreda.domain.Report;
 import com.svenwesterlaken.gemeentebreda.presentation.activities.DetailedReportActivity;
-import com.svenwesterlaken.gemeentebreda.presentation.activities.FilterActivity;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -53,6 +49,7 @@ public class ReportMapFragment extends Fragment implements ReportRequest.ReportL
     private GoogleMap map;
     private List<Marker> markers;
     private HashMap<Marker, Report> reportHashMap = new HashMap<>();
+    private Location myLocation;
 
     @Override
     public View onCreateView(LayoutInflater layoutInflater, ViewGroup viewGroup, Bundle bundle) {
@@ -105,7 +102,7 @@ public class ReportMapFragment extends Fragment implements ReportRequest.ReportL
                 String provider = locationManager.getBestProvider(criteria, true);
 
                 // Get Current Location
-                Location myLocation = null;
+                myLocation = null;
                 if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION)
                         == PackageManager.PERMISSION_GRANTED) {
                     myLocation = locationManager.getLastKnownLocation(provider);
@@ -142,10 +139,11 @@ public class ReportMapFragment extends Fragment implements ReportRequest.ReportL
 
                 map.setOnInfoWindowClickListener(ReportMapFragment.this);
 
+                map.getUiSettings().setMapToolbarEnabled(false);
+
+                getReports();
             }
         });
-
-        getReports();
 
         return v;
     }
@@ -159,7 +157,17 @@ public class ReportMapFragment extends Fragment implements ReportRequest.ReportL
         }
 
         ReportRequest request = new ReportRequest(getContext(), this);
-        request.handleGetAllReports();
+        com.svenwesterlaken.gemeentebreda.domain.Location location = new com.svenwesterlaken.gemeentebreda.domain.Location();
+
+        if (myLocation != null) {
+            double lat = myLocation.getLatitude();
+            double lng = myLocation.getLongitude();
+            location.setLatitude(lat);
+            location.setLongitude(lng);
+            request.handleGetAllReports(location);
+        } else {
+            request.handleGetAllReports();
+        }
     }
 
     public void enableMyLocation() {

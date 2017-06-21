@@ -15,7 +15,7 @@ public class Location implements Parcelable {
     int locationID;
     Double latitude;
     Double longitude;
-    
+
     public Location(String street, String city, int houseNumber, String postalCode, int locationID, Double latitude, Double longitude ) {
         this.street = street;
         this.locationID = locationID;
@@ -25,15 +25,15 @@ public class Location implements Parcelable {
         this.latitude = latitude;
         this.longitude = longitude;
     }
-    
+
     public Location(String street, int locationID, Double latitude, Double longitude){
         this.street = street;
         this.locationID = locationID;
         this.latitude = latitude;
         this.longitude = longitude;
     }
-    
-    public Location(){};
+
+    public Location(){}
     
     //getters
     
