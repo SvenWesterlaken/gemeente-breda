@@ -1,10 +1,15 @@
 package com.svenwesterlaken.gemeentebreda.presentation.fragments;
 
 
-import android.content.Intent;
+import android.Manifest;
+import android.content.pm.PackageManager;
 import android.graphics.Color;
+import android.location.Criteria;
+import android.location.Location;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -14,7 +19,6 @@ import android.view.ViewGroup;
 import com.baoyz.widget.PullRefreshLayout;
 import com.svenwesterlaken.gemeentebreda.R;
 import com.svenwesterlaken.gemeentebreda.data.api.ReportRequest;
-import com.svenwesterlaken.gemeentebreda.data.database.DatabaseHandler;
 import com.svenwesterlaken.gemeentebreda.domain.Report;
 import com.svenwesterlaken.gemeentebreda.logic.adapters.ReportAdapter;
 import com.svenwesterlaken.gemeentebreda.presentation.activities.ReportActivity;
@@ -24,15 +28,17 @@ import java.util.ArrayList;
 import jp.wasabeef.recyclerview.animators.FadeInUpAnimator;
 
 import static android.app.Activity.RESULT_OK;
+import static android.content.Context.LOCATION_SERVICE;
 
 
 public class ReportListFragment extends Fragment implements PullRefreshLayout.OnRefreshListener, ReportRequest.ReportListener {
 	
-	ReportAdapter reportAdapter;
-	PullRefreshLayout prf;
-	ArrayList<Report> reports;
-	ReportActivity activity;
-	RecyclerView reportList;
+	private ReportAdapter reportAdapter;
+	private PullRefreshLayout prf;
+	private ArrayList<Report> reports;
+	private ReportActivity activity;
+	private RecyclerView reportList;
+	private Location myLocation;
 	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -60,6 +66,22 @@ public class ReportListFragment extends Fragment implements PullRefreshLayout.On
 		prf = (PullRefreshLayout) rootView.findViewById(R.id.swipeRefreshLayout);
 		prf.setColorSchemeColors(Color.argb(255, 217, 29, 73));
 		prf.setOnRefreshListener(this);
+
+		// Get NewLocationManager object from System Service LOCATION_SERVICE
+		LocationManager locationManager = (LocationManager) getContext().getSystemService(LOCATION_SERVICE);
+
+		// Create a criteria object to retrieve provider
+		Criteria criteria = new Criteria();
+
+		// Get the name of the best provider
+		String provider = locationManager.getBestProvider(criteria, true);
+
+		// Get Current Location
+		myLocation = null;
+		if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION)
+				== PackageManager.PERMISSION_GRANTED) {
+			myLocation = locationManager.getLastKnownLocation(provider);
+		}
 		
 		return rootView;
 	}
@@ -93,7 +115,16 @@ public class ReportListFragment extends Fragment implements PullRefreshLayout.On
 		
 		if (activity.getList() == null || activity.getList().isEmpty()) {
 			ReportRequest request = new ReportRequest(getContext(), this);
-			request.handleGetAllReports();
+			com.svenwesterlaken.gemeentebreda.domain.Location location = new com.svenwesterlaken.gemeentebreda.domain.Location();
+			if (myLocation != null) {
+				double lat = myLocation.getLatitude();
+				double lng = myLocation.getLongitude();
+				location.setLatitude(lat);
+				location.setLongitude(lng);
+				request.handleGetAllReports(location);
+			} else {
+				request.handleGetAllReports();
+			}
 		}
 		else {
 			reports = activity.getList();
