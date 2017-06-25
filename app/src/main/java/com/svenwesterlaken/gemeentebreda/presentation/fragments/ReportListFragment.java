@@ -121,14 +121,17 @@ public class ReportListFragment extends Fragment implements PullRefreshLayout.On
 			ReportRequest request = new ReportRequest(getContext(), this);
 			com.svenwesterlaken.gemeentebreda.domain.Location location = new com.svenwesterlaken.gemeentebreda.domain.Location();
 
-			if (myLocation != null) {
+			double lat;
+			double lng;
+			if (myLocation == null) {
 				LatLng hogeschool = new LatLng(51.5843682, 4.795152);
-				myLocation.setLatitude(hogeschool.latitude);
-				myLocation.setLongitude(hogeschool.longitude);
+				lat = hogeschool.latitude;
+				lng = hogeschool.longitude;
+			} else {
+				lat = myLocation.getLatitude();
+				lng = myLocation.getLongitude();
 			}
 
-			double lat = myLocation.getLatitude();
-			double lng = myLocation.getLongitude();
 			location.setLatitude(lat);
 			location.setLongitude(lng);
 
